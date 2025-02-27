@@ -1,9 +1,9 @@
-name: Build nightly container image
+name: Build edge container image
 on:
   workflow_dispatch:
   push:
     branches:
-      - feat/setup-docker-file
+      - main
 
 permissions:
   contents: read
@@ -33,9 +33,11 @@ jobs:
         ghcr.io/fedimod/fires-server
       version_prerelease: ${{ needs.compute-suffix.outputs.prerelease }}
       labels: |
-        org.opencontainers.image.description=Nightly build image used for testing purposes
+        org.opencontainers.image.description=Edge build image used for testing purposes
+        org.opencontainers.image.licenses=AGPL-3.0
       flavor: |
         latest=auto
       tags: |
-        type=raw,value=edge
+        type=edge
+        type=edge,branch=main
     secrets: inherit

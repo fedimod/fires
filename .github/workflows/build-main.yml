@@ -1,0 +1,41 @@
+name: Build nightly container image
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/setup-docker-file
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  compute-suffix:
+    runs-on: ubuntu-latest
+    if: github.repository == 'FediMod/fires'
+    steps:
+      - id: version_vars
+        env:
+          TZ: Etc/UTC
+        run: |
+          echo fires_version_prerelease=main.$(git rev-parse --short ${{github.event.pull_request.head.sha}}) >> $GITHUB_OUTPUT
+    outputs:
+      prerelease: ${{ steps.version_vars.outputs.fires_version_prerelease }}
+
+  build-image:
+    needs: compute-suffix
+    uses: ./.github/workflows/build-container-image.yml
+    with:
+      file_to_build: Dockerfile
+      cache: false
+      target_stage: fires-server
+      push_to_images: |
+        ghcr.io/FediMod/fires-server
+      version_prerelease: ${{ needs.compute-suffix.outputs.prerelease }}
+      labels: |
+        org.opencontainers.image.description=Nightly build image used for testing purposes
+      flavor: |
+        latest=auto
+      tags: |
+        type=raw,value=edge
+    secrets: inherit

@@ -72,7 +72,11 @@ RUN \
   apk update; \
   apk upgrade; \
   # Install curl and tini
-  apk add tini tzdata curl wget jq;
+  apk add \
+  tini=0.19.0-r3 \
+  tzdata=2025a-r0 \
+  curl=8.12.1-r0 \
+  jq=1.7.1-r0;
 
 # Configure pnpm
 ENV PNPM_HOME="/pnpm"
@@ -89,12 +93,16 @@ RUN \
   corepack enable; \
   corepack prepare --activate;
 
+# hadolint ignore=DL3059
 RUN --mount=type=cache,id=pnpm-${TARGETPLATFORM},target=/pnpm/store pnpm install --filter !@fedimod/fires-docs --frozen-lockfile
+# hadolint ignore=DL3059
 RUN pnpm run --filter=@fedimod/fires-server -r build
+# hadolint ignore=DL3059
 RUN pnpm deploy --filter=@fedimod/fires-server --prod /fires-server-deploy
 
 # pnpm deploy omits the `imports` key in the output package.json,
 # so we have to copy it across ourselves:
+# hadolint ignore=DL3059
 RUN \
   mv /opt/fires/components/fires-server/build /fires-server-build; \
   jq --argjson imports "$(jq .imports /opt/fires/components/fires-server/package.json)" '.imports = $imports' /fires-server-deploy/package.json > /fires-server-build/package.json;

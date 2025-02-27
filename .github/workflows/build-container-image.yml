@@ -21,6 +21,10 @@ on:
       target_stage:
         type: string
 
+permissions:
+  contents: read
+  packages: write
+
 # This builds multiple images with one runner each, allowing us to build for multiple architectures
 # using Github's runners.
 # The two-step process is adapted form:

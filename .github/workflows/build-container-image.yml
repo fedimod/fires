@@ -166,14 +166,18 @@ jobs:
           tags: ${{ inputs.tags }}
           labels: ${{ inputs.labels }}
 
+      - name: Prepare arguments
+        run: |
+          manifest_args=$(jq -cr '(.tags | map("-t " + .)) + (.annotations | map("-a \"" + . + "\"")) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          echo "MANIFEST_ARGS=${manifest_args%,}" >> $GITHUB_ENV
+
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
         run: |
           echo "$PUSH_TO_IMAGES" | xargs -I{} \
-            docker buildx imagetools create $(jq -cr '(.tags | map("-t " + .)) + (.annotations | map("--annotation " + .)) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-              $(printf '{}@sha256:%s ' *)
+            docker buildx imagetools create ${{env.MANIFEST_ARGS}} $(printf '{}@sha256:%s ' *)
 
       - name: Inspect image
         run: |

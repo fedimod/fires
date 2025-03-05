@@ -44,14 +44,14 @@ jobs:
         run: pnpm run --filter @fedimod/fires-docs build
 
       - name: Upload artifact
-        if: ${{ github.ref == 'refs/heads/main' && github.repository == 'FediMod/fires' }}
+        if: ${{ github.ref == 'refs/heads/main' && github.repository == 'fedimod/fires' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
 
   # Deployment job
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' && github.repository == 'FediMod/fires' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.repository == 'fedimod/fires' }}
     environment:
       name: website
       url: ${{ steps.deployment.outputs.page_url }}

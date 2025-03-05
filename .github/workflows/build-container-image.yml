@@ -168,7 +168,7 @@ jobs:
 
       - name: Prepare arguments
         run: |
-          manifest_args=$(jq -cr '(.tags | map("-t " + .)) + (.annotations | map("-a \"" + . + "\"")) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          manifest_args=$(jq -cr '(.tags | map("-t " + .)) + (.annotations | map("--annotation \"" + . + "\"")) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
           echo "MANIFEST_ARGS=${manifest_args%,}" >> $GITHUB_ENV
 
       - name: Create manifest list and push

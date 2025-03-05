@@ -170,6 +170,8 @@ jobs:
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
         run: |
           echo "$PUSH_TO_IMAGES" | xargs -I{} \
             docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \

@@ -3,6 +3,19 @@ import { defineConfig } from '@adonisjs/core/app'
 export default defineConfig({
   /*
   |--------------------------------------------------------------------------
+  | Directories
+  |--------------------------------------------------------------------------
+  |
+  | These override some of the default directories for things in Adonis.js,
+  | such as where the language files are stored.
+  |
+  */
+  directories: {
+    languageFiles: 'resources/locales',
+  },
+
+  /*
+  |--------------------------------------------------------------------------
   | Commands
   |--------------------------------------------------------------------------
   |
@@ -35,6 +48,7 @@ export default defineConfig({
     () => import('@adonisjs/vite/vite_provider'),
     () => import('@adonisjs/core/providers/edge_provider'),
     () => import('@adonisjs/shield/shield_provider'),
+    () => import('@adonisjs/i18n/i18n_provider'),
     () => import('@thisismissem/adonisjs-respond-with/provider'),
   ],
 
@@ -50,6 +64,7 @@ export default defineConfig({
     () => import('#start/logging'),
     () => import('#start/routes'),
     () => import('#start/kernel'),
+    () => import('#start/events'),
   ],
 
   /*
@@ -84,6 +99,10 @@ export default defineConfig({
     },
     {
       pattern: 'resources/views/**/*.edge',
+      reloadServer: false,
+    },
+    {
+      pattern: 'resources/locales/**/*.{json,yaml,yml}',
       reloadServer: false,
     },
   ],

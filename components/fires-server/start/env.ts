@@ -48,4 +48,5 @@ export default await Env.create(new URL('../', import.meta.url), {
   | Variables for configuring the FIRES server
   |----------------------------------------------------------
   */
+  DEFAULT_LOCALE: Env.schema.string.optional(),
 })

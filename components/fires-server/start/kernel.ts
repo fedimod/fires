@@ -38,6 +38,7 @@ server.use([
 router.use([
   () => import('@adonisjs/shield/shield_middleware'),
   () => import('@adonisjs/core/bodyparser_middleware'),
+  () => import('#middleware/localization_middleware'),
 ])
 
 /**

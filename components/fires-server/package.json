@@ -59,6 +59,7 @@
     "@adonisjs/auth": "^9.3.1",
     "@adonisjs/core": "^6.17.2",
     "@adonisjs/cors": "^2.2.1",
+    "@adonisjs/i18n": "^2.2.0",
     "@adonisjs/lucid": "^21.6.0",
     "@adonisjs/shield": "^8.1.2",
     "@adonisjs/static": "^1.1.1",

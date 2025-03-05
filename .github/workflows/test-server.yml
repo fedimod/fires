@@ -67,6 +67,7 @@ jobs:
       NODE_ENV: development
       PORT: 4444
       HOST: localhost
+      PUBLIC_URL: http://localhost:4444/
       LOG_LEVEL: info
       APP_KEY: "test_determinist_key_DO_NOT_USE_IN_PRODUCTION"
       DATABASE_HOST: 127.0.0.1

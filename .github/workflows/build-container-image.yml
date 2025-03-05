@@ -165,6 +165,8 @@ jobs:
           flavor: ${{ inputs.flavor }}
           tags: ${{ inputs.tags }}
           labels: ${{ inputs.labels }}
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests

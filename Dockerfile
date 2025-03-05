@@ -118,4 +118,8 @@ EXPOSE 4444
 # Set container tini as default entry point
 ENTRYPOINT ["/sbin/tini", "--"]
 
+LABEL org.opencontainers.image.description="FediMod FIRES Reference Server"
+LABEL org.opencontainers.image.source=https://github.com/fedimod/fires
+LABEL org.opencontainers.image.licenses=AGPL-3.0
+
 CMD ["node", "bin/server.js"]

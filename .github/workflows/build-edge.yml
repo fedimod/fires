@@ -18,7 +18,7 @@ jobs:
         env:
           TZ: Etc/UTC
         run: |
-          echo fires_version_prerelease=main.$(git rev-parse --short ${{github.event.pull_request.head.sha}}) >> $GITHUB_OUTPUT
+          echo fires_version_prerelease=main.$(git rev-parse --short ${{github.event.push.after}}) >> $GITHUB_OUTPUT
     outputs:
       prerelease: ${{ steps.version_vars.outputs.fires_version_prerelease }}
 
@@ -33,8 +33,7 @@ jobs:
         ghcr.io/fedimod/fires-server
       version_prerelease: ${{ needs.compute-suffix.outputs.prerelease }}
       labels: |
-        org.opencontainers.image.description=Edge build image used for testing purposes
-        org.opencontainers.image.licenses=AGPL-3.0
+        org.opencontainers.image.description="Edge build image used for testing purposes"
       flavor: |
         latest=auto
       tags: |

@@ -165,8 +165,6 @@ jobs:
           flavor: ${{ inputs.flavor }}
           tags: ${{ inputs.tags }}
           labels: ${{ inputs.labels }}
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
@@ -174,7 +172,7 @@ jobs:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
         run: |
           echo "$PUSH_TO_IMAGES" | xargs -I{} \
-            docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            docker buildx imagetools create $(jq -cr '(.tags | map("-t " + .)) + (.annotations | map("--annotation " + .)) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
               $(printf '{}@sha256:%s ' *)
 
       - name: Inspect image

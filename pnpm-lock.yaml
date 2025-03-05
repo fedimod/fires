@@ -48,6 +48,9 @@ importers:
       '@picocss/pico':
         specifier: ^2.0.6
         version: 2.0.6
+      '@thisismissem/adonisjs-respond-with':
+        specifier: ^2.0.0
+        version: 2.0.0(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(mime-types@2.1.35)
       '@vinejs/vine':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1200,6 +1203,13 @@ packages:
 
   '@swc/types@0.1.17':
     resolution: {integrity: sha512-V5gRru+aD8YVyCOMAjMpWR1Ui577DD5KSJsHP8RAxopAH22jFz6GZd/qxqjO6MJHQhcsjvjOFXyDhyLQUnMveQ==}
+
+  '@thisismissem/adonisjs-respond-with@2.0.0':
+    resolution: {integrity: sha512-N4Ct2WOGwHt/OPIEB6tUcLUVpTrAtK9vd3InwnePOYz/dkVAss/0DgkJ/M5h2U7oDEb1E1gkpI9lZfkYbQlB/w==}
+    engines: {node: '>=20.6.0'}
+    peerDependencies:
+      '@adonisjs/core': ^6.2.0
+      mime-types: ^2.1.35
 
   '@tokenizer/inflate@0.2.7':
     resolution: {integrity: sha512-MADQgmZT1eKjp06jpI2yozxaU9uVs4GzzgSL+uEq7bVcJ9V1ZXQkeGNql1fsSI0gMy1vhvNTNbUqrx+pZfJVmg==}
@@ -4951,6 +4961,11 @@ snapshots:
   '@swc/types@0.1.17':
     dependencies:
       '@swc/counter': 0.1.3
+
+  '@thisismissem/adonisjs-respond-with@2.0.0(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(mime-types@2.1.35)':
+    dependencies:
+      '@adonisjs/core': 6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1)
+      mime-types: 2.1.35
 
   '@tokenizer/inflate@0.2.7':
     dependencies:

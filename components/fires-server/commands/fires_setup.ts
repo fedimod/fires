@@ -40,7 +40,7 @@ export default class FiresSetup extends BaseCommand {
   async run() {
     if ((await this.checkExistingSettings()) && !this.force) {
       this.logger.error('This FIRES server already appears to be configured.')
-      this.logger.error('If you would like to reconfigure, please pass: --force')
+      this.logger.error('If you would like to reconfigure, please re-run with: --force')
       this.exitCode = 1
       return this.terminate()
     }
@@ -48,10 +48,11 @@ export default class FiresSetup extends BaseCommand {
     let description: string = ''
     let contactEmail: string = ''
     let contactAccount: string = ''
-    let homepageUrl: string | undefined
     let providerUrl: string = ''
     let documentationUrl: string = ''
     let appealsUrl: string = ''
+    let redirectUrl: string | undefined
+    let redirect: boolean = false
 
     let correct = false
     while (!correct) {
@@ -59,15 +60,6 @@ export default class FiresSetup extends BaseCommand {
         'Please give your new FIRES server a short description:\n',
         { default: description }
       )
-
-      contactEmail = await this.prompt.ask('What is your contact email?', {
-        hint: 'Will be publicly available',
-        validate: async (value) => {
-          const [error] = await this.emailValidator.tryValidate(value)
-          return error === null ? true : error.messages[0].message
-        },
-        default: contactEmail,
-      })
 
       contactAccount = await this.prompt.ask('What is the contact fediverse account?', {
         hint: '@user@server.example',
@@ -84,24 +76,16 @@ export default class FiresSetup extends BaseCommand {
         default: contactAccount,
       })
 
-      homepageUrl = await this.prompt.ask(
-        'Would you like to redirect visitors to a different homepage URL?',
-        {
-          hint: 'https://...',
-          validate: async (value) => {
-            // vine.string.url cannot accept being nullable/optional:
-            if (value.length === 0) {
-              return true
-            }
+      contactEmail = await this.prompt.ask('What is the contact email?', {
+        hint: 'Will be publicly available',
+        validate: async (value) => {
+          const [error] = await this.emailValidator.tryValidate(value)
+          return error === null ? true : error.messages[0].message
+        },
+        default: contactEmail,
+      })
 
-            const [error] = await this.urlValidator.tryValidate(value)
-            return error === null ? true : error.messages[0].message
-          },
-          default: homepageUrl,
-        }
-      )
-
-      providerUrl = await this.prompt.ask('Where is your website as a FIRES provider?', {
+      providerUrl = await this.prompt.ask('Where is your website as a FIRES server provider?', {
         hint: 'https://...',
         validate: async (value) => {
           const [error] = await this.urlValidator.tryValidate(value)
@@ -124,7 +108,7 @@ export default class FiresSetup extends BaseCommand {
       })
 
       appealsUrl = await this.prompt.ask(
-        'Where can people got to lodge an appeal for moderation decisions?',
+        'Where can people appeal a moderation decisions on your FIRES server?',
         {
           hint: 'https://...',
           validate: async (value) => {
@@ -135,15 +119,33 @@ export default class FiresSetup extends BaseCommand {
         }
       )
 
+      redirect = await this.prompt.confirm(
+        'Would you like to redirect visitors to a different URL for this server?',
+        {
+          default: redirect,
+        }
+      )
+
+      if (redirect) {
+        redirectUrl = await this.prompt.ask('Which URL?', {
+          hint: 'https://...',
+          validate: async (value) => {
+            const [error] = await this.urlValidator.tryValidate(value)
+            return error === null ? true : error.messages[0].message
+          },
+          default: redirectUrl,
+        })
+      }
+
       this.logger.info(`
         Description: ${description}
         Contact Email: ${contactEmail}
         Contact Account: ${contactAccount}
 
-        Homepage URL: ${homepageUrl}
         Provider URL: ${providerUrl}
         Documentation URL: ${documentationUrl}
         Appeals URL: ${appealsUrl}
+        ${redirect ? `Redirect URL: ${redirectUrl}` : ''}
       `)
 
       correct = await this.prompt.confirm('Is this correct?', { default: true })
@@ -176,11 +178,11 @@ export default class FiresSetup extends BaseCommand {
       },
     ])
 
-    if (homepageUrl) {
+    if (redirect && redirectUrl) {
       await Setting.updateOrCreate(
-        { key: 'homepage_url' },
+        { key: 'redirect_url' },
         {
-          value: homepageUrl,
+          value: redirectUrl,
         }
       )
     }

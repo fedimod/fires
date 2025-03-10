@@ -8,12 +8,13 @@ ARG TARGETPLATFORM=${TARGETPLATFORM}
 ARG BUILDPLATFORM=${BUILDPLATFORM}
 ARG BASE_REGISTRY="docker.io"
 
-# # Node version to use in base image, change with [--build-arg NODE_MAJOR_VERSION="20"]
+# # Node version to use in base image, change with [--build-arg NODE_VERSION="22.14.0"]
 # renovate: datasource=node-version depName=node
-ARG NODE_MAJOR_VERSION="22"
+ARG NODE_VERSION="22.14.0"
+ARG DISTRO_VERSION="3.21"
 
-# Node image to use for base image based on combined variables (ex: 20-bookworm-slim)
-FROM ${BASE_REGISTRY}/node:${NODE_MAJOR_VERSION}-alpine AS node
+# Node image to use for base image based on combined variables (ex: 22.14.0-alpine3.21)
+FROM ${BASE_REGISTRY}/node:${NODE_VERSION}-alpine${DISTRO_VERSION} AS node
 
 # Resulting version string is vX.X.X-FIRES_VERSION_PRERELEASE+FIRES_VERSION_METADATA
 # Example: v4.3.0-nightly.2023.11.09+pr-123456
@@ -100,16 +101,9 @@ RUN pnpm run --filter=@fedimod/fires-server -r build
 # hadolint ignore=DL3059
 RUN pnpm deploy --filter=@fedimod/fires-server --prod /fires-server-deploy
 
-# pnpm deploy omits the `imports` key in the output package.json,
-# so we have to copy it across ourselves:
-# hadolint ignore=DL3059
-RUN \
-  mv /opt/fires/components/fires-server/build /fires-server-build; \
-  jq --argjson imports "$(jq .imports /opt/fires/components/fires-server/package.json)" '.imports = $imports' /fires-server-deploy/package.json > /fires-server-build/package.json;
-
 FROM node AS fires-server
-COPY --from=build /fires-server-build/ /opt/fires/fires-server/
-COPY --from=build /fires-server-deploy/pnpm-lock.yaml /opt/fires/fires-server/
+COPY --from=build /opt/fires/components/fires-server/build /opt/fires/fires-server/
+COPY --from=build /fires-server-deploy/pnpm-lock.yaml /fires-server-deploy/package.json /opt/fires/fires-server/
 COPY --from=build /fires-server-deploy/node_modules /opt/fires/fires-server/node_modules/
 WORKDIR /opt/fires/fires-server/
 USER fires

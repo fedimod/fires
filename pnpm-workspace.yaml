@@ -1,3 +1,6 @@
 packages:
-  - "docs"
-  - "components/*"
+  - docs
+  - components/*
+onlyBuiltDependencies:
+  - "@swc/core"
+  - esbuild

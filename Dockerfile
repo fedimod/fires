@@ -58,9 +58,7 @@ RUN \
   echo "${TZ}" > /etc/localtime; \
   # Creates fires user/group and sets home directory
   addgroup -Sg "${GID}" fires; \
-  adduser -S -u "${UID}" -h /opt/fires fires fires; \
-  # Creates /fires symlink to /opt/fires
-  ln -s /opt/fires /fires;
+  adduser -S -u "${UID}" -h /opt/fires fires fires;
 
 # Set /opt/mastodon as working directory
 WORKDIR /opt/fires
@@ -102,10 +100,10 @@ RUN pnpm run --filter=@fedimod/fires-server -r build
 RUN pnpm deploy --filter=@fedimod/fires-server --prod /fires-server-deploy
 
 FROM node AS fires-server
-COPY --from=build /opt/fires/components/fires-server/build /opt/fires/fires-server/
-COPY --from=build /fires-server-deploy/pnpm-lock.yaml /fires-server-deploy/package.json /opt/fires/fires-server/
-COPY --from=build /fires-server-deploy/node_modules /opt/fires/fires-server/node_modules/
-WORKDIR /opt/fires/fires-server/
+COPY --from=build /opt/fires/components/fires-server/build /opt/fires-server/
+COPY --from=build /fires-server-deploy/pnpm-lock.yaml /fires-server-deploy/package.json /opt/fires-server/
+COPY --from=build /fires-server-deploy/node_modules /opt/fires-server/node_modules/
+WORKDIR /opt/fires-server/
 USER fires
 EXPOSE 4444
 

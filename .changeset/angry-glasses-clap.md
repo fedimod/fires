@@ -16,10 +16,11 @@ Which will prompt you for the following questions:
 - Please give your new FIRES server a short description
 - What is your contact email? (publicly available)
 - What is the contact fediverse account?
-- Would you like to redirect visitors to a different homepage URL? (optional)
 - Where is your website as a FIRES provider?
 - Do you have a website with documentation?
 - Where can people go to lodge an appeal for moderation decisions?
+- Would you like to redirect visitors to a different URL for this server?
+  - (if yes) Which URL?
 
 Both the documentation and homepage URLs are optional, the rest are currently mandatory.
 

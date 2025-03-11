@@ -1,18 +1,74 @@
 import { test } from '@japa/runner'
 import { faker } from '@faker-js/faker'
+import type { HttpMethod } from '#tests/plugins/request_tests'
 
 import { LabelFactory } from '#database/factories/label_factory'
 import Label from '#models/label'
+import AccessToken from '#models/access_token'
+import { getAuthorizationHeader, createToken } from '#tests/helpers/http_authorization'
 
 test.group('Controllers / api / labels', (group) => {
+  let token: AccessToken
+  group.setup(async () => {
+    token = await createToken(['read', 'write', 'admin'])
+  })
   group.each.teardown(async () => {
     await Label.query().delete()
   })
 
+  test('requires authentication', async ({ assertResponse, request }) => {
+    const response = await request
+      .get('/api/labels')
+      .headers({
+        accept: 'application/json',
+      })
+      .end()
+
+    assertResponse.status(response, 401)
+    assertResponse.challenge(response, {
+      realm: 'FIRES',
+      scheme: 'Bearer',
+    })
+  })
+
+  test('requires authentication using token with read or admin abilities')
+    .with<{ method: HttpMethod; endpoint: string }[]>([
+      { method: 'get', endpoint: '/api/labels' },
+      { method: 'post', endpoint: '/api/labels' },
+      { method: 'patch', endpoint: '/api/labels/123' },
+      { method: 'delete', endpoint: '/api/labels/123' },
+    ])
+    .run(async ({ assertResponse, request }, { method, endpoint }) => {
+      const writeOnlyToken = await createToken(['write'])
+
+      const response = await request
+        .any(method, endpoint)
+        .headers({
+          accept: 'application/json',
+          authorization: getAuthorizationHeader(writeOnlyToken),
+        })
+        .end()
+
+      assertResponse.status(response, 401)
+      assertResponse.challenge(response, {
+        scheme: 'Bearer',
+        realm: 'FIRES',
+        params: {
+          error: 'insufficient_scope',
+        },
+      })
+    })
+
   test('lists labels', async ({ assert, assertResponse, request }) => {
     const labels = await LabelFactory.createMany(2)
 
-    const response = await request.get('/api/labels').headers({ accept: 'application/json' }).end()
+    const response = await request
+      .get('/api/labels')
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
+      .end()
 
     assertResponse.status(response, 200)
     assertResponse.contentType(response, 'application/json; charset=utf-8')
@@ -35,7 +91,10 @@ test.group('Controllers / api / labels', (group) => {
       .body({
         name: 'Test Label',
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assertResponse.status(response, 200)
@@ -55,7 +114,10 @@ test.group('Controllers / api / labels', (group) => {
       .body({
         name: newName,
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assertResponse.status(response, 200)
@@ -81,7 +143,10 @@ test.group('Controllers / api / labels', (group) => {
         name: 'Test Label',
         summary: 'Test Summary',
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assertResponse.status(response, 200)
@@ -107,7 +172,10 @@ test.group('Controllers / api / labels', (group) => {
       .body({
         name: 'Existing Label',
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assertResponse.status(response, 422)
@@ -126,7 +194,10 @@ test.group('Controllers / api / labels', (group) => {
 
     const response = await request
       .delete(`/api/labels/${label.id}`)
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assertResponse.status(response, 200)
@@ -144,7 +215,10 @@ test.group('Controllers / api / labels', (group) => {
 
     const response = await request
       .delete(`/api/labels/${label.id}?force=true`)
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assertResponse.status(response, 204)

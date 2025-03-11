@@ -8,7 +8,7 @@ import type { NextFn } from '@adonisjs/core/types/http'
 export default class ViewDataMiddleware {
   constructor(protected softwareService: SoftwareService) {}
 
-  excludedEndpoints = ['/.well-known/nodeinfo', '/nodeinfo/2.1']
+  excludedEndpoints = ['/.well-known/nodeinfo', '/nodeinfo/2.1', '/api/']
 
   async handle(ctx: HttpContext, next: NextFn) {
     if (this.excludedEndpoints.some((endpoint) => ctx.request.url().startsWith(endpoint))) {

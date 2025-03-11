@@ -5,8 +5,9 @@ import { ApplicationService } from '@adonisjs/core/types'
 import inject from 'light-my-request'
 
 // These come from light-my-request:
-type HttpMethod = 'delete' | 'get' | 'head' | 'options' | 'patch' | 'post' | 'put' | 'trace'
-type RequestMethods = Record<HttpMethod, (url: string) => inject.Chain>
+export type HttpMethod = 'delete' | 'get' | 'head' | 'options' | 'patch' | 'post' | 'put' | 'trace'
+type RequestMethods = Record<HttpMethod, (url: string) => inject.Chain> &
+  Record<'any', (method: HttpMethod, url: string) => inject.Chain>
 
 type ExpectedChallenge = {
   realm: string
@@ -39,8 +40,6 @@ class ResponseAssertions {
   }
 
   challenge(response: inject.Response, expectedChallenge: ExpectedChallenge) {
-    this.assert.equal(response.statusCode, 401)
-
     const challenge =
       (Array.isArray(response.headers['www-authenticate'])
         ? response.headers['www-authenticate'][0]
@@ -82,6 +81,9 @@ export function requestTests(app: ApplicationService): PluginFn {
       'request',
       function (this: TestContext) {
         return {
+          any(method: HttpMethod, url: string) {
+            return inject(requestHandler)[method](url)
+          },
           get(url: string) {
             return inject(requestHandler).get(url)
           },

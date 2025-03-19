@@ -31,9 +31,8 @@ test.group('Controllers / labels', (group) => {
     assert.equal(json['type'], 'Collection')
     assert.equal(json['totalItems'], 0)
     assert.deepEqual(json['items'], [])
-    // fixme: can't really know what the port number is:
-    assert.isString(json['id'])
-    assert.isString(json['summary'])
+    assert.equal(json['id'], 'https://fires.test/labels')
+    assert.equal(json['summary'], 'Labels from https://fires.test/')
   })
 
   test('correctly negotiates to HTML', async ({ assert }) => {

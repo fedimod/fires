@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ title ? `${title} - FediMod FIRES` : 'FediMod FIRES' }}</title>
+    <title>
+      {{ title ? `${title} - FediMod FIRES` : 'FediMod FIRES' }}
+    </title>
     @vite(['resources/styles/app.css'])
   </head>
   <body>
@@ -17,8 +19,10 @@
         {{{ await $slots.main() }}}
       </main>
       <footer>
-        <hr/>
-        <p>Powered by <a href="https://fires.fedimod.org" target="_blank">FediMod FIRES</a> vX.Y.Z</p>
+        <hr />
+        <p>
+          Powered by <a href="https://fires.fedimod.org" target="_blank">FediMod FIRES</a>&nbsp;vX.Y.Z
+        </p>
       </footer>
     </div>
   </body>

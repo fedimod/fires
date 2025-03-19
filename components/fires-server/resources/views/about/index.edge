@@ -1,8 +1,10 @@
 @layouts.app()
   @slot('main')
-    <p class="lead">{{ description }}</p>
+    <p class="lead">
+      {{ description }}
+    </p>
     <p>
-      <a href="{{route('labels.index')}}">View Labels</a>
+      <a href="{{ route('labels.index') }}">View Labels</a>
     </p>
   @endslot
 @end

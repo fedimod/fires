@@ -53,7 +53,8 @@
     "rimraf": "^6.0.1",
     "ts-node-maintained": "^10.9.5",
     "typescript": "~5.7",
-    "vite": "^6.1.1"
+    "vite": "^6.1.1",
+    "yalc": "1.0.0-pre.53"
   },
   "dependencies": {
     "@adonisjs/auth": "^9.3.1",

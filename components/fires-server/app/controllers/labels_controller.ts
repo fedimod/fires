@@ -7,7 +7,11 @@ export default class LabelsController {
     const labels = await Label.all()
     return response.negotiate(
       {
-        json() {
+        json(acceptedType) {
+          if (acceptedType?.startsWith('application/ld+json')) {
+            response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          }
+
           response.json(LabelsSerializer.collection(labels))
         },
         html() {
@@ -23,7 +27,11 @@ export default class LabelsController {
 
     return response.negotiate(
       {
-        json() {
+        json(acceptedType) {
+          if (acceptedType?.startsWith('application/ld+json')) {
+            response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          }
+
           response.json(LabelsSerializer.singular(label))
         },
         html() {

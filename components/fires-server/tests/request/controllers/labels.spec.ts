@@ -35,6 +35,23 @@ test.group('Controllers / labels', (group) => {
     assert.equal(json['summary'], 'Labels from https://fires.test/')
   })
 
+  test('correctly negotiates with JSON-LD', async ({ assert }) => {
+    const server = await createServer()
+    const request = createRequestInjection(server)
+
+    const response = await request.get('/labels').headers({ accept: 'application/ld+json' }).end()
+
+    assert.equal(response.statusCode, 200)
+    assert.equal(response.headers['content-type'], 'application/ld+json; charset=utf-8')
+
+    const json = response.json()
+
+    assert.deepEqual(json['@context'], [
+      'https://www.w3.org/ns/activitystreams',
+      { Label: 'https://fires.fedimod.org/ns#Label' },
+    ])
+  })
+
   test('correctly negotiates to HTML', async ({ assert }) => {
     const server = await createServer()
     const request = createRequestInjection(server)

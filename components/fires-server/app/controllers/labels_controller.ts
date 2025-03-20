@@ -7,12 +7,12 @@ export default class LabelsController {
     const labels = await Label.all()
     return response.negotiate(
       {
-        json(acceptedType) {
+        async json(acceptedType) {
           if (acceptedType?.startsWith('application/ld+json')) {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
           }
 
-          response.json(LabelsSerializer.collection(labels))
+          response.json(await LabelsSerializer.collection(labels))
         },
         html() {
           return view.render('labels/index', { labels })

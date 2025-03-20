@@ -5,6 +5,7 @@ import { createRequestInjection, createServer } from '#tests/helpers/http_inject
 import { LabelFactory } from '#database/factories/label_factory'
 import { CONTEXT } from '#serializers/labels_serializer'
 import Label from '#models/label'
+import { XSDDateFormat } from '#utils/jsonld'
 
 test.group('Controllers / labels / content negotiation', (group) => {
   group.setup(async () => {
@@ -89,9 +90,12 @@ test.group('Controllers / labels', (group) => {
 
     assert.equal(json['type'], 'Collection')
     assert.equal(json.totalItems, 1)
+    assert.equal(json.updated, label.updatedAt.toFormat(XSDDateFormat))
     assert.equal(json.items[0]['type'], 'Label')
     assert.equal(json.items[0].name, label.name)
     assert.equal(json.items[0].summary, label.summary)
+    assert.equal(json.items[0].published, label.createdAt.toFormat(XSDDateFormat))
+    assert.equal(json.items[0].updated, label.updatedAt.toFormat(XSDDateFormat))
     assert.notDeepInclude(json.items[0], ['owl:deprecated'])
   })
 

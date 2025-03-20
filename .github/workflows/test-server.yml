@@ -65,6 +65,7 @@ jobs:
     env:
       TZ: UTC
       NODE_ENV: development
+      HOST: 127.0.0.1
       PUBLIC_URL: https://fires.test/
       LOG_LEVEL: info
       APP_KEY: "test_determinist_key_DO_NOT_USE_IN_PRODUCTION"

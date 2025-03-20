@@ -8,6 +8,7 @@ import { XSDDateFormat } from '#utils/jsonld'
 interface LabelType {
   '@context'?: (string | Record<string, string>)[]
   'id': string
+  'context': string
   'type': 'Label'
   'name': string
   'published': string
@@ -32,23 +33,21 @@ export class LabelsSerializer {
       .orderBy('updatedAt', 'desc')
       .first()
 
+    const collectionId = new URL(router.makeUrl('labels.index'), env.get('PUBLIC_URL')).href
+
     return {
       '@context': CONTEXT,
       'summary': `Labels from ${env.get('PUBLIC_URL')}`,
       'type': 'Collection',
-      'id': new URL(router.makeUrl('labels.index'), env.get('PUBLIC_URL')).href,
+      'id': collectionId,
       'updated': latest?.updatedAt.toFormat(XSDDateFormat),
       'totalItems': labels.length,
-      'items': labels.map((item) => this.singular(item, false)),
+      'items': labels.map((item) => this.singular(item, collectionId)),
     }
   }
 
-  static singular(item: Label, includeContext: boolean = true) {
+  static singular(item: Label, collectionId: string) {
     const result: Partial<LabelType> = {}
-
-    if (includeContext) {
-      result['@context'] = CONTEXT
-    }
 
     if (item.deprecatedAt && item.deprecatedAt < DateTime.now()) {
       result['owl:deprecated'] = true
@@ -57,6 +56,7 @@ export class LabelsSerializer {
     result.id = new URL(router.makeUrl('labels.show', { id: item.id }), env.get('PUBLIC_URL')).href
     result.type = 'Label'
     result.name = item.name
+    result.context = collectionId
     result.published = item.createdAt.toFormat(XSDDateFormat)
     if (item.updatedAt !== null) {
       result.updated = item.updatedAt.toFormat(XSDDateFormat)

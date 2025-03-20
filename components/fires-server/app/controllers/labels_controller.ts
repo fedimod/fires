@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Label from '#models/label'
-import { LabelsSerializer } from '#serializers/labels_serializer'
+import { CONTEXT, LabelsSerializer } from '#serializers/labels_serializer'
+import router from '@adonisjs/core/services/router'
+import env from '#start/env'
 
 export default class LabelsController {
   async index({ response, view }: HttpContext) {
@@ -32,7 +34,12 @@ export default class LabelsController {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
           }
 
-          response.json(LabelsSerializer.singular(label))
+          const collectionId = new URL(router.makeUrl('labels.index'), env.get('PUBLIC_URL')).href
+
+          response.json({
+            '@context': CONTEXT,
+            ...LabelsSerializer.singular(label, collectionId),
+          })
         },
         html() {
           return view.render('labels/show', { label })

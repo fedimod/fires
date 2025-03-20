@@ -30,8 +30,9 @@ emitter.on('http:request_completed', ({ ctx, duration }) => {
 
   ctx.logger.info(
     {
-      statusCode: response.getStatus(),
-      responseTime,
+      response_time: responseTime,
+      status: response.getStatus(),
+      query: request.qs(),
     },
     `request ${ctx.request.method()} ${ctx.request.url()} status=${ctx.response.getStatus()} rt=${responseTime}`
   )

@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import { createHttpInjectionTest } from '#tests/helpers/http_injection_test'
+import { createMiddlewareInjectionTest } from '#tests/helpers/http_injection_test'
 
 import DisableMultipartRequestsMiddleware from '#middleware/disable_multipart_requests_middleware'
 
@@ -7,7 +7,7 @@ test.group('Middleware / Disable multipart requests', () => {
   test('returns http bad request for multipart requests', async ({ assert }) => {
     let nextCalled = false
 
-    const request = createHttpInjectionTest(async (ctx) => {
+    const request = createMiddlewareInjectionTest(async (ctx) => {
       const middleware = new DisableMultipartRequestsMiddleware()
 
       nextCalled = false
@@ -32,7 +32,7 @@ test.group('Middleware / Disable multipart requests', () => {
   test('passes through requests that are not multipart', async ({ assert }) => {
     let nextCalled = false
 
-    const request = createHttpInjectionTest(async (ctx) => {
+    const request = createMiddlewareInjectionTest(async (ctx) => {
       const middleware = new DisableMultipartRequestsMiddleware()
 
       nextCalled = false

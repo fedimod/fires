@@ -168,6 +168,10 @@ export default defineConfig({
                   text: "Introduction",
                   link: "/reference/protocol/",
                 },
+                {
+                  text: "Labels",
+                  link: "/reference/protocol/labels",
+                },
               ],
             },
           ],

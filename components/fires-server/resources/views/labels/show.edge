@@ -1,0 +1,22 @@
+@layouts.app()
+  @slot('main')
+    <a href="{{ route('labels.index') }}" class="breadcrumb-link">&laquo; All Labels</a>
+    <h2>
+      Labels: {{label.name}}
+    </h2>
+    <div class="label-content">
+      <p>
+        @if(label.summary)
+          {{ label.summary }}
+        @else
+          <em>Summary Missing</em>
+        @end
+      </p>
+      @if(label.description)
+        <div class="label-description">
+          {{ markdown(label.description) }}
+        </div>
+      @end
+    </div>
+  @endslot
+@end

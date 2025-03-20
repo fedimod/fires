@@ -1,1 +1,56 @@
 @import '@picocss/pico';
+
+.root-container {
+  max-width: 70%;
+  margin: 3rem auto;
+}
+
+/* Small (landscape phones) */
+@media (max-width: 576px) {
+  .root-container {
+    max-width: 100%;
+    margin: 3rem 1rem;
+  }
+}
+
+header {
+  margin-bottom: 3rem;
+}
+
+footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.6rem;
+}
+
+.breadcrumb-link {
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+dl.labels dt {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.label-content {
+  margin-left: 2rem;
+}
+
+.label-description h1 {
+  font-size: 1.4rem;
+}
+
+.label-description h2 {
+  font-size: 1.3rem;
+}
+
+.label-description h3 {
+  font-size: 1.2rem;
+}
+
+.label-description h4 {
+  font-size: 1.1rem;
+}

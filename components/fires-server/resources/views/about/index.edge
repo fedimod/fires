@@ -1,20 +1,10 @@
-<!DOCTYPE html>
-<html lang="{{ i18n.locale }}">
-  <head>
-    <meta charset="utf-8" />
-    <title>
-      FediMod FIRES
-    </title>
-    @vite(['resources/styles/app.css'])
-  </head>
-  <body>
-    <main class="container-fluid">
-      <h1>
-        FediMod FIRES
-      </h1>
-      <p>
-        {{ description }}
-      </p>
-    </main>
-  </body>
-</html>
+@layouts.app()
+  @slot('main')
+    <p class="lead">
+      {{ description }}
+    </p>
+    <p>
+      <a href="{{ route('labels.index') }}">View Labels</a>
+    </p>
+  @endslot
+@end

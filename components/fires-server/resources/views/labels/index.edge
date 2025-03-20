@@ -1,0 +1,26 @@
+@layouts.app()
+  @slot('main')
+    <h2>
+      Labels
+    </h2>
+    <dl class="labels">
+      @each(label in labels)
+        <dt>
+          {{ label.name }}
+        </dt>
+        <dd class="label-content">
+          <p>
+            @if(label.summary)
+              {{ label.summary }}
+            @else
+              <em>Summary Missing</em>
+            @end
+          </p>
+          <p>
+            <a href="{{ route('labels.show', {id: label.id}) }}">Read more</a>
+          </p>
+        </dd>
+      @end
+    </dl>
+  @endslot
+@end

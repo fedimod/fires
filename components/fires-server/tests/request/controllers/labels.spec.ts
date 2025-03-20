@@ -110,6 +110,7 @@ test.group('Controllers / labels', (group) => {
 
     const json = response.json()
 
+    assert.deepEqual(json['@context'], CONTEXT)
     assert.equal(json['type'], 'Label')
     assert.equal(json.name, label.name)
     assert.equal(json.summary, label.summary)

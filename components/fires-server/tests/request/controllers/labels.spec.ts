@@ -4,14 +4,11 @@ import testUtils from '@adonisjs/core/services/test_utils'
 import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
 import { LabelFactory } from '#database/factories/label_factory'
 import { CONTEXT } from '#serializers/labels_serializer'
+import Label from '#models/label'
 
 test.group('Controllers / labels / content negotiation', (group) => {
   group.setup(async () => {
     await testUtils.db().migrate()
-  })
-
-  group.teardown(async () => {
-    await testUtils.db().truncate()
   })
 
   test('correctly negotiates to JSON', async ({ assert }) => {
@@ -74,49 +71,65 @@ test.group('Controllers / labels', (group) => {
     await testUtils.db().migrate()
   })
 
+  group.each.teardown(async () => {
+    await Label.query().delete()
+  })
+
+  test('fetching the collection of labels', async ({ assert }) => {
+    const label = await LabelFactory.create()
+
+    const server = await createServer()
+    const request = createRequestInjection(server)
+
+    const response = await request.get(`/labels`).headers({ accept: 'application/json' }).end()
+
+    assert.equal(response.statusCode, 200)
+
+    const json = response.json()
+
+    assert.equal(json['type'], 'Collection')
+    assert.equal(json.totalItems, 1)
+    assert.equal(json.items[0]['type'], 'Label')
+    assert.equal(json.items[0].name, label.name)
+    assert.equal(json.items[0].summary, label.summary)
+    assert.notDeepInclude(json.items[0], ['owl:deprecated'])
+  })
+
+  test('fetching an individual label', async ({ assert }) => {
+    const label = await LabelFactory.create()
+
+    const server = await createServer()
+    const request = createRequestInjection(server)
+
+    const response = await request
+      .get(`/labels/${label.id}`)
+      .headers({ accept: 'application/json' })
+      .end()
+
+    assert.equal(response.statusCode, 200)
+
+    const json = response.json()
+
+    assert.equal(json['type'], 'Label')
+    assert.equal(json.name, label.name)
+    assert.equal(json.summary, label.summary)
+  })
+
   test('when a label is deprecated, it returns owl:deprecated true', async ({ assert }) => {
     const label = await LabelFactory.apply('deprecated').create()
 
-    try {
-      const server = await createServer()
-      const request = createRequestInjection(server)
+    const server = await createServer()
+    const request = createRequestInjection(server)
 
-      const response = await request
-        .get(`/labels/${label.id}`)
-        .headers({ accept: 'application/json' })
-        .end()
+    const response = await request
+      .get(`/labels/${label.id}`)
+      .headers({ accept: 'application/json' })
+      .end()
 
-      assert.equal(response.statusCode, 200)
+    assert.equal(response.statusCode, 200)
 
-      const json = response.json()
+    const json = response.json()
 
-      assert.equal(json['owl:deprecated'], true)
-    } finally {
-      // fixme: for some reason the database isn't being truncated
-      await label.delete()
-    }
-  })
-
-  test('when a label is not deprecated, it does not return owl:deprecated', async ({ assert }) => {
-    const label = await LabelFactory.create()
-
-    try {
-      const server = await createServer()
-      const request = createRequestInjection(server)
-
-      const response = await request
-        .get(`/labels/${label.id}`)
-        .headers({ accept: 'application/json' })
-        .end()
-
-      assert.equal(response.statusCode, 200)
-
-      const json = response.json()
-
-      assert.notDeepInclude(json, ['owl:deprecated'])
-    } finally {
-      // fixme: for some reason the database isn't being truncated
-      await label.delete()
-    }
+    assert.equal(json['owl:deprecated'], true)
   })
 })

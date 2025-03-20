@@ -2,8 +2,9 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 import Label from '#models/label'
 import { createLabelValidator, updateLabelValidator } from '#validators/label'
+import { DateTime } from 'luxon'
 
-export default class LabelsController {
+export default class LabelsApiController {
   /**
    * Handle form submission for the create action
    */
@@ -34,11 +35,16 @@ export default class LabelsController {
   /**
    * Delete record
    */
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, request, response }: HttpContext) {
     const label = await Label.findOrFail(params.id)
 
-    await label.delete()
+    if (request.input('force') === 'true') {
+      await label.delete()
+      return response.noContent()
+    }
 
-    return response.noContent()
+    await label.merge({ deprecatedAt: DateTime.now() }).save()
+
+    return response.json(label.serialize())
   }
 }

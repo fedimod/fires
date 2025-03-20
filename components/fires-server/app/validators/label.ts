@@ -6,6 +6,11 @@ export const labelSchema = vine.object({
     table: Label.table,
     column: 'name',
     caseInsensitive: true,
+    filter(db, _value, field) {
+      if (field.parent?.params?.id) {
+        db.andWhereNot('id', field.parent.params.id)
+      }
+    },
   }),
   summary: vine.string().optional(),
   description: vine.string().optional(),
@@ -16,7 +21,7 @@ export const createLabelValidator = vine.compile(labelSchema.clone())
 export const updateLabelValidator = vine.compile(
   vine.object({
     params: vine.object({
-      id: vine.string().uuid({ version: [4] }),
+      id: vine.string().uuid(),
     }),
 
     ...labelSchema.getProperties(),

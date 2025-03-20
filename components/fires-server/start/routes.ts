@@ -16,7 +16,7 @@ router.resource('labels', () => import('#controllers/labels_controller')).only([
 router
   .group(() => {
     router
-      .resource('labels', () => import('#controllers/labels_controller'))
+      .resource('labels', () => import('#controllers/api/labels_controller'))
       .except(['index', 'create', 'edit'])
       .as('labels')
   })

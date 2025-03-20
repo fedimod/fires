@@ -18,6 +18,9 @@ export default class Label extends BaseModel {
   @column()
   declare description: string
 
+  @column.dateTime()
+  declare deprecatedAt: DateTime | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

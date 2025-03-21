@@ -1,4 +1,49 @@
 @import '@picocss/pico';
+@import '@picocss/pico/css/pico.colors.css';
+
+/* Orange color for light color scheme (Default) */
+/* Can be forced with data-theme="light" */
+[data-theme='light'],
+:root:not([data-theme='dark']),
+:host:not([data-theme='dark']) {
+  --pico-text-selection-color: rgba(244, 93, 44, 0.25);
+  --pico-primary: #bd3c13;
+  --pico-primary-background: #d24317;
+  --pico-primary-underline: rgba(189, 60, 19, 0.5);
+  --pico-primary-hover: #942d0d;
+  --pico-primary-hover-background: #bd3c13;
+  --pico-primary-focus: rgba(244, 93, 44, 0.5);
+  --pico-primary-inverse: #fff;
+}
+
+/* Orange color for dark color scheme (Auto) */
+/* Automatically enabled if user has Dark mode enabled */
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]),
+  :host:not([data-theme]) {
+    --pico-background-color: var(--pico-color-zinc-850);
+    --pico-text-selection-color: rgba(245, 107, 61, 0.1875);
+    --pico-primary: var(--pico-color-pumpkin-300);
+    --pico-primary-background: #d24317;
+    --pico-primary-underline: rgba(245, 107, 61, 0.5);
+    --pico-primary-hover: var(--pico-color-red-450);
+    --pico-primary-hover-background: #e74b1a;
+    --pico-primary-focus: rgba(245, 107, 61, 0.375);
+    --pico-primary-inverse: #fff;
+  }
+}
+/* Orange color for dark color scheme (Forced) */
+/* Enabled if forced with data-theme="dark" */
+[data-theme='dark'] {
+  --pico-text-selection-color: rgba(245, 107, 61, 0.1875);
+  --pico-primary: #f56b3d;
+  --pico-primary-background: #d24317;
+  --pico-primary-underline: rgba(245, 107, 61, 0.5);
+  --pico-primary-hover: #f8a283;
+  --pico-primary-hover-background: #e74b1a;
+  --pico-primary-focus: rgba(245, 107, 61, 0.375);
+  --pico-primary-inverse: #fff;
+}
 
 .root-container {
   max-width: 70%;
@@ -14,13 +59,36 @@
 }
 
 header {
+  border-bottom: 1px solid var(--pico-color-zinc-150);
   margin-bottom: 3rem;
 }
 
 footer {
-  margin-top: 2rem;
+  margin-top: 3rem;
+  border-top: 1px solid var(--pico-color-zinc-150);
+  padding-top: 1rem;
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]),
+  :host:not([data-theme]) {
+    header {
+      border-bottom-color: var(--pico-color-zinc-650);
+    }
+    footer {
+      border-top-color: var(--pico-color-zinc-650);
+    }
+  }
+}
+
+footer p {
   text-align: center;
   font-size: 0.6rem;
+  color: var(--pico-muted-color);
+}
+
+footer a {
+  opacity: 0.6;
 }
 
 .breadcrumb-link {

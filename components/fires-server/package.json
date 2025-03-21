@@ -4,6 +4,11 @@
   "private": true,
   "type": "module",
   "license": "AGPL-3.0",
+  "homepage": "https://fires.fedimod.org/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fedimod/fires.git"
+  },
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",

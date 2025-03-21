@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
-      {{ title ? `${title} - FediMod FIRES` : 'FediMod FIRES' }}
+      {{ title ? `${title} - ${provider.name}` : provider.name }}
     </title>
     @vite(['resources/styles/app.css'])
   </head>
@@ -12,16 +12,19 @@
     <div class="root-container">
       <header>
         <h1>
-          FediMod FIRES
+          <a href="{{ route('about') }}">{{ provider.name }}</a>
         </h1>
+        <p class="lead">
+          {{ provider.summary }}
+        </p>
       </header>
       <main>
         {{{ await $slots.main() }}}
       </main>
       <footer>
-        <hr />
         <p>
-          Powered by <a href="https://fires.fedimod.org" target="_blank">FediMod FIRES</a>&nbsp;vX.Y.Z
+          Powered by <a href="{{ software.homepage }}" target="_blank" rel='noopener'>{{ software.name }}</a>&nbsp;v{{ software.version }}<br />
+          <a href="{{ software.source.url }}" target="_blank" rel='noopener'>View source code</a>
         </p>
       </footer>
     </div>

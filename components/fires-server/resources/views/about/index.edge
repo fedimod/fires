@@ -1,8 +1,6 @@
 @layouts.app()
   @slot('main')
-    <p class="lead">
-      {{ description }}
-    </p>
+    {{ markdown(description) }}
     <p>
       <a href="{{ route('labels.index') }}">View Labels</a>
     </p>

@@ -24,6 +24,16 @@ export default await Env.create(new URL('../', import.meta.url), {
   HOST: Env.schema.string({ format: 'host' }),
   PUBLIC_URL: Env.schema.string({ format: 'url', tld: false }),
 
+  /**
+   * Build Metadata
+   */
+  SOURCE_BASE_URL: Env.schema.string.optional(),
+  SOURCE_REPOSITORY: Env.schema.string.optional(),
+  SOURCE_COMMIT: Env.schema.string.optional(),
+  SOURCE_TAG: Env.schema.string.optional(),
+  FIRES_VERSION_METADATA: Env.schema.string.optional(),
+  FIRES_VERSION_PRERELEASE: Env.schema.string.optional(),
+
   /*
   |----------------------------------------------------------
   | Variables for encryption and hashing

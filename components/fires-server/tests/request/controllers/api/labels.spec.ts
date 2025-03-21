@@ -1,10 +1,10 @@
 import { test } from '@japa/runner'
+import { faker } from '@faker-js/faker'
 import testUtils from '@adonisjs/core/services/test_utils'
 
 import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
 import { LabelFactory } from '#database/factories/label_factory'
 import Label from '#models/label'
-import { faker } from '@faker-js/faker'
 
 test.group('Controllers / api / labels', (group) => {
   group.setup(async () => {
@@ -13,6 +13,28 @@ test.group('Controllers / api / labels', (group) => {
 
   group.each.teardown(async () => {
     await Label.query().delete()
+  })
+
+  test('lists labels', async ({ assert }) => {
+    const labels = await LabelFactory.createMany(2)
+    const server = await createServer()
+    const request = createRequestInjection(server)
+
+    const response = await request.get('/api/labels').headers({ accept: 'application/json' }).end()
+
+    assert.equal(response.statusCode, 200)
+    assert.equal(response.headers['content-type'], 'application/json; charset=utf-8')
+
+    const json = response.json()
+
+    assert.typeOf(json.items, 'array')
+    assert.lengthOf(json.items, 2)
+    assert.containsSubset(
+      json.items,
+      labels.map((label) => ({
+        id: label.id,
+      }))
+    )
   })
 
   test('creates a label', async ({ assert }) => {

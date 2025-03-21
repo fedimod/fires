@@ -6,7 +6,18 @@ import { DateTime } from 'luxon'
 
 export default class LabelsApiController {
   /**
-   * Handle form submission for the create action
+   * Handle the index action
+   */
+  async index({ response }: HttpContext) {
+    const labels = await Label.all()
+
+    return response.json({
+      items: labels.map((label) => label.serialize()),
+    })
+  }
+
+  /**
+   * Handle the create action
    */
   async store({ request, response, i18n }: HttpContext) {
     const data = await request.validateUsing(createLabelValidator)
@@ -21,7 +32,7 @@ export default class LabelsApiController {
   }
 
   /**
-   * Handle form submission for the edit action
+   * Handle update action
    */
   async update({ request, response, i18n }: HttpContext) {
     const { params, ...update } = await request.validateUsing(updateLabelValidator)
@@ -33,7 +44,7 @@ export default class LabelsApiController {
   }
 
   /**
-   * Delete record
+   * Handle the delete / deprecate action
    */
   async destroy({ params, request, response }: HttpContext) {
     const label = await Label.findOrFail(params.id)

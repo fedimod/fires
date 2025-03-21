@@ -17,7 +17,7 @@ router
   .group(() => {
     router
       .resource('labels', () => import('#controllers/api/labels_controller'))
-      .except(['index', 'create', 'edit'])
+      .except(['create', 'edit'])
       .as('labels')
   })
   .prefix('api')

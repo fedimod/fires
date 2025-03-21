@@ -7,7 +7,7 @@ export const LabelFactory = factory
   .define(Label, async ({ faker }) => {
     return {
       id: uuidv7(),
-      name: faker.word.sample(2),
+      name: faker.lorem.words(5),
       language: faker.helpers.arrayElement(['en', 'de', 'pt-PT']),
       summary: faker.lorem.sentence({ min: 1, max: 3 }),
       description: faker.lorem.paragraphs(3),

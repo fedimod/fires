@@ -1,16 +1,11 @@
 import { test } from '@japa/runner'
 import { faker } from '@faker-js/faker'
-import testUtils from '@adonisjs/core/services/test_utils'
 
 import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
 import { LabelFactory } from '#database/factories/label_factory'
 import Label from '#models/label'
 
 test.group('Controllers / api / labels', (group) => {
-  group.setup(async () => {
-    await testUtils.db().migrate()
-  })
-
   group.each.teardown(async () => {
     await Label.query().delete()
   })

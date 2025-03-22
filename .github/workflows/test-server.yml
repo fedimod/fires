@@ -64,7 +64,7 @@ jobs:
           - 54321:5432
     env:
       TZ: UTC
-      NODE_ENV: development
+      NODE_ENV: test
       HOST: 127.0.0.1
       PORT: 4444
       PUBLIC_URL: https://fires.test/

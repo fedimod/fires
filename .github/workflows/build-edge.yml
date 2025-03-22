@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
       - id: version_vars
         run: |
-          fires_short_sha=$(git rev-parse --short ${{github.event.push.after}})
+          fires_short_sha=$(git rev-parse --short ${{github.event.after}})
           echo fires_short_sha=$fires_short_sha >> $GITHUB_OUTPUT
           echo fires_version_metadata=edge-{{ fires_short_sha }} >> $GITHUB_OUTPUT
     outputs:

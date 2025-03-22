@@ -90,5 +90,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Run migrations
+        run: pnpm --filter @fedimod/fires-server -r migrate:fresh
+
       - name: Run tests
         run: pnpm --filter @fedimod/fires-server -r test

@@ -3,7 +3,7 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import dedent from 'dedent'
 
 export default class extends BaseSeeder {
-  static environment = ['development']
+  static environment = ['development', 'console']
 
   async run() {
     await Label.updateOrCreateMany('name', [

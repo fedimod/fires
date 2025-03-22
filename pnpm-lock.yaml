@@ -51,6 +51,9 @@ importers:
       '@fedify/fedify':
         specifier: ^1.4.6
         version: 1.4.7(web-streams-polyfill@3.3.3)
+      '@foadonis/openapi':
+        specifier: ^0.3.4
+        version: 0.3.4(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@adonisjs/lucid@21.6.0(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@vinejs/vine@3.0.0)(luxon@3.5.0)(pg@8.13.3))(@vinejs/vine@3.0.0)(luxon@3.5.0)(reflect-metadata@0.2.2)
       '@picocss/pico':
         specifier: ^2.0.6
         version: 2.0.6
@@ -842,6 +845,15 @@ packages:
   '@fedify/fedify@1.4.7':
     resolution: {integrity: sha512-G0d5LgPIwTb/xGCl2a4zFR30vNvVEPnNcvbpAoIaTt3xFv4XQttBcvYsmaI9JKzl36CXlq3qaQzhwchk5t2qew==}
     engines: {bun: '>=1.1.0', deno: '>=2.0.0', node: '>=20.0.0'}
+
+  '@foadonis/openapi@0.3.4':
+    resolution: {integrity: sha512-TcyoyM/v77phMVwvBxAbcLLF4cn+7JApgI72Po3+Rq3HDzvnEu1XkYT4umYER4PXFK4YtxFoeyLq/p9ael3nnA==}
+    engines: {node: '>=20.6.0'}
+    peerDependencies:
+      '@adonisjs/core': ^6.2.0
+      '@adonisjs/lucid': ^21.2.0
+      '@vinejs/vine': ^3.0.0
+      luxon: ^3.5.0
 
   '@formatjs/ecma402-abstract@2.3.3':
     resolution: {integrity: sha512-pJT1OkhplSmvvr6i3CWTPvC/FGC06MbN5TNBfRO6Ox62AEz90eMq+dVvtX9Bl3jxCEkS0tATzDarRZuOLw7oFg==}
@@ -1966,6 +1978,10 @@ packages:
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
+  deepmerge@4.3.1:
+    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
+    engines: {node: '>=0.10.0'}
+
   delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
@@ -3069,6 +3085,14 @@ packages:
 
   oniguruma-to-es@3.1.1:
     resolution: {integrity: sha512-bUH8SDvPkH3ho3dvwJwfonjlQ4R80vjyvrU8YpxuROddv55vAEJrTuCuCVUhhsHbtlD9tGGbaNApGQckXhS8iQ==}
+
+  openapi-metadata@0.1.1:
+    resolution: {integrity: sha512-sa73zvzB++avR4zHpdTMlYxgIDyNOqu5KqYV504hGhupm/zKh82jAdMDO/XVxPNcaTZ1l+5SPkah7gfdcwtF3g==}
+    peerDependencies:
+      reflect-metadata: ^0.2.2
+
+  openapi-types@12.1.3:
+    resolution: {integrity: sha512-N4YtSYJqghVu4iek2ZUvcN/0aqH1kRDuNqzcycDxhOUpg7GdvLa2F3DgS6yBNhInhv2r/6I0Flkn7CqL8+nIcw==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -4973,6 +4997,16 @@ snapshots:
     transitivePeerDependencies:
       - web-streams-polyfill
 
+  '@foadonis/openapi@0.3.4(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@adonisjs/lucid@21.6.0(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@vinejs/vine@3.0.0)(luxon@3.5.0)(pg@8.13.3))(@vinejs/vine@3.0.0)(luxon@3.5.0)(reflect-metadata@0.2.2)':
+    dependencies:
+      '@adonisjs/core': 6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1)
+      '@adonisjs/lucid': 21.6.0(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@vinejs/vine@3.0.0)(luxon@3.5.0)(pg@8.13.3)
+      '@vinejs/vine': 3.0.0
+      luxon: 3.5.0
+      openapi-metadata: 0.1.1(reflect-metadata@0.2.2)
+    transitivePeerDependencies:
+      - reflect-metadata
+
   '@formatjs/ecma402-abstract@2.3.3':
     dependencies:
       '@formatjs/fast-memoize': 2.2.6
@@ -6065,6 +6099,8 @@ snapshots:
 
   deep-is@0.1.4: {}
 
+  deepmerge@4.3.1: {}
+
   delayed-stream@1.0.0: {}
 
   depd@2.0.0: {}
@@ -7138,6 +7174,14 @@ snapshots:
       emoji-regex-xs: 1.0.0
       regex: 6.0.1
       regex-recursion: 6.0.2
+
+  openapi-metadata@0.1.1(reflect-metadata@0.2.2):
+    dependencies:
+      deepmerge: 4.3.1
+      openapi-types: 12.1.3
+      reflect-metadata: 0.2.2
+
+  openapi-types@12.1.3: {}
 
   optionator@0.9.4:
     dependencies:

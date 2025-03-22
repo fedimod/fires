@@ -12,7 +12,7 @@ permissions:
 jobs:
   compute-suffix:
     runs-on: ubuntu-latest
-    if: ${{ github.event.push.head.repo.full_name == github.repository }}
+    if: github.repository == 'fedimod/fires'
     steps:
       # Repository needs to be cloned so `git rev-parse` below works
       - name: Clone repository

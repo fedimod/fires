@@ -53,6 +53,105 @@ $ docker run --net <network_name> --env-file=.env.local ghcr.io/fedimod/fires-se
 $ docker run --net <network_name> --env-file=.env.local -p 4444:4444 ghcr.io/fedimod/fires-server:edge
 ```
 
+## Features
+
+- [x] /.well-known/nodeinfo endpoints
+- [x] Labels Endpoint
+- [x] non-standard API for managing Labels (still need to figure out a standardisable API here)
+- [x] Basic Web UI for reading data
+- [ ] Authentication & Authorization
+- [ ] Datasets
+
+### FIRES Protocol Endpoints
+
+#### Labels
+
+The Labels endpoints return data according to the [Labels](https://fires.fedimod.org/reference/protocol/labels.html) section in the [FIRES Protocol Reference](https://fires.fedimod.org/reference/protocol/).
+
+```http
+GET /labels
+Accept: application/ld+json
+```
+
+Will return the Collection of Labels as JSON-LD
+
+```http
+GET /labels/:id
+Accept: application/ld+json
+```
+
+Will return an individual Label as JSON-LD
+
+#### NodeInfo
+
+The FIRES reference server supports the [NodeInfo Specification](https://nodeinfo.diaspora.software/).
+
+```http
+GET /.well-known/nodeinfo
+Accept: application/json
+```
+
+```http
+GET /nodeinfo/2.1
+Accept: application/json
+```
+
+Returns the NodeInfo data about the FIRES server (excluding usage data)
+
+#### Datasets
+
+Eventually we'll have endpoints for [Datasets](https://fires.fedimod.org/concepts/changes.html).
+
+### Non-Standard API
+
+The FIRES reference server has a non-standard API for managing data stored on it.
+
+#### Labels
+
+```http
+GET /api/labels
+```
+
+Returns the raw list of labels on the server.
+
+```http
+POST /api/labels
+
+{"name": "test label"}
+```
+
+Creates a new label on the FIRES server called "test label"
+
+```http
+PATCH /api/labels/:id
+
+{"summary": "test label for demonstration purposes"}
+```
+
+Partially updates the label identified by `:id`
+
+```http
+PUT /api/labels/:id
+
+{"name": "Edited label", "summary": "test label for demonstration purposes"}
+```
+
+Overwrites the label identified by `:id`
+
+```http
+DELETE /api/labels/:id
+```
+
+Deprecates the label identified by `:id`
+
+```http
+DELETE /api/labels/:id?force=true
+```
+
+Completely deletes the label identified by `:id`, usage of this isn't recommended in production servers, as the label may be present in an existing dataset.
+
+---
+
 ## Acknowledgements
 
 [<img src="/docs/public/nlnet-logo.svg" alt="NLNet" height="80px" />](http://nlnet.nl)&nbsp;&nbsp;&nbsp;&nbsp;

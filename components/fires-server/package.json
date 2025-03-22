@@ -77,6 +77,7 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^4.0.0",
     "@fedify/fedify": "^1.4.6",
+    "@foadonis/openapi": "^0.3.4",
     "@picocss/pico": "^2.0.6",
     "@thisismissem/adonisjs-respond-with": "^2.1.0",
     "@vinejs/vine": "^3.0.0",

@@ -8,6 +8,7 @@
 */
 
 import router from '@adonisjs/core/services/router'
+import openapi from '@foadonis/openapi/services/main'
 
 router.get('/', [() => import('#controllers/about_controller'), 'index']).as('about')
 router.get('/health', ({ response }) => {
@@ -30,6 +31,8 @@ router
       .resource('labels', () => import('#controllers/api/labels_controller'))
       .except(['create', 'edit'])
       .as('labels')
+
+    openapi.registerRoutes('/', (route) => route.as('openapi'))
   })
   .prefix('api')
   .as('api')

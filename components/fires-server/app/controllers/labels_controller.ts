@@ -3,6 +3,7 @@ import Label from '#models/label'
 import { CONTEXT, LabelsSerializer } from '#serializers/labels_serializer'
 import { UrlService } from '#services/url_service'
 import { inject } from '@adonisjs/core'
+import { ApiExcludeOperation } from '@foadonis/openapi/decorators'
 
 @inject()
 export default class LabelsController {
@@ -11,6 +12,7 @@ export default class LabelsController {
     protected labelsSerializer: LabelsSerializer
   ) {}
 
+  @ApiExcludeOperation()
   async index({ response, view }: HttpContext) {
     const labels = await Label.all()
     return response.negotiate(
@@ -30,6 +32,7 @@ export default class LabelsController {
     )
   }
 
+  @ApiExcludeOperation()
   async show({ params, response, view }: HttpContext) {
     const label = await Label.findOrFail(params.id)
     const collectionId = this.urlService.makeUrl('labels.index')

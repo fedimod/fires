@@ -1,5 +1,4 @@
 import { test } from '@japa/runner'
-import testUtils from '@adonisjs/core/services/test_utils'
 
 import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
 import { LabelFactory } from '#database/factories/label_factory'
@@ -7,11 +6,7 @@ import { CONTEXT } from '#serializers/labels_serializer'
 import Label from '#models/label'
 import { XSDDateFormat } from '#utils/jsonld'
 
-test.group('Controllers / labels / content negotiation', (group) => {
-  group.setup(async () => {
-    await testUtils.db().migrate()
-  })
-
+test.group('Controllers / labels / content negotiation', () => {
   test('correctly negotiates to JSON', async ({ assert }) => {
     const server = await createServer()
     const request = createRequestInjection(server)
@@ -68,10 +63,6 @@ test.group('Controllers / labels / content negotiation', (group) => {
 })
 
 test.group('Controllers / labels', (group) => {
-  group.setup(async () => {
-    await testUtils.db().migrate()
-  })
-
   group.each.teardown(async () => {
     await Label.query().delete()
   })

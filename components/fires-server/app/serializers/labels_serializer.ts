@@ -1,9 +1,9 @@
+import { inject } from '@adonisjs/core'
 import Label from '#models/label'
-import env from '#start/env'
-import router from '@adonisjs/core/services/router'
 import markdown from '#utils/markdown'
 import { DateTime } from 'luxon'
 import { XSDDateFormat } from '#utils/jsonld'
+import { UrlService } from '#services/url_service'
 
 interface LabelType {
   '@context'?: (string | Record<string, string>)[]
@@ -26,18 +26,21 @@ export const CONTEXT = [
   },
 ]
 
+@inject()
 export class LabelsSerializer {
-  static async collection(labels: Label[]) {
+  constructor(protected urlService: UrlService) {}
+
+  async collection(labels: Label[]) {
     const latest = await Label.query()
       .select('id', 'updatedAt')
       .orderBy('updatedAt', 'desc')
       .first()
 
-    const collectionId = new URL(router.makeUrl('labels.index'), env.get('PUBLIC_URL')).href
+    const collectionId = this.urlService.makeUrl('labels.index')
 
     return {
       '@context': CONTEXT,
-      'summary': `Labels from ${env.get('PUBLIC_URL')}`,
+      'summary': `Labels from ${this.urlService.publicUrl}`,
       'type': 'Collection',
       'id': collectionId,
       'updated': latest?.updatedAt.toFormat(XSDDateFormat),
@@ -46,14 +49,14 @@ export class LabelsSerializer {
     }
   }
 
-  static singular(item: Label, collectionId: string) {
+  singular(item: Label, collectionId: string) {
     const result: Partial<LabelType> = {}
 
     if (item.deprecatedAt && item.deprecatedAt < DateTime.now()) {
       result['owl:deprecated'] = true
     }
 
-    result.id = new URL(router.makeUrl('labels.show', { id: item.id }), env.get('PUBLIC_URL')).href
+    result.id = this.urlService.makeUrl('labels.show', { id: item.id })
     result.type = 'Label'
     result.name = item.name
     result.context = collectionId

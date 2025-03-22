@@ -64,8 +64,9 @@ jobs:
           - 54321:5432
     env:
       TZ: UTC
-      NODE_ENV: development
+      NODE_ENV: test
       HOST: 127.0.0.1
+      PORT: 4444
       PUBLIC_URL: https://fires.test/
       LOG_LEVEL: info
       APP_KEY: "test_determinist_key_DO_NOT_USE_IN_PRODUCTION"
@@ -89,6 +90,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Run migrations
+        run: pnpm --filter @fedimod/fires-server -r migrate:fresh
 
       - name: Run tests
         run: pnpm --filter @fedimod/fires-server -r test

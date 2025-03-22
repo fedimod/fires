@@ -10,6 +10,9 @@
 import router from '@adonisjs/core/services/router'
 
 router.get('/', [() => import('#controllers/about_controller'), 'index']).as('about')
+router.get('/health', ({ response }) => {
+  return response.send('ok')
+})
 
 // NodeInfo
 const nodeinfoController = () => import('#controllers/well-known/nodeinfo_controller')

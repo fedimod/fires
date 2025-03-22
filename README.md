@@ -19,9 +19,12 @@
 
 The documentation to FIRES is split into a few sections:
 
-- [Overview & Background](#)
-- [API Specification](#)
-- [Reference Server](#)
+- [Background](https://fires.fedimod.org/concepts/background/)
+- [Concepts](https://fires.fedimod.org/concepts/)
+- [Protocol Specification](https://fires.fedimod.org/reference/protocol/)
+
+For the runnable components in this repository, you can find documentation at:
+- [Reference Server](/components/fires-server/README.md)
 
 ## Acknowledgements
 

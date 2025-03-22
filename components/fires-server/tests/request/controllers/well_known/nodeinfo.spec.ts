@@ -1,14 +1,9 @@
 import { test } from '@japa/runner'
-import testUtils from '@adonisjs/core/services/test_utils'
 
 import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
 import { NodeInfo, NodeInfoDiscovery } from '#controllers/well-known/nodeinfo_controller'
 
-test.group('Controllers / nodeinfo', (group) => {
-  group.setup(async () => {
-    await testUtils.db().migrate()
-  })
-
+test.group('Controllers / nodeinfo', () => {
   test('GET /.well-known/nodeinfo returns JSON document pointing to nodeinfo', async ({
     assert,
   }) => {

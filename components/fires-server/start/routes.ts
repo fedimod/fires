@@ -12,10 +12,10 @@ import router from '@adonisjs/core/services/router'
 router.get('/', [() => import('#controllers/about_controller'), 'index']).as('about')
 
 // NodeInfo
-const nodeinfoController = () => import('#controllers/well-known/node_info_controller')
+const nodeinfoController = () => import('#controllers/well-known/nodeinfo_controller')
 
-router.get('/.well-known/nodeinfo', [nodeinfoController, 'discovery'])
-router.get('/nodeinfo/2.1', [nodeinfoController, 'retrieval'])
+router.get('/.well-known/nodeinfo', [nodeinfoController, 'discovery']).as('nodeinfo.discovery')
+router.get('/nodeinfo/2.1', [nodeinfoController, 'retrieval']).as('nodeinfo.retrieval')
 
 // FIRES labels Endpoint
 router.resource('labels', () => import('#controllers/labels_controller')).only(['index', 'show'])

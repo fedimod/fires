@@ -4,7 +4,7 @@ import { inject } from '@adonisjs/core'
 import { SoftwareService } from '#services/software_service'
 
 @inject()
-export default class AboutController {
+export default class NodeInfoController {
   constructor(
     protected urlService: UrlService,
     protected softwareService: SoftwareService
@@ -15,7 +15,7 @@ export default class AboutController {
       links: [
         {
           rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1',
-          href: this.urlService.makeUrl('nodeinfo.retrieve'),
+          href: this.urlService.makeUrl('nodeinfo.retrieval'),
         },
       ],
     })
@@ -30,7 +30,7 @@ export default class AboutController {
     const softwareMetadata = await this.softwareService.getMetadata()
 
     return response.json({
-      version: 'v2.1',
+      version: '2.1',
       software: {
         name: softwareMetadata.slug,
         homepage: softwareMetadata.homepage,
@@ -44,7 +44,35 @@ export default class AboutController {
       },
       openRegistrations: false,
       // no usage data
+      usage: {},
       metadata: {},
     })
   }
+}
+
+export type NodeInfoDiscovery = {
+  links: NodeInfoDiscoveryLink[]
+}
+
+export type NodeInfoDiscoveryLink = {
+  rel: string
+  href: string
+}
+
+export type NodeInfo = {
+  version: '2.1'
+  software: {
+    name: string
+    version: string
+    homepage?: string
+    repository?: string
+  }
+  protocols: string[]
+  services: {
+    inbound: string[]
+    outbound: string[]
+  }
+  openRegistrations: boolean
+  usage: Record<string, any>
+  metadata: Record<string, any>
 }

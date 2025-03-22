@@ -12,15 +12,19 @@ permissions:
 jobs:
   compute-suffix:
     runs-on: ubuntu-latest
-    if: github.repository == 'fedimod/fires'
+    if: ${{ github.event.push.head.repo.full_name == github.repository }}
     steps:
+      # Repository needs to be cloned so `git rev-parse` below works
+      - name: Clone repository
+        uses: actions/checkout@v4
       - id: version_vars
-        env:
-          TZ: Etc/UTC
         run: |
-          echo fires_version_prerelease=main.$(git rev-parse --short ${{github.event.push.after}}) >> $GITHUB_OUTPUT
+          fires_short_sha=$(git rev-parse --short ${{github.event.push.after}})
+          echo fires_short_sha=$fires_short_sha >> $GITHUB_OUTPUT
+          echo fires_version_metadata=edge-{{ fires_short_sha }} >> $GITHUB_OUTPUT
     outputs:
-      prerelease: ${{ steps.version_vars.outputs.fires_version_prerelease }}
+      metadata: ${{ steps.version_vars.outputs.fires_version_metadata }}
+      short_sha: ${{ steps.version_vars.outputs.fires_short_sha }}
 
   build-image:
     needs: compute-suffix
@@ -31,6 +35,7 @@ jobs:
       target_stage: fires-server
       push_to_images: |
         ghcr.io/fedimod/fires-server
+      version_metadata: ${{ needs.compute-suffix.outputs.metadata }}
       version_prerelease: ${{ needs.compute-suffix.outputs.prerelease }}
       labels: |
         org.opencontainers.image.description="Edge build image used for testing purposes"
@@ -39,4 +44,5 @@ jobs:
       tags: |
         type=edge
         type=edge,branch=main
+        type=edge,suffix=-${{ needs.compute-suffix.outputs.short_sha }}
     secrets: inherit

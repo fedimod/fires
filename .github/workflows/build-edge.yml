@@ -21,7 +21,7 @@ jobs:
         run: |
           fires_short_sha=$(git rev-parse --short ${{github.event.after}})
           echo fires_short_sha=$fires_short_sha >> $GITHUB_OUTPUT
-          echo fires_version_metadata=edge-{{ fires_short_sha }} >> $GITHUB_OUTPUT
+          echo fires_version_metadata=edge-${{ fires_short_sha }} >> $GITHUB_OUTPUT
     outputs:
       metadata: ${{ steps.version_vars.outputs.fires_version_metadata }}
       short_sha: ${{ steps.version_vars.outputs.fires_short_sha }}

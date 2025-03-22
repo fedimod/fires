@@ -8,7 +8,13 @@ import type { NextFn } from '@adonisjs/core/types/http'
 export default class ViewDataMiddleware {
   constructor(protected softwareService: SoftwareService) {}
 
+  excludedEndpoints = ['/.well-known/nodeinfo', '/nodeinfo/2.1']
+
   async handle(ctx: HttpContext, next: NextFn) {
+    if (this.excludedEndpoints.some((endpoint) => ctx.request.url().startsWith(endpoint))) {
+      return await next()
+    }
+
     if (!ctx.request.header('Accept') || ctx.request.accepts(['html', '*/*']) === 'html') {
       const [name, summary] = await Setting.findMany(['name', 'summary'])
 

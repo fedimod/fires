@@ -3,10 +3,13 @@ import string from '@adonisjs/core/helpers/string'
 import { createHmac } from 'node:crypto'
 import { appKey } from '#config/app'
 import { safeEqual, Secret } from '@adonisjs/core/helpers'
+import { DateTime } from 'luxon'
 
 export type Ability = 'read' | 'write' | 'admin'
 
 const TOKEN_PREFIX = 'fires_'
+// 1 day in milliseconds:
+const TOKEN_TOUCH_INTERVAL = 24 * 60 * 60 * 1000
 const IDENTIFIER_LENGTH = 32
 
 export default class AccessTokenService {
@@ -48,6 +51,33 @@ export default class AccessTokenService {
     }
 
     return await AccessToken.findBy({ token: value })
+  }
+
+  /**
+   * If the token hasn't been used within the last day, then we touch the
+   * lastUsedAt column and save the token
+   * @param token {AccessToken}
+   */
+  static async touch(token: AccessToken): Promise<void> {
+    let touch = false
+    // all AccessTokens start out unused, i.e., lastUsedAt is null
+    if (token.lastUsedAt === null) {
+      touch = true
+    }
+
+    if (!touch) {
+      const now = Date.now()
+      const lastUsedAt = token.lastUsedAt.toMillis()
+
+      // If the token was last used over a day ago, or the token was last used
+      // somehow in the future, touch the lastUsedAt timestamp
+      touch = lastUsedAt < now - TOKEN_TOUCH_INTERVAL || lastUsedAt > now
+    }
+
+    if (touch) {
+      token.lastUsedAt = DateTime.now()
+      await token.save()
+    }
   }
 
   private static createHmac(value: string): string {

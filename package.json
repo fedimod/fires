@@ -2,7 +2,7 @@
   "name": "@fedimod/fires",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b",
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
   "scripts": {
     "changeset": "changeset",
     "ci:version": "changeset version && prettier --write CHANGELOG.md && git add package.json CHANGELOG.md",

@@ -8,6 +8,7 @@
 */
 
 import router from '@adonisjs/core/services/router'
+import { middleware } from '#start/kernel'
 
 router.get('/', [() => import('#controllers/about_controller'), 'index']).as('about')
 router.get('/health', ({ response }) => {
@@ -31,5 +32,6 @@ router
       .except(['create', 'edit'])
       .as('labels')
   })
+  .use(middleware.requireAuth())
   .prefix('api')
   .as('api')

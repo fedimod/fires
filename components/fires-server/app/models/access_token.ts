@@ -5,6 +5,8 @@ import { jsonArrayColumn, secretColumn } from '#utils/lucid_extensions'
 import { v7 as uuidv7 } from 'uuid'
 
 export default class AccessToken extends BaseModel {
+  selfAssignPrimaryKey = true
+
   @column({ isPrimary: true })
   declare id: string
 

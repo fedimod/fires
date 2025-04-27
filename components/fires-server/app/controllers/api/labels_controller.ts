@@ -8,7 +8,15 @@ export default class LabelsApiController {
   /**
    * Handle the index action
    */
-  async index({ response }: HttpContext) {
+  async index({ response, token, logger }: HttpContext) {
+    logger.debug(token)
+    if (!token?.abilities.includes('read')) {
+      return response.unauthenticated('FIRES', {
+        error: 'insufficient_scope',
+        error_description: 'You do not have sufficient scope to access this endpoint',
+      })
+    }
+
     const labels = await Label.all()
 
     return response.json({

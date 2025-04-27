@@ -3,6 +3,8 @@ import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 import { v7 as uuidv7 } from 'uuid'
 
 export default class Label extends BaseModel {
+  selfAssignPrimaryKey = true
+
   @column({ isPrimary: true })
   declare id: string
 

@@ -4,10 +4,59 @@ import { faker } from '@faker-js/faker'
 import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
 import { LabelFactory } from '#database/factories/label_factory'
 import Label from '#models/label'
+import AccessToken from '#models/access_token'
+import { getAuthorizationHeader, createToken } from '#tests/helpers/access_token'
 
 test.group('Controllers / api / labels', (group) => {
+  let token: AccessToken
+  group.setup(async () => {
+    token = await createToken(['read', 'write'])
+  })
   group.each.teardown(async () => {
     await Label.query().delete()
+  })
+
+  test('requires authentication', async ({ assert }) => {
+    const server = await createServer()
+    const request = createRequestInjection(server)
+
+    const response = await request
+      .get('/api/labels')
+      .headers({
+        accept: 'application/json',
+      })
+      .end()
+
+    assert.equal(response.statusCode, 401)
+    assert.equal(response.headers['www-authenticate'], 'Bearer realm="FIRES"')
+  })
+
+  test('requires authentication with read token', async ({ assert }) => {
+    const writeOnlyToken = await createToken(['write'])
+    const server = await createServer()
+    const request = createRequestInjection(server)
+
+    const response = await request
+      .get('/api/labels')
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(writeOnlyToken),
+      })
+      .end()
+
+    assert.equal(response.statusCode, 401)
+    assert.isString(response.headers['www-authenticate'])
+
+    const challenge =
+      (Array.isArray(response.headers['www-authenticate'])
+        ? response.headers['www-authenticate'][0]
+        : response.headers['www-authenticate']) ?? ''
+
+    assert.ok(challenge.startsWith('Bearer '), 'Challenge contains correct auth scheme')
+    assert.ok(
+      challenge.includes('error="insufficient_scope"'),
+      'Challenge indicates insufficient scopes'
+    )
   })
 
   test('lists labels', async ({ assert }) => {
@@ -15,7 +64,13 @@ test.group('Controllers / api / labels', (group) => {
     const server = await createServer()
     const request = createRequestInjection(server)
 
-    const response = await request.get('/api/labels').headers({ accept: 'application/json' }).end()
+    const response = await request
+      .get('/api/labels')
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
+      .end()
 
     assert.equal(response.statusCode, 200)
     assert.equal(response.headers['content-type'], 'application/json; charset=utf-8')
@@ -41,7 +96,10 @@ test.group('Controllers / api / labels', (group) => {
       .body({
         name: 'Test Label',
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assert.equal(response.statusCode, 200)
@@ -64,7 +122,10 @@ test.group('Controllers / api / labels', (group) => {
       .body({
         name: newName,
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     const json = response.json()
@@ -88,7 +149,10 @@ test.group('Controllers / api / labels', (group) => {
         name: 'Test Label',
         summary: 'Test Summary',
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assert.equal(response.statusCode, 200)
@@ -112,7 +176,10 @@ test.group('Controllers / api / labels', (group) => {
       .body({
         name: 'Existing Label',
       })
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assert.equal(response.statusCode, 422)
@@ -133,7 +200,10 @@ test.group('Controllers / api / labels', (group) => {
 
     const response = await request
       .delete(`/api/labels/${label.id}`)
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assert.equal(response.statusCode, 200)
@@ -153,7 +223,10 @@ test.group('Controllers / api / labels', (group) => {
 
     const response = await request
       .delete(`/api/labels/${label.id}?force=true`)
-      .headers({ accept: 'application/json' })
+      .headers({
+        accept: 'application/json',
+        authorization: getAuthorizationHeader(token),
+      })
       .end()
 
     assert.equal(response.statusCode, 204)

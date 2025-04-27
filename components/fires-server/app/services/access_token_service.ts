@@ -50,7 +50,7 @@ export default class AccessTokenService {
       return null
     }
 
-    return await AccessToken.findBy({ token: value })
+    return await AccessToken.findBy('token', value)
   }
 
   /**

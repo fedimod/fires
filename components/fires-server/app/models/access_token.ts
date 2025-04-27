@@ -1,17 +1,20 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { Secret } from '@adonisjs/core/helpers'
+import { jsonArrayColumn, secretColumn } from '#utils/lucid_extensions'
+import { v7 as uuidv7 } from 'uuid'
 
 export default class AccessToken extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
-  @column()
-  declare token: string
+  @secretColumn()
+  declare token: Secret<string>
 
   @column()
   declare description: string
 
-  @column()
+  @jsonArrayColumn()
   declare abilities: string[]
 
   @column.dateTime({ autoCreate: true })
@@ -22,4 +25,9 @@ export default class AccessToken extends BaseModel {
 
   @column.dateTime()
   declare lastUsedAt: DateTime
+
+  @beforeCreate()
+  static assignId(accessToken: AccessToken) {
+    accessToken.id = uuidv7()
+  }
 }

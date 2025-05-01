@@ -50,6 +50,7 @@ export default defineConfig({
     () => import('@adonisjs/shield/shield_provider'),
     () => import('@adonisjs/i18n/i18n_provider'),
     () => import('@thisismissem/adonisjs-respond-with/provider'),
+    () => import('@foadonis/openapi/openapi_provider'),
   ],
 
   /*

@@ -8,13 +8,9 @@ export default class LabelsApiController {
   /**
    * Handle the index action
    */
-  async index({ response, token, logger }: HttpContext) {
-    logger.debug(token)
-    if (!token?.abilities.includes('read')) {
-      return response.unauthenticated('FIRES', {
-        error: 'insufficient_scope',
-        error_description: 'You do not have sufficient scope to access this endpoint',
-      })
+  async index({ response, auth }: HttpContext) {
+    if (!auth.hasAbility('read')) {
+      return auth.insufficientScope()
     }
 
     const labels = await Label.all()
@@ -27,7 +23,12 @@ export default class LabelsApiController {
   /**
    * Handle the create action
    */
-  async store({ request, response, i18n }: HttpContext) {
+  async store(ctx: HttpContext) {
+    const { request, response, i18n, auth } = ctx
+    if (!auth.hasAbility('admin')) {
+      return auth.insufficientScope()
+    }
+
     const data = await request.validateUsing(createLabelValidator)
     const language = i18n.locale
 
@@ -42,7 +43,12 @@ export default class LabelsApiController {
   /**
    * Handle update action
    */
-  async update({ request, response, i18n }: HttpContext) {
+  async update(ctx: HttpContext) {
+    const { request, response, i18n, auth } = ctx
+    if (!auth.hasAbility('admin')) {
+      return auth.insufficientScope()
+    }
+
     const { params, ...update } = await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)
 
@@ -54,7 +60,12 @@ export default class LabelsApiController {
   /**
    * Handle the delete / deprecate action
    */
-  async destroy({ params, request, response }: HttpContext) {
+  async destroy(ctx: HttpContext) {
+    const { request, response, params, auth } = ctx
+    if (!auth.hasAbility('admin')) {
+      return auth.insufficientScope()
+    }
+
     const label = await Label.findOrFail(params.id)
 
     if (request.input('force') === 'true') {

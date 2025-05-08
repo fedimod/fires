@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import { createMiddlewareInjectionTest } from '#tests/helpers/http_injection_test'
+import { createMiddlewareInjectionTest } from '#tests/helpers/middleware_injection_test'
 
 import DisableMultipartRequestsMiddleware from '#middleware/disable_multipart_requests_middleware'
 

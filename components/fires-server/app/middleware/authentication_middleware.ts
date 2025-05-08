@@ -1,28 +1,29 @@
 import AccessToken from '#models/access_token'
 import AccessTokenService from '#services/access_token_service'
-import { type HttpContext } from '@adonisjs/core/http'
+import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 
 export default class AuthenticationMiddleware {
-  REALM = 'FIRES'
-  AUTH_SCHEME = 'Bearer '
-
   async handle(ctx: HttpContext, next: NextFn) {
-    ctx.token = null
+    ctx.auth = new AuthProvider(ctx)
 
     const authorization = ctx.request.header('authorization', '')
-    if (!authorization?.startsWith(this.AUTH_SCHEME)) {
-      return ctx.response.unauthenticated(this.REALM)
+    if (!authorization) {
+      return next()
     }
 
-    const unverifiedToken = authorization.slice(this.AUTH_SCHEME.length).trim()
+    if (!authorization?.startsWith(ctx.auth.SCHEME)) {
+      return ctx.auth.fail()
+    }
+
+    const unverifiedToken = authorization.slice(ctx.auth.SCHEME.length).trim()
     if (unverifiedToken.length === 0) {
-      return ctx.response.unauthenticated(this.REALM)
+      return ctx.auth.fail()
     }
 
     const accessToken = await AccessTokenService.verify(unverifiedToken)
     if (accessToken === null) {
-      return ctx.response.unauthenticated(this.REALM, {
+      return ctx.auth.fail({
         error: 'invalid_token',
         error_description: 'The access token is not valid',
       })
@@ -30,14 +31,63 @@ export default class AuthenticationMiddleware {
 
     await AccessTokenService.touch(accessToken)
 
-    ctx.token = accessToken
+    ctx.auth.setToken(accessToken)
 
     return next()
   }
 }
 
+export class AuthProvider {
+  REALM = 'FIRES'
+  SCHEME = 'Bearer '
+
+  protected token?: AccessToken
+  protected ctx: HttpContext
+
+  constructor(ctx: HttpContext) {
+    this.ctx = ctx
+  }
+
+  fail(params: Record<string, string> = {}) {
+    const challengeParameters = Object.keys(params)
+      .map((param) => {
+        return `${param}=${JSON.stringify(String(params[param]))}`
+      })
+      .join(', ')
+
+    const challenge = `Bearer realm="${this.REALM}"${challengeParameters.length ? ', ' + challengeParameters : ''}`
+
+    this.ctx.response
+      .status(ResponseStatus.Unauthorized)
+      .header('WWW-Authenticate', challenge)
+      .send(JSON.stringify(params))
+  }
+
+  insufficientScope() {
+    return this.fail({
+      error: 'insufficient_scope',
+      error_description: 'You do not have sufficient scope to access this endpoint',
+    })
+  }
+
+  setToken(token: AccessToken) {
+    this.token = token
+  }
+
+  hasToken() {
+    return this.token !== undefined
+  }
+
+  hasAbility(ability: string): boolean {
+    if (this.token) {
+      return this.token.abilities.includes(ability)
+    }
+    return false
+  }
+}
+
 declare module '@adonisjs/core/http' {
   export interface HttpContext {
-    token: AccessToken | null
+    auth: AuthProvider
   }
 }

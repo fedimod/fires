@@ -26,7 +26,7 @@ export default class AccessToken extends BaseModel {
   declare updatedAt: DateTime
 
   @column.dateTime()
-  declare lastUsedAt: DateTime
+  declare lastUsedAt: DateTime | null
 
   @beforeCreate()
   static assignId(accessToken: AccessToken) {

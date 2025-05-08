@@ -10,7 +10,7 @@ export type Ability = 'read' | 'write' | 'admin'
 export const TOKEN_PREFIX = 'fires_'
 export const IDENTIFIER_LENGTH = 32
 // 1 day in milliseconds:
-const TOKEN_TOUCH_INTERVAL = 24 * 60 * 60 * 1000
+const TOKEN_TOUCH_INTERVAL = 24 * 60 * 60
 
 export default class AccessTokenService {
   static mint() {
@@ -25,6 +25,7 @@ export default class AccessTokenService {
       token: this.mint(),
       abilities,
       description,
+      lastUsedAt: null,
     })
   }
 
@@ -65,22 +66,22 @@ export default class AccessTokenService {
   static async touch(token: AccessToken): Promise<void> {
     let touch = false
     // all AccessTokens start out unused, i.e., lastUsedAt is null
-    if (token.lastUsedAt === null) {
+    if (token.lastUsedAt === undefined || token.lastUsedAt === null) {
       touch = true
     }
 
-    if (!touch) {
-      const now = Date.now()
-      const lastUsedAt = token.lastUsedAt.toMillis()
+    if (token.lastUsedAt !== undefined && token.lastUsedAt !== null) {
+      const now = DateTime.now()
+      const minLastUsedAt = now.minus({ seconds: TOKEN_TOUCH_INTERVAL })
+      const lastUsedAt = token.lastUsedAt
 
       // If the token was last used over a day ago, or the token was last used
       // somehow in the future, touch the lastUsedAt timestamp
-      touch = lastUsedAt < now - TOKEN_TOUCH_INTERVAL || lastUsedAt > now
+      touch = lastUsedAt < minLastUsedAt || lastUsedAt > now
     }
 
     if (touch) {
-      token.lastUsedAt = DateTime.now()
-      await token.save()
+      await token.merge({ lastUsedAt: DateTime.now() }).save()
     }
   }
 }

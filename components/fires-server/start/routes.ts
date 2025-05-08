@@ -17,7 +17,7 @@ const LabelsApiController = () => import('#controllers/api/labels_controller')
 
 router.get('/', [AboutController, 'index']).as('about')
 router.get('/health', ({ response }) => {
-  return response.send('ok')
+  return response.safeStatus(200).json({ ok: true })
 })
 
 // NodeInfo

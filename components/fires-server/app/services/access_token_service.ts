@@ -1,24 +1,28 @@
 import AccessToken from '#models/access_token'
 import string from '@adonisjs/core/helpers/string'
-import { createHmac } from 'node:crypto'
+import crypto from 'node:crypto'
 import { appKey } from '#config/app'
 import { safeEqual, Secret } from '@adonisjs/core/helpers'
 import { DateTime } from 'luxon'
 
 export type Ability = 'read' | 'write' | 'admin'
 
-const TOKEN_PREFIX = 'fires_'
+export const TOKEN_PREFIX = 'fires_'
+export const IDENTIFIER_LENGTH = 32
 // 1 day in milliseconds:
 const TOKEN_TOUCH_INTERVAL = 24 * 60 * 60 * 1000
-const IDENTIFIER_LENGTH = 32
 
 export default class AccessTokenService {
-  static async create(abilities: Ability[], description: string) {
+  static mint() {
     const identifier = string.random(IDENTIFIER_LENGTH)
-    const hmac = this.createHmac(identifier)
+    const hmac = createHmac(identifier)
 
+    return new Secret(`${TOKEN_PREFIX}${identifier}.${hmac}`)
+  }
+
+  static async create(abilities: Ability[], description: string) {
     return AccessToken.create({
-      token: new Secret(`${TOKEN_PREFIX}${identifier}.${hmac}`),
+      token: this.mint(),
       abilities,
       description,
     })
@@ -45,7 +49,7 @@ export default class AccessTokenService {
       return null
     }
 
-    const verifiedHmac = this.createHmac(identifier)
+    const verifiedHmac = createHmac(identifier)
     if (!safeEqual(verifiedHmac, hmac)) {
       return null
     }
@@ -79,8 +83,8 @@ export default class AccessTokenService {
       await token.save()
     }
   }
+}
 
-  private static createHmac(value: string): string {
-    return createHmac('sha256', appKey.release()).update(value).digest('base64url')
-  }
+export function createHmac(value: string): string {
+  return crypto.createHmac('sha256', appKey.release()).update(value).digest('base64url')
 }

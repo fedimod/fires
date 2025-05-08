@@ -39,8 +39,6 @@ class ResponseAssertions {
   }
 
   challenge(response: inject.Response, expectedChallenge: ExpectedChallenge) {
-    this.assert.equal(response.statusCode, 401)
-
     const challenge =
       (Array.isArray(response.headers['www-authenticate'])
         ? response.headers['www-authenticate'][0]

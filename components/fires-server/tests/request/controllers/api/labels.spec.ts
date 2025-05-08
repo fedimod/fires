@@ -23,6 +23,7 @@ test.group('Controllers / api / labels', (group) => {
       })
       .end()
 
+    assertResponse.status(response, 401)
     assertResponse.challenge(response, {
       realm: 'FIRES',
       scheme: 'Bearer',
@@ -40,6 +41,7 @@ test.group('Controllers / api / labels', (group) => {
       })
       .end()
 
+    assertResponse.status(response, 401)
     assertResponse.challenge(response, {
       scheme: 'Bearer',
       realm: 'FIRES',

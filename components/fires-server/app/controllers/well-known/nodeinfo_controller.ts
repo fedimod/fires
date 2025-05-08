@@ -15,7 +15,7 @@ export default class NodeInfoController {
       links: [
         {
           rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1',
-          href: this.urlService.makeUrl('nodeinfo.retrieval'),
+          href: this.urlService.make('nodeinfo.retrieval'),
         },
       ],
     })

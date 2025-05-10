@@ -78,7 +78,7 @@
     "@adonisjs/vite": "^4.0.0",
     "@fedify/fedify": "^1.4.6",
     "@picocss/pico": "^2.0.6",
-    "@thisismissem/adonisjs-respond-with": "^2.1.0",
+    "@thisismissem/adonisjs-respond-with": "^2.1.1",
     "@vinejs/vine": "^3.0.0",
     "dedent": "^1.5.3",
     "edge.js": "^6.2.1",

@@ -36,7 +36,7 @@ export class LabelsSerializer {
       .orderBy('updatedAt', 'desc')
       .first()
 
-    const collectionId = this.urlService.makeUrl('labels.index')
+    const collectionId = this.urlService.make('labels.index')
 
     return {
       '@context': CONTEXT,
@@ -56,7 +56,7 @@ export class LabelsSerializer {
       result['owl:deprecated'] = true
     }
 
-    result.id = this.urlService.makeUrl('labels.show', { id: item.id })
+    result.id = this.urlService.make('labels.show', { id: item.id })
     result.type = 'Label'
     result.name = item.name
     result.context = collectionId

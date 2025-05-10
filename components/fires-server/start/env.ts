@@ -46,12 +46,8 @@ export default await Env.create(new URL('../', import.meta.url), {
   | Variables for configuring database connection
   |----------------------------------------------------------
   */
-  DATABASE_HOST: Env.schema.string({ format: 'host' }),
-  DATABASE_PORT: Env.schema.number(),
-  DATABASE_USER: Env.schema.string(),
-  DATABASE_PASSWORD: Env.schema.string.optional(),
-  DATABASE_NAME: Env.schema.string.optional(),
-  DATABASE_SSL_CA_CERT: Env.schema.string.optional(),
+  DATABASE_URL: Env.schema.string(),
+  DATABASE_POOL_MAX: Env.schema.number.optional(),
 
   /*
   |----------------------------------------------------------

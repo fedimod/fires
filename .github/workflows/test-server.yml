@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     paths:
+      - ".github/workflows/test-server.yml"
       - "components/fires-server/**"
       - "pnpm-lock.json"
 
@@ -54,7 +55,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: fires_test
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U ${POSTGRES_USER}"
           --health-interval 10ms
           --health-timeout 3s
           --health-retries 50
@@ -70,11 +71,8 @@ jobs:
       PUBLIC_URL: https://fires.test/
       LOG_LEVEL: info
       APP_KEY: "test_determinist_key_DO_NOT_USE_IN_PRODUCTION"
-      DATABASE_HOST: 127.0.0.1
-      DATABASE_PORT: 54321
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
-      DATABASE_DATABASE: fires_test
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54321/fires_test
+      DATABASE_POOL_MAX: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4

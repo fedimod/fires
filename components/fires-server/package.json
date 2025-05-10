@@ -85,6 +85,7 @@
     "luxon": "^3.5.0",
     "markdown-it": "^14.1.0",
     "pg": "^8.13.3",
+    "pg-connection-string": "^2.8.5",
     "reflect-metadata": "^0.2.2",
     "uuid": "^11.1.0"
   },

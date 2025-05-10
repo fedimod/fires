@@ -32,7 +32,7 @@ export default class LabelsController {
 
   async show({ params, response, view }: HttpContext) {
     const label = await Label.findOrFail(params.id)
-    const collectionId = this.urlService.makeUrl('labels.index')
+    const collectionId = this.urlService.make('labels.index')
 
     return response.negotiate(
       {

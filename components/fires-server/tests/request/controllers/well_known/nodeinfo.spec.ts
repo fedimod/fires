@@ -1,19 +1,16 @@
 import { test } from '@japa/runner'
-
-import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
 import { NodeInfo, NodeInfoDiscovery } from '#controllers/well-known/nodeinfo_controller'
 
 test.group('Controllers / nodeinfo', () => {
   test('GET /.well-known/nodeinfo returns JSON document pointing to nodeinfo', async ({
     assert,
+    assertResponse,
+    request,
   }) => {
-    const server = await createServer()
-    const request = createRequestInjection(server)
-
     const response = await request.get('/.well-known/nodeinfo').end()
 
-    assert.equal(response.statusCode, 200)
-    assert.include(response.headers, { 'content-type': 'application/json; charset=utf-8' })
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/json; charset=utf-8')
 
     const json = response.json<NodeInfoDiscovery>()
 
@@ -27,17 +24,18 @@ test.group('Controllers / nodeinfo', () => {
     ])
   })
 
-  test('GET /nodeinfo/2.1 endpoint returns JSON with nodeinfo properties', async ({ assert }) => {
-    const server = await createServer()
-    const request = createRequestInjection(server)
-
+  test('GET /nodeinfo/2.1 endpoint returns JSON with nodeinfo properties', async ({
+    assert,
+    assertResponse,
+    request,
+  }) => {
     const response = await request.get('/nodeinfo/2.1').end()
 
-    assert.equal(response.statusCode, 200)
-    assert.include(response.headers, {
-      'content-type':
-        'application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.1#"',
-    })
+    assertResponse.status(response, 200)
+    assertResponse.contentType(
+      response,
+      'application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.1#"'
+    )
 
     const json = response.json<NodeInfo>()
 

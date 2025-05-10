@@ -1,0 +1,80 @@
+# @fedimod/fires-server
+
+## 0.1.0
+
+### Minor Changes
+
+- [#36](https://github.com/fedimod/fires/pull/36) [`791d620`](https://github.com/fedimod/fires/commit/791d6206fb6a8bfa1e79c02952a3e5b71d36c636) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Bootstrap fires-server component
+
+  - Sets up an adonis.js application with postgresql, lucid, vite, edge.js, and pico.css
+  - Adds database configuration for using SSL CA Certificates (needed for people to deploy with providers like DigitalOcean's Managed Databases)
+  - Disables multipart/form-data requests, as the FIRES server doesn't need to handle these, but there's no way to disable them in Adonis.js yet. See: https://github.com/adonisjs/bodyparser/pull/66
+
+- [#72](https://github.com/fedimod/fires/pull/72) [`ce2e791`](https://github.com/fedimod/fires/commit/ce2e791625c66766a50b6dea47974d44c4bded67) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Added support for NodeInfo Protocol
+
+  This helps discovery of FIRES servers by using the well-known [NodeInfo
+  Protocol](https://nodeinfo.diaspora.software/). We don't expose usage data
+  because it's not relevant and the FIRES server doesn't have "users" as such.
+
+  We're also currently using a non-standard `protocol` of `"fires"` as the
+  protocol in NodeInfo Schema is defined as an enum of specific string values, so
+  isn't extensible without new revisions to their specification, and it lacks a
+  protocol registry (like what many IETF specs have), so I can't "register" the
+  `"fires"` protocol.
+
+  But at least this gives some discovery information.
+
+- [#64](https://github.com/fedimod/fires/pull/64) [`81ebb83`](https://github.com/fedimod/fires/commit/81ebb830e3aecacbc36b8e96f6a3e75e03c97c37) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Implemented Labels API
+
+  This provides a new set of APIs to the FIRES reference server, as well as documenting the API of the Labels endpoint(s) in the FIRES protocol.
+
+  The FIRES protocol covers reading the collection of all labels and retrieving an individual label as both `text/html` and `application/json` or `application/ld+json`.
+
+  The non-standard API for managing labels covers creating, updated, deprecating and deleting labels from the FIRES reference server.
+
+- [#96](https://github.com/fedimod/fires/pull/96) [`8d4aa5a`](https://github.com/fedimod/fires/commit/8d4aa5a4717bdc8a69fdb60f3f74db3629ce0f7e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Use `DATABASE_URL` in libpq compat mode for database connections
+
+  This change removes the previous `DATABASE_*` environment variables, and replaces them with a singular `DATABASE_URL`. This ensures we have better handling of SSL Certificates for self-signed certificates (e.g., when the postgresql database is on a managed service like DigitalOcean).
+
+  When using `DATABASE_URL` you can omit the database name (the path component of the connection string), in which case, we will automatically use the combined of `fires_` and the current `NODE_ENV` as the database name.
+
+  Also introduced is `DATABASE_POOL_MAX` to configure the database pool size, as we weren't previously using database connection pooling.
+
+### Patch Changes
+
+- [#62](https://github.com/fedimod/fires/pull/62) [`d3d6fd8`](https://github.com/fedimod/fires/commit/d3d6fd84ea0ce209939ebdd563ee8fbaa3579a30) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add CLI to support setting up a FIRES server
+
+  This work was done in PR [#60](https://github.com/fedimod/fires/pull/60). The idea is to help someone configure a FIRES server, and eventually provision the issue admin-level bearer token for authentication.
+
+  Provided a working installation of a FIRES server, you can run:
+
+  ```
+  node ace fires:setup
+  ```
+
+  Which will prompt you for the following questions:
+
+  - Please give your new FIRES server a short description
+  - What is your contact email? (publicly available)
+  - What is the contact fediverse account?
+  - Where is your website as a FIRES provider?
+  - Do you have a website with documentation?
+  - Where can people go to lodge an appeal for moderation decisions?
+  - Would you like to redirect visitors to a different URL for this server?
+    - (if yes) Which URL?
+
+  Both the documentation and homepage URLs are optional, the rest are currently mandatory.
+
+  This information will eventually be available when visiting the root of the FIRES server.
+
+- [#46](https://github.com/fedimod/fires/pull/46) [`02f2b07`](https://github.com/fedimod/fires/commit/02f2b07da20a218ee4bf3dd396547b21135617ea) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Migrate from npm to pnpm for better builds
+
+- [#50](https://github.com/fedimod/fires/pull/50) [`647e6af`](https://github.com/fedimod/fires/commit/647e6af2c551214855c0c617e30202a2900ad62e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add required PUBLIC_URL environment variable
+
+- [#52](https://github.com/fedimod/fires/pull/52) [`56c8d47`](https://github.com/fedimod/fires/commit/56c8d479e652f24b58c3d610ff18f6ddfd6968f5) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix docker image labels, these weren't working correctly on edge images
+
+- [#47](https://github.com/fedimod/fires/pull/47) [`9455ab7`](https://github.com/fedimod/fires/commit/9455ab7b8682bd3f4e73a95d8ff5f78ec9b7720f) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add docker images to deployments
+
+  We're now building both amd64 and arm64 docker images for fires-server.
+
+- [#51](https://github.com/fedimod/fires/pull/51) [`e65304b`](https://github.com/fedimod/fires/commit/e65304be1f705326c496435904ef321a0361f0aa) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add localisation support

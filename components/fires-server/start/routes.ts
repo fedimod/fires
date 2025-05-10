@@ -8,6 +8,7 @@
 */
 
 import router from '@adonisjs/core/services/router'
+import { middleware } from '#start/kernel'
 
 const AboutController = () => import('#controllers/about_controller')
 const NodeinfoController = () => import('#controllers/well-known/nodeinfo_controller')
@@ -16,7 +17,7 @@ const LabelsApiController = () => import('#controllers/api/labels_controller')
 
 router.get('/', [AboutController, 'index']).as('about')
 router.get('/health', ({ response }) => {
-  return response.send('ok')
+  return response.safeStatus(200).json({ ok: true })
 })
 
 // NodeInfo
@@ -31,5 +32,6 @@ router
   .group(() => {
     router.resource('labels', LabelsApiController).except(['create', 'edit']).as('labels')
   })
+  .use([middleware.auth(), middleware.requireAuth()])
   .prefix('api')
   .as('api')

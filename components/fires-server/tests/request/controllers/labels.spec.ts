@@ -5,7 +5,11 @@ import { LabelFactory } from '#database/factories/label_factory'
 import { CONTEXT } from '#serializers/labels_serializer'
 import { XSDDateFormat } from '#utils/jsonld'
 
-test.group('Controllers / labels / content negotiation', () => {
+test.group('Controllers / labels / content negotiation', (group) => {
+  group.each.teardown(async () => {
+    await Label.query().delete()
+  })
+
   test('correctly negotiates to JSON', async ({ assert, assertResponse, request }) => {
     const response = await request.get('/labels').headers({ accept: 'application/json' }).end()
 
@@ -47,6 +51,19 @@ test.group('Controllers / labels / content negotiation', () => {
     assertResponse.status(response, 200)
     assertResponse.contentType(response, 'text/html; charset=utf-8')
   })
+
+  test('correctly negotiates an individual label to HTML', async ({
+    assert,
+    assertResponse,
+    request,
+  }) => {
+    const label = await LabelFactory.create()
+    const response = await request.get(`/labels/${label.id}`).headers({ accept: 'text/html' }).end()
+
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'text/html; charset=utf-8')
+    assert.ok(response.body.includes(label.name), 'Should contain the label name on the page')
+  })
 })
 
 test.group('Controllers / labels', (group) => {
@@ -85,6 +102,25 @@ test.group('Controllers / labels', (group) => {
 
     assertResponse.status(response, 200)
     assertResponse.contentType(response, 'application/json; charset=utf-8')
+
+    const json = response.json()
+
+    assert.deepEqual(json['@context'], CONTEXT)
+    assert.equal(json['type'], 'Label')
+    assert.equal(json.name, label.name)
+    assert.equal(json.summary, label.summary)
+  })
+
+  test('fetching an individual label as json-ld', async ({ assert, assertResponse, request }) => {
+    const label = await LabelFactory.create()
+
+    const response = await request
+      .get(`/labels/${label.id}`)
+      .headers({ accept: 'application/ld+json' })
+      .end()
+
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/ld+json; charset=utf-8')
 
     const json = response.json()
 

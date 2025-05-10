@@ -1,20 +1,16 @@
 import { test } from '@japa/runner'
 
-import { createRequestInjection, createServer } from '#tests/helpers/http_injection_test'
+import Label from '#models/label'
 import { LabelFactory } from '#database/factories/label_factory'
 import { CONTEXT } from '#serializers/labels_serializer'
-import Label from '#models/label'
 import { XSDDateFormat } from '#utils/jsonld'
 
 test.group('Controllers / labels / content negotiation', () => {
-  test('correctly negotiates to JSON', async ({ assert }) => {
-    const server = await createServer()
-    const request = createRequestInjection(server)
-
+  test('correctly negotiates to JSON', async ({ assert, assertResponse, request }) => {
     const response = await request.get('/labels').headers({ accept: 'application/json' }).end()
 
-    assert.equal(response.statusCode, 200)
-    assert.equal(response.headers['content-type'], 'application/json; charset=utf-8')
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/json; charset=utf-8')
 
     const json = response.json()
 
@@ -27,38 +23,29 @@ test.group('Controllers / labels / content negotiation', () => {
     assert.equal(json['summary'], 'Labels from https://fires.test/')
   })
 
-  test('correctly negotiates with JSON-LD', async ({ assert }) => {
-    const server = await createServer()
-    const request = createRequestInjection(server)
-
+  test('correctly negotiates with JSON-LD', async ({ assert, assertResponse, request }) => {
     const response = await request.get('/labels').headers({ accept: 'application/ld+json' }).end()
 
-    assert.equal(response.statusCode, 200)
-    assert.equal(response.headers['content-type'], 'application/ld+json; charset=utf-8')
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/ld+json; charset=utf-8')
 
     const json = response.json()
 
     assert.deepEqual(json['@context'], CONTEXT)
   })
 
-  test('correctly negotiates to HTML', async ({ assert }) => {
-    const server = await createServer()
-    const request = createRequestInjection(server)
-
+  test('correctly negotiates to HTML', async ({ assertResponse, request }) => {
     const response = await request.get('/labels').headers({ accept: 'text/html' }).end()
 
-    assert.equal(response.statusCode, 200)
-    assert.equal(response.headers['content-type'], 'text/html; charset=utf-8')
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'text/html; charset=utf-8')
   })
 
-  test('defaults to HTML when no Accept header is present', async ({ assert }) => {
-    const server = await createServer()
-    const request = createRequestInjection(server)
-
+  test('defaults to HTML when no Accept header is present', async ({ assertResponse, request }) => {
     const response = await request.get('/labels').end()
 
-    assert.equal(response.statusCode, 200)
-    assert.equal(response.headers['content-type'], 'text/html; charset=utf-8')
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'text/html; charset=utf-8')
   })
 })
 
@@ -67,15 +54,13 @@ test.group('Controllers / labels', (group) => {
     await Label.query().delete()
   })
 
-  test('fetching the collection of labels', async ({ assert }) => {
+  test('fetching the collection of labels', async ({ assert, assertResponse, request }) => {
     const label = await LabelFactory.create()
-
-    const server = await createServer()
-    const request = createRequestInjection(server)
 
     const response = await request.get(`/labels`).headers({ accept: 'application/json' }).end()
 
-    assert.equal(response.statusCode, 200)
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/json; charset=utf-8')
 
     const json = response.json()
 
@@ -90,18 +75,16 @@ test.group('Controllers / labels', (group) => {
     assert.notDeepInclude(json.items[0], ['owl:deprecated'])
   })
 
-  test('fetching an individual label', async ({ assert }) => {
+  test('fetching an individual label', async ({ assert, assertResponse, request }) => {
     const label = await LabelFactory.create()
-
-    const server = await createServer()
-    const request = createRequestInjection(server)
 
     const response = await request
       .get(`/labels/${label.id}`)
       .headers({ accept: 'application/json' })
       .end()
 
-    assert.equal(response.statusCode, 200)
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/json; charset=utf-8')
 
     const json = response.json()
 
@@ -111,18 +94,20 @@ test.group('Controllers / labels', (group) => {
     assert.equal(json.summary, label.summary)
   })
 
-  test('when a label is deprecated, it returns owl:deprecated true', async ({ assert }) => {
+  test('when a label is deprecated, it returns owl:deprecated true', async ({
+    assert,
+    assertResponse,
+    request,
+  }) => {
     const label = await LabelFactory.apply('deprecated').create()
-
-    const server = await createServer()
-    const request = createRequestInjection(server)
 
     const response = await request
       .get(`/labels/${label.id}`)
       .headers({ accept: 'application/json' })
       .end()
 
-    assert.equal(response.statusCode, 200)
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/json; charset=utf-8')
 
     const json = response.json()
 

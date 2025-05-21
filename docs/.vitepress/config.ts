@@ -58,14 +58,10 @@ export default defineConfig({
         text: "Manuals",
         items: [
           {
-            text: "Under Development!",
-            link: "/manuals/",
-          },
-          /* {
             text: "Reference Server",
             link: "/manuals/reference-server/",
           },
-          {
+          /* {
             text: "Example Provider",
             link: "/manuals/example-provider/",
           },
@@ -193,7 +189,7 @@ export default defineConfig({
             },
           ],
         },
-        {
+        /*{
           text: "Example Provider",
           items: [
             {
@@ -210,7 +206,7 @@ export default defineConfig({
               link: "/manuals/example-consumer/",
             },
           ],
-        },
+        },*/
       ],
     },
 

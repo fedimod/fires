@@ -52,9 +52,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Add summary
+        run: echo "```${{toJson(steps.changesets.outputs)}}```" >> $GITHUB_STEP_SUMMARY
+
   release-fires-server-image:
     needs: [release]
-    if: ${{ needs.release.outputs.published == 'true' && contains(fromJson(needs.release.outputs.publishedPackages).*.name, 'fires-server') }}
+    # Even though needs.release.outputs.publishedPackages is JSON, for some reason I can't get it to match correct as json:
+    if: ${{ needs.release.outputs.published == 'true' && contains(needs.release.outputs.publishedPackages, 'fires-server') }}
     uses: ./.github/workflows/build-container-image.yml
     with:
       file_to_build: Dockerfile

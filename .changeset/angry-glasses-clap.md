@@ -1,5 +1,5 @@
 ---
-"@fedimod/fires-server": patch
+"@fedimod/fires-server": minor
 ---
 
 Add CLI to support setting up a FIRES server

@@ -54,7 +54,7 @@ jobs:
 
   release-fires-server-image:
     needs: [release]
-    if: ${{ needs.release.outputs.published == 'true' && contains(needs.release.outputs.publishedPackages.*.name, 'fires-server') }}
+    if: ${{ needs.release.outputs.published == 'true' && contains(fromJson(needs.release.outputs.publishedPackages).*.name, 'fires-server') }}
     uses: ./.github/workflows/build-container-image.yml
     with:
       file_to_build: Dockerfile

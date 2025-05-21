@@ -1,9 +1,22 @@
 import Label from '#models/label'
+import Setting from '#models/setting'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import dedent from 'dedent'
 
 export default class extends BaseSeeder {
   async run() {
+    await Setting.updateOrCreateMany('key', [
+      {
+        key: 'name',
+        value: 'Example FIRES Server',
+      },
+      {
+        key: 'summary',
+        value:
+          'An example FIRES server for labels, moderation advisories, and moderation recommendations.',
+      },
+    ])
+
     await Label.updateOrCreateMany('name', [
       {
         name: 'CSAM',

@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.1.3
+
+### Patch Changes
+
+- [#115](https://github.com/fedimod/fires/pull/115) [`9c0224f`](https://github.com/fedimod/fires/commit/9c0224f5ac66d167145068daf001409ee7958ac0) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix releases again
+
 ## 0.1.2
 
 ### Patch Changes

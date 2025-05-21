@@ -46,39 +46,17 @@ To stop everything:
 $ docker compose down
 ```
 
-### Running without docker compose
-
 If you already have postgresql running in docker and want to use that instead, you can with the following, but you'll need to know the network name that postgresql is on, which you can find out with:
 
 ```sh
-$ docker inspect --format='{{println .HostConfig.NetworkMode}}' fires-postgresql
+$ docker inspect --format='{{println .HostConfig.NetworkMode}}' postgresql
 ```
 
-Where `fires-postgesql` is the name of the postgesql container you have running.
+Where `postgesql` is the name of the postgesql container you have running.
 
 You'll also need to create the database in postgresql for the fires server to use.
 
-```sh
-# Run the migrations:
-$ docker run --net <network_name> --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:run --force
-
-# Run the setup:
-$ docker run --net <network_name> --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace fires:setup
-
-# Seed the database with example data (optional):
-$ docker run --net <network_name> --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace db:seed
-
-# Run the server:
-$ docker run --net <network_name> --env-file=.env.docker.local -p 4444:4444 ghcr.io/fedimod/fires-server:edge
-```
-
-#### Managing Access Tokens
-
-The following commands exist for managing access tokens (necessary to access the non-standard API for working with Labels and Datasets):
-
-- `fires:tokens:list`
-- `fires:tokens:create`
-- `fires:tokens:delete <token_prefix>`
+### Running administrative commands:
 
 In docker, you need to run these from a command line, so first get the Container ID using:
 
@@ -92,7 +70,24 @@ Then start a command line using:
 $ docker exec -it <Container ID> /bin/sh
 ```
 
-Then you can run the following commands which are interactive:
+#### Setting up the server:
+
+From within the docker command line, you can run the interactive setup with:
+
+```sh
+# Run the interactive setup:
+$ node ace fires:setup
+```
+
+#### Managing Access Tokens
+
+The following commands exist for managing access tokens (necessary to access the non-standard API for working with Labels and Datasets):
+
+- `fires:tokens:list`
+- `fires:tokens:create`
+- `fires:tokens:delete <token_prefix>`
+
+You can run these commands, which are interactive, from the docker command line:
 
 ```sh
 # Create an access token:

@@ -31,7 +31,7 @@ jobs:
     uses: ./.github/workflows/build-container-image.yml
     with:
       file_to_build: Dockerfile
-      cache: false
+      cache: true
       target_stage: fires-server
       push_to_images: |
         ghcr.io/fedimod/fires-server

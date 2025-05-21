@@ -8,6 +8,10 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   release:
     name: Release
@@ -15,6 +19,9 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      publishedPackages: ${{ steps.changesets.outputs.publishedPackages.*.name }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -44,3 +51,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release-fires-server-image:
+    needs: [release]
+    if: ${{ needs.release.outputs.published == 'true' && contains(needs.release.outputs.publishedPackages, 'fires-server') }}
+    uses: ./.github/workflows/build-container-image.yml
+    with:
+      file_to_build: Dockerfile
+      target_stage: fires-server
+      push_to_images: |
+        ghcr.io/fedimod/fires-server
+      # Do not use cache when building releases, so apk update is always ran and the release always contain the latest packages
+      cache: false
+      # Only tag with latest when ran against the latest stable branch
+      # This needs to be updated after each minor version release
+      flavor: |
+        latest=true
+      tags: |
+        type=pep440,pattern={{raw}}
+        type=pep440,pattern=v{{major}}.{{minor}}
+    secrets: inherit

@@ -17,6 +17,10 @@ export default class FiresTokensList extends BaseCommand {
       .head(['Token (truncated)', 'Description', 'Abilities', 'Last Used At'])
     const tokens = await AccessToken.all()
 
+    if (tokens.length === 0) {
+      table.row([{ colSpan: 4, content: 'No Access Tokens Exist' }])
+    }
+
     tokens.forEach((token) => {
       table.row([
         token.token.release().split('.')[0],

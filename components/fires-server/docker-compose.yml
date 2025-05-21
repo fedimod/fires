@@ -19,7 +19,7 @@ services:
 
   web:
     # You can uncomment the following line if you want to not use the prebuilt image, for example if you have local code changes
-    # build: .
+    build: ../../
     image: ghcr.io/fedimod/fires-server:edge
     restart: always
     env_file: .env.docker

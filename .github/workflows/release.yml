@@ -21,7 +21,7 @@ jobs:
       contents: write
     outputs:
       published: ${{ steps.changesets.outputs.published }}
-      publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
+      tags: ${{ steps.release.outputs.tags }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -52,15 +52,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Add summary
-        run: echo "```${{toJson(steps.changesets.outputs)}}```" >> $GITHUB_STEP_SUMMARY
+      - name: Setup release variables
+        id: release
+        run: |
+          echo '::debug::${{steps.changesets.outputs.publishedPackages}}'
+          tags=$(jq -cr 'map([.name, .version] | join("@")) | map("refs/tags/" + .)' <<< ${{ steps.changesets.outputs.publishedPackages }})
+          echo "tags='${tags%,}'" >> "$GITHUB_OUTPUT"
 
   release-fires-server-image:
     needs: [release]
-    # Even though needs.release.outputs.publishedPackages is JSON, for some reason I can't get it to match correct as json:
-    if: ${{ needs.release.outputs.published == 'true' && contains(needs.release.outputs.publishedPackages, 'fires-server') }}
+    if: ${{ needs.release.outputs.published == 'true' }}
+    strategy:
+      matrix:
+        git_ref: ${{ fromJson(needs.release.outputs.tags) }}
     uses: ./.github/workflows/build-container-image.yml
     with:
+      git_ref: ${{ matrix.git_ref }}
       file_to_build: Dockerfile
       target_stage: fires-server
       push_to_images: |

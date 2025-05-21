@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.1.6
+
+### Patch Changes
+
+- [#121](https://github.com/fedimod/fires/pull/121) [`91a0604`](https://github.com/fedimod/fires/commit/91a0604ec705ddf773f388484b71da2e7d69391b) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix missing quotes on json when doing releases
+
 ## 0.1.5
 
 ### Patch Changes

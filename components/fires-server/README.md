@@ -13,7 +13,15 @@
 
 ## Running in Docker
 
-If you just want to try out the FIRES server via docker compose, you can use:
+First you'll need an [environment file](https://github.com/fedimod/fires/blob/main/components/fires-server/.env.docker), to create this use:
+
+```
+# Copy the example .env for docker, you'll need to
+# edit this to set the right credentials for the database and the `APP_KEY`:
+$ cp .env.docker .env.docker.local
+```
+
+Then you can try out the FIRES server via [docker compose](https://github.com/fedimod/fires/blob/main/components/fires-server/docker-compose.yml), this will automatically use the `.env.docker.local` file:
 
 ```sh
 $ docker compose up -d
@@ -23,10 +31,13 @@ This will spin up postgresql and the fires-server, after which you'll need to ru
 
 ```sh
 # Run the migrations:
-$ docker run --net fires-server_internal_network --env-file=.env.docker ghcr.io/fedimod/fires-server:edge node ace migration:fresh --force
+$ docker run --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:run --force
+
+# If you need to wipe the database and recreate it, use:
+$ docker run --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:fresh --force
 
 # Seed some example data:
-$ docker run --net fires-server_internal_network --env-file=.env.docker ghcr.io/fedimod/fires-server:edge node ace db:seed
+$ docker run --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace db:seed
 ```
 
 To stop everything:
@@ -48,21 +59,17 @@ Where `fires-postgesql` is the name of the postgesql container you have running.
 You'll also need to create the database in postgresql for the fires server to use.
 
 ```sh
-# Copy the example .env for docker, you'll need to
-# edit this to set the right credentials for the database
-$ cp .env.docker .env.local
-
 # Run the migrations:
-$ docker run --net <network_name> --env-file=.env.local ghcr.io/fedimod/fires-server:edge node ace migration:fresh --force
+$ docker run --net <network_name> --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:run --force
 
 # Run the setup:
-$ docker run --net <network_name> --env-file=.env.local ghcr.io/fedimod/fires-server:edge node ace fires:setup
+$ docker run --net <network_name> --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace fires:setup
 
 # Seed the database with example data (optional):
-$ docker run --net <network_name> --env-file=.env.local ghcr.io/fedimod/fires-server:edge node ace db:seed
+$ docker run --net <network_name> --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace db:seed
 
 # Run the server:
-$ docker run --net <network_name> --env-file=.env.local -p 4444:4444 ghcr.io/fedimod/fires-server:edge
+$ docker run --net <network_name> --env-file=.env.docker.local -p 4444:4444 ghcr.io/fedimod/fires-server:edge
 ```
 
 #### Managing Access Tokens

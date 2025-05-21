@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.1.5
+
+### Patch Changes
+
+- [#119](https://github.com/fedimod/fires/pull/119) [`6d82599`](https://github.com/fedimod/fires/commit/6d825995d9f352305240b34d6aae8041f9c1b243) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Attempt to get the release to ship based on checking out a specific tag"
+
 ## 0.1.4
 
 ### Patch Changes

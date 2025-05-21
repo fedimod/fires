@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.1.2
+
+### Patch Changes
+
+- [#112](https://github.com/fedimod/fires/pull/112) [`a465fc5`](https://github.com/fedimod/fires/commit/a465fc5f20fc148123c42298b31ef73bbc796280) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix container image releases
+
 ## 0.1.1
 
 ### Patch Changes

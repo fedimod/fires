@@ -225,6 +225,8 @@
   --vp-c-brand: var(--vp-c-brand-1);
 
   --vp-c-warning-soft: var(--vp-c-yellow-soft);
+  --vp-c-warning-1: var(--vp-c-text-1);
+  --vp-c-warning-2: var(--vp-c-text-2);
 
   /*
   --vp-c-tip-1: var(--vp-c-brand-1);
@@ -662,7 +664,7 @@ p + .custom-block.warning {
 :is(.vp-external-link-icon, .vp-doc a[href*="://"], .vp-doc a[target="_blank"]):not(.no-icon)::after
 {
   content: "";
-  color: var(--vp-c-brand-1);
+  color: inherit;
   transition:
     color 0.25s,
     opacity 0.25s;
@@ -670,5 +672,5 @@ p + .custom-block.warning {
 
 :is(.vp-external-link-icon, .vp-doc a[href*="://"], .vp-doc a[target="_blank"]):not(.no-icon):hover::after
 {
-  color: var(--vp-c-brand-2);
+  color: inherit;
 }

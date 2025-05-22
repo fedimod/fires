@@ -3,11 +3,15 @@
 > [!CAUTION]
 > This section of the documentation is still being written.
 
-In order to show a working example of the FIRES protocol and its features, we've built a reference server implementation. Whilst this could be used in production, it probably best not to until it reaches version 1.0.0.
+In order to show a working example of the FIRES protocol and its features, we've built a reference server implementation. Whilst this could be used in production, it is probably best not to until version 1.0.0 is released.
 
-The easiest way to get started is to use docker, for that we need some basic configuration in a file containing some environment variables called `.env.docker.local`:
+The FIRES reference server depends on [postgresql](https://postgresql.org) version 17 or greater.
 
-```conf
+## Quick start with Docker
+
+The easiest way to get started is to use docker or similar container runtime, for that we need some basic configuration in a file containing some environment variables called `.env.production`:
+
+```dotenv
 TZ=UTC
 NODE_ENV=production
 LOG_LEVEL=info
@@ -24,9 +28,66 @@ APP_KEY=
 # `fires_<NODE_ENV>` if not present.
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432
 DATABASE_POOL_MAX=10
+DATABASE_AUTOMIGRATE=true
 ```
 
-The FIRES reference server depends on [postgresql](https://postgresql.org), and by default uses a database named `fires_production` (assuming `NODE_ENV` is `production`). You'll need to create this database in order for the reference server to be able to use it (the docker compose file automatically creates this database).
+The configuration above will use a database named `fires_production` by default.
+
+You will need to generate a value for `APP_KEY` that is a reasonably long random value, this can be done with `openssl rand -base64 48` or similar.
+
+We can create a `docker-compose.yml` with the following contents:
+
+```yml
+name: fires-example
+services:
+  postgresql:
+    container_name: fires-postgresql
+    restart: always
+    image: postgres:17-alpine
+    shm_size: 256mb
+    networks:
+      - internal_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 2s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+    volumes:
+      - ./postgres17:/var/lib/postgresql/data
+    environment:
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+      - 'POSTGRES_DB=fires_production'
+
+  web:
+    container_name: fires-server
+    image: ghcr.io/fedimod/fires-server:0.1
+    restart: always
+    env_file: .env.production
+    networks:
+      - external_network
+      - internal_network
+    healthcheck:
+      # prettier-ignore
+      test: ['CMD-SHELL',"curl -s --noproxy localhost localhost:4444/health | grep -q 'OK' || exit 1"]
+    ports:
+      - '127.0.0.1:4444:4444'
+    depends_on:
+      postgresql:
+        condition: service_healthy
+        restart: true
+
+networks:
+  external_network:
+  internal_network:
+    internal: true
+```
+
+> [!WARNING]
+> In a production deployment, don't use `POSTGRES_HOST_AUTH_METHOD=true` and instead set `POSTGRES_PASSWORD=some-really-secure-password` and `POSTGRES_USER=fires`, the `healthcheck` and `.env.production` will need to be updated to reflect these changes.
+>
+> We're just using `POSTGRES_HOST_AUTH_METHOD=true` for development convenience.
+
 
 You can now start up the docker compose:
 
@@ -34,12 +95,24 @@ You can now start up the docker compose:
 $ docker compose up -d
 ```
 
-With everything started, we now need to run the migrations:
+With everything started, we can now seed some data, first we need to get the container ID for the `fires-server`:
 
 ```sh
-$ docker run --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:run --force
+$ docker ps -f "name=fires-server" --format "{{.ID}}"
 ```
 
-Now you can access the FIRES reference server at: `http://localhost:4444`.
+Then we can start a command shell inside that container, where `$ContainerID` is replaced with the result from the previous command:
+
+```sh
+$ docker exec -it $ContainerID /bin/sh
+```
+
+Finally, we can seed some example data in our server:
+
+```sh
+$ node ace db:seed
+```
+
+Now you can access the FIRES reference server at: `http://localhost:4444/`.
 
 For further documentation, please see the reference server [README](https://github.com/fedimod/fires/tree/main/components/fires-server#readme).

@@ -64,7 +64,7 @@ jobs:
     needs: [release]
     strategy:
       matrix: ${{ fromJson(needs.release.outputs.matrix) }}
-    if: ${{ needs.release.outputs.published == 'true' }}
+    if: ${{ needs.release.outputs.published == 'true' && needs.release.outputs.matrix != '{"include":[]}' }}
     uses: ./.github/workflows/build-container-image.yml
     with:
       git_ref: ${{ matrix.tag }}

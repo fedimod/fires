@@ -1,5 +1,6 @@
 ---
 "@fedimod/fires-server": patch
+"@fedimod/fires-docs": patch
 ---
 
 Add automatic running of migrations on server startup

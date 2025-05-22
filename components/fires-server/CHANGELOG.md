@@ -1,5 +1,13 @@
 # @fedimod/fires-server
 
+## 0.1.8
+
+### Patch Changes
+
+- [#125](https://github.com/fedimod/fires/pull/125) [`d2f7be7`](https://github.com/fedimod/fires/commit/d2f7be786857367c4efae05786f3561f2853fecb) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Attempt again to get the release workflow to work
+
+  It was still failing to detect the tags correctly.
+
 ## 0.1.7
 
 ### Patch Changes

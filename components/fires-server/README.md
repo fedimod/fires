@@ -27,34 +27,43 @@ Then you can try out the FIRES server via [docker compose](https://github.com/fe
 $ docker compose up -d
 ```
 
-This will spin up postgresql and the fires-server, after which you'll need to run the migrations and seed the data:
+This will spin up postgresql and the reference fires server.
 
-```sh
-# Run the migrations:
-$ docker run --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:run --force
-
-# If you need to wipe the database and recreate it, use:
-$ docker run --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:fresh --force
-
-# Seed some example data:
-$ docker run --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace db:seed
-```
-
-To stop everything:
+To stop everything, use:
 
 ```sh
 $ docker compose down
 ```
 
-If you already have postgresql running in docker and want to use that instead, you can with the following, but you'll need to know the network name that postgresql is on, which you can find out with:
+### Database Migrations
+
+If you're just deploying a single container of the FIRES reference server, the default `.env.docker.local` will automatically run the migrations on startup for you. This is controlled via the `DATABASE_AUTOMIGRATE` environment variable, which if truthy will cause the migrations to automatically be run.
+
+**NOTE:** If you're running more than one instance of the FIRES reference server container, then using automatic migrations can cause deployment issues due to multiple concurrent attempts at running the migrations happening at once, in which case you likely want to use manual migrations.
+
+#### Manual Migrations
+
+To run the migrations manually, use the following:
 
 ```sh
-$ docker inspect --format='{{println .HostConfig.NetworkMode}}' postgresql
+$ docker run --rm --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:run --force
 ```
 
-Where `postgesql` is the name of the postgesql container you have running.
+#### Resetting the database:
 
-You'll also need to create the database in postgresql for the fires server to use.
+If you need to wipe the database and recreate it, use:
+
+```sh
+$ docker run --rm --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:fresh --force
+```
+
+#### Seeding the database with example data
+
+For testing purposes, it can be handy to add a bunch of seed data to the database, this can be done with:
+
+```sh
+$ docker run --rm --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace db:seed
+```
 
 ### Running administrative commands:
 
@@ -72,7 +81,7 @@ $ docker exec -it <Container ID> /bin/sh
 
 #### Setting up the server:
 
-From within the docker command line, you can run the interactive setup with:
+From within the command line, you can run the interactive setup with:
 
 ```sh
 # Run the interactive setup:
@@ -106,9 +115,9 @@ When you're done, you can enter `exit` to exit the command prompt.
 
 Unfortunately at this time it is not possible to run these commands via `docker run` due to a bug that causes the command to not correctly accept input.
 
-### FIRES Protocol Endpoints
+## FIRES Protocol Endpoints
 
-#### Labels
+### Labels
 
 The Labels endpoints return data according to the [Labels](https://fires.fedimod.org/reference/protocol/labels.html) section in the [FIRES Protocol Reference](https://fires.fedimod.org/reference/protocol/).
 
@@ -126,7 +135,7 @@ Accept: application/ld+json
 
 Will return an individual Label as JSON-LD
 
-#### NodeInfo
+### NodeInfo
 
 The FIRES reference server supports the [NodeInfo Specification](https://nodeinfo.diaspora.software/).
 
@@ -142,17 +151,23 @@ Accept: application/json
 
 Returns the NodeInfo data about the FIRES server (excluding usage data)
 
-#### Datasets
+### Datasets
 
 Eventually we'll have endpoints for [Datasets](https://fires.fedimod.org/concepts/changes.html).
 
-### Non-Standard API
+## Non-Standard API
 
 The FIRES reference server has a non-standard API for managing data stored on it.
 
-#### Labels
+### Authentication
 
-Authorization is provided via `Bearer` token, where the `<token>` below is the Access Token starting with `fires_`. For the `GET` request (first below), you need an access token with the `read` ability. For all other requests, you need the `admin` ability.
+Authentication and authorization is provided via `Bearer` access tokens. In the examples below the `<token>` string is the Access Token starting with `fires_`.
+
+These access tokens are managed with the commands described in "Managing Access Tokens" above.
+
+### Labels
+
+For the `GET` request (first below), you need an access token with the `read` ability. For all other requests, you need the `admin` ability.
 
 ```http
 GET /api/labels

@@ -19,6 +19,7 @@ services:
       - 'POSTGRES_DB=fires_production'
 
   web:
+    container_name: fires-server
     # You can uncomment the following line if you want to not use the prebuilt image, for example if you have local code changes
     build: ../../
     image: ghcr.io/fedimod/fires-server:edge

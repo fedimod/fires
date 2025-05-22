@@ -61,6 +61,7 @@ export default defineConfig({
   |
   */
   preloads: [
+    () => import('#start/migrations'),
     () => import('#start/logging'),
     () => import('#start/routes'),
     () => import('#start/kernel'),

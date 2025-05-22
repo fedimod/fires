@@ -26,7 +26,7 @@ APP_KEY=
 
 # The database name in the connection string is optional, and defaults to
 # `fires_<NODE_ENV>` if not present.
-DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432
+DATABASE_URL=postgresql://fires:super_secret_password_123@fires-postgresql:5432
 DATABASE_POOL_MAX=10
 DATABASE_AUTOMIGRATE=true
 ```
@@ -56,7 +56,8 @@ services:
     volumes:
       - ./postgres17:/var/lib/postgresql/data
     environment:
-      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+      - 'POSTGRES_USER=fires'
+      - 'POSTGRES_PASSWORD=super_secret_password_123'
       - 'POSTGRES_DB=fires_production'
 
   web:
@@ -82,12 +83,6 @@ networks:
   internal_network:
     internal: true
 ```
-
-> [!WARNING]
-> In a production deployment, don't use `POSTGRES_HOST_AUTH_METHOD=true` and instead set `POSTGRES_PASSWORD=some-really-secure-password` and `POSTGRES_USER=fires`, the `healthcheck` and `.env.production` will need to be updated to reflect these changes.
->
-> We're just using `POSTGRES_HOST_AUTH_METHOD=true` for development convenience.
-
 
 You can now start up the docker compose:
 

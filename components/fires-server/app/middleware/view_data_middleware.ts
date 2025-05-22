@@ -16,7 +16,9 @@ export default class ViewDataMiddleware {
     }
 
     if (!ctx.request.header('Accept') || ctx.request.accepts(['html', '*/*']) === 'html') {
-      const [name, summary] = await Setting.findMany(['name', 'summary'])
+      const settings = await Setting.findMany(['name', 'summary'])
+      const name = settings.find((setting) => setting.key === 'name')
+      const summary = settings.find((setting) => setting.key === 'summary')
 
       ctx.view.share({
         provider: {

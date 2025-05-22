@@ -39,3 +39,52 @@ Deprecation of labels is preferable to deletion.
 
 [1]: https://www.w3.org/TR/activitystreams-core/#collections
 [2]: https://www.w3.org/TR/2012/REC-owl2-syntax-20121211/
+
+## Examples
+
+> [!WARNING]
+> The context document listed below does not actually exist yet, and will be replaced with one from a FEP that is [currently being written](https://github.com/swicg/activitypub-trust-and-safety/issues/84).
+
+
+A label collection looks like this in json-ld:
+```json
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    {
+      "Label": "https://fires.fedimod.org/ns#Label"
+    }
+  ],
+  "summary": "Example Labels",
+  "type": "OrderedCollection",
+  "id": "https://labels.example.org/",
+  "totalItems": 1,
+  "orderedItems": [
+    {
+      "id": "https://labels.example.org/violent-threat",
+      "type": "Label",
+      "name": "Violent Threat",
+      "summary": "summary for a violent threat"
+    }
+  ]
+}
+```
+
+An individual label in json-ld would look like:
+
+```json
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    {
+      "Label": "https://fires.fedimod.org/ns#Label"
+    }
+  ],
+  "id": "https://labels.example.org/violent-threat",
+  "type": "Label",
+  "name": "Violent Threat",
+  "summary": "summary for a violent threat",
+  "content": "a fuller description for the violent threat label, contains HTML",
+  "context": "https://labels.example.org/"
+}
+```

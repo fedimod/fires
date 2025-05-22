@@ -1,5 +1,17 @@
 # @fedimod/fires-server
 
+## 0.1.10
+
+### Patch Changes
+
+- [#131](https://github.com/fedimod/fires/pull/131) [`d2823c4`](https://github.com/fedimod/fires/commit/d2823c4be9683d560743510dc2370a6e20745975) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add automatic running of migrations on server startup
+
+  By setting the `DATABASE_AUTOMIGRATE` environment variable to `true`, you can now have the container for the FIRES reference server automatically run the migrations on startup if necessary. This can make deployment simpler in some cases.
+
+- [#132](https://github.com/fedimod/fires/pull/132) [`14e058a`](https://github.com/fedimod/fires/commit/14e058afe5eb4ef34a9069d0acb8236c6218756b) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix bug with Server details being incorrectly displayed
+
+  In some situations, the two settings for the server name and summary were being displayed in the wrong position, e.g., name would appear as summary and summary as name. This turned out to be a bug in how we were fetching the settings back in the middleware that supplies this information to the views.
+
 ## 0.1.9
 
 ### Patch Changes

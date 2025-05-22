@@ -57,7 +57,7 @@ jobs:
         run: |
           echo '::debug::${{steps.changesets.outputs.publishedPackages}}'
           tags=$(jq -cr 'map([.name, .version] | join("@")) | map("refs/tags/" + .)' <<< '${{ steps.changesets.outputs.publishedPackages }}')
-          echo "tags='${tags%,}'" >> "$GITHUB_OUTPUT"
+          echo "tags=${tags%,}" >> "$GITHUB_OUTPUT"
 
   release-fires-server-image:
     needs: [release]

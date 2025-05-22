@@ -1,5 +1,15 @@
 # @fedimod/fires-docs
 
+## 1.1.1
+
+### Patch Changes
+
+- [#131](https://github.com/fedimod/fires/pull/131) [`2be4c9b`](https://github.com/fedimod/fires/commit/2be4c9b9adec367d30132c54b8818b557c6aac02) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Improve documentation for Labels
+
+- [#131](https://github.com/fedimod/fires/pull/131) [`d2823c4`](https://github.com/fedimod/fires/commit/d2823c4be9683d560743510dc2370a6e20745975) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add automatic running of migrations on server startup
+
+  By setting the `DATABASE_AUTOMIGRATE` environment variable to `true`, you can now have the container for the FIRES reference server automatically run the migrations on startup if necessary. This can make deployment simpler in some cases.
+
 ## 1.1.0
 
 ### Minor Changes

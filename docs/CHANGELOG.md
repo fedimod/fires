@@ -1,5 +1,16 @@
 # @fedimod/fires-docs
 
+## 1.2.0
+
+### Minor Changes
+
+- [#137](https://github.com/fedimod/fires/pull/137) [`97bded9`](https://github.com/fedimod/fires/commit/97bded9edac4fd41568e45d374d36d2777228627) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Improve documentation
+
+  - Split the API and Data Model sections to make the documentation for Labels clearer
+  - Improved redirect handling
+  - Fixed incorrect page links
+  - Fixed missing page titles result in the titles of pages being confusing
+
 ## 1.1.1
 
 ### Patch Changes

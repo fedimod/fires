@@ -1,3 +1,7 @@
+---
+title: "Why not…? | Project Background"
+---
+
 # Why not…?
 
 ## Why not ActivityPub

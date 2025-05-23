@@ -1,3 +1,7 @@
+---
+title: "Goals & Objectives | Project Background"
+---
+
 # Goals & Objectives
 
 This proposal aims to develop a small server that can be integrated with by [Data Providers](../terms/data-provider) allowing them to publish moderation advisories and recommendations via an API that allows for resumable consumption of the data, with the full changelog of the data being made available by the server. The data made available by this server is designed to be structured data, suitable for machine consumption, allowing it to be surfaced via tools and user interfaces.

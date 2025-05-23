@@ -1,3 +1,7 @@
+---
+title: "Advisories | Managing Changes"
+---
+
 # Advisories
 
 Advisories allow data providers to put out an early warning about an entity, without yet recommending a specific action be taken, and they typically come before the creation recommendations.

@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.1.11
+
+### Patch Changes
+
+- [#134](https://github.com/fedimod/fires/pull/134) [`e117a0f`](https://github.com/fedimod/fires/commit/e117a0f0bded92b0e42f41636a39ff6011e76271) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix issue with migrations continuously running for CLI commands
+
 ## 0.1.10
 
 ### Patch Changes

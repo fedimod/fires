@@ -1,3 +1,7 @@
+---
+title: "Tombstones | Managing Changes"
+---
+
 # Tombstones
 
 There may be cases where an entity which was contained within a FIRES dataset becomes permanently unavailable, in these situations, rather than everyone retaining the data previously published, we can publish a Tombstone record.

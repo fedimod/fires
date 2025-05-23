@@ -1,3 +1,7 @@
+---
+title: "Retractions | Managing Changes"
+---
+
 # Retractions
 
 A major problem that exists when sharing moderation decisions is that of being able to retract a decision later, if that decision wasn't a good one. In the current system of using CSV files for domain denylists, the only way to handle retractions is to have a separate CSV file that stores any retractions, which makes management difficult.

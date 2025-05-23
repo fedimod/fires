@@ -1,4 +1,5 @@
 ---
+title: "Project Background"
 prev: false
 next:
   text: Goals & Objectives

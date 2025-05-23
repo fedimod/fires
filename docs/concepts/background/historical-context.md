@@ -1,3 +1,7 @@
+---
+title: "Historical Context | Project Background"
+---
+
 # Historical Context
 
 This section provides a brief overview of the moderation tooling as it relates to denylists or “blocklists”, and the functionality in various Fediverse software for handling federation management.

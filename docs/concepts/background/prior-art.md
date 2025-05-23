@@ -1,3 +1,7 @@
+---
+title: "Prior Art | Project Background"
+---
+
 # Prior Art
 
 This proposal acknowledges that many people have worked on denylists and federation / moderation management, and lists those projects here, noting both the good and bad outcomes:

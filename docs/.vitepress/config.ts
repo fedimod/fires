@@ -52,10 +52,15 @@ export default defineConfig({
     nav: [
       { text: "Home", link: "/" },
       { text: "Concepts", link: "/concepts/", activeMatch: "^/concepts" },
-      { text: "Protocol Reference", link: "/reference/protocol/" },
+      {
+        text: "Protocol Reference",
+        link: "/reference/protocol/",
+        activeMatch: "^/reference/protocol",
+      },
       { text: "Conformance Tests", link: "/reference/testing/" },
       {
         text: "Manuals",
+        activeMatch: "^/manuals",
         items: [
           {
             text: "Reference Server",
@@ -150,25 +155,50 @@ export default defineConfig({
       ],
       "/reference/": [
         {
-          text: "Reference",
+          text: "Protocol Reference",
+          items: [
+            {
+              text: "Introduction",
+              link: "/reference/protocol/",
+            },
+            {
+              text: "Data Model",
+              items: [
+                {
+                  text: "Labels",
+                  link: "/reference/protocol/data-model/labels",
+                },
+                {
+                  text: "Datasets",
+                  link: "/reference/protocol/data-model/datasets",
+                },
+                {
+                  text: "Changes",
+                  link: "/reference/protocol/data-model/changes",
+                },
+              ],
+            },
+            {
+              text: "API",
+              items: [
+                {
+                  text: "Labels",
+                  link: "/reference/protocol/api/labels",
+                },
+                {
+                  text: "Datasets",
+                  link: "/reference/protocol/api/datasets",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          text: "Protocol Tooling",
           items: [
             {
               text: "Conformance Tests",
               link: "/reference/testing/",
-            },
-            {
-              text: "Protocol",
-              collapsed: true,
-              items: [
-                {
-                  text: "Introduction",
-                  link: "/reference/protocol/",
-                },
-                {
-                  text: "Labels",
-                  link: "/reference/protocol/labels",
-                },
-              ],
             },
           ],
         },

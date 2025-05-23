@@ -1,6 +1,10 @@
 ---
 outline: deep
+title: "Protocol Reference"
 prev: false
+next:
+  text: "Data Model: Labels"
+  link: ./data-model/labels
 ---
 
 # Protocol Reference

@@ -2,22 +2,18 @@
 import DefaultTheme from "vitepress/theme";
 import { inBrowser, useData, useRouter } from "vitepress";
 import { watch } from "vue";
+import { redirects } from "./redirects.ts"
 
 const { page } = useData();
 const { go } = useRouter();
 
-const redirects = Object.entries({
-  "/concepts/advisories-and-recommendations": "/concepts/changes.html",
-  "/concepts/advisories-and-recommendations.html": "/concepts/changes.html",
-  "/concepts/retractions": "/concepts/changes/retractions.html",
-  "/concepts/federation-firewalls": "/concepts/federation-management.html",
-});
+const redirectMap = Object.entries(redirects);
 
 watch(
   () => page.value.isNotFound,
   (isNotFound) => {
     if (!isNotFound || !inBrowser) return;
-    const redirect = redirects.find(([from]) =>
+    const redirect = redirectMap.find(([from]) =>
       window.location.pathname.startsWith(from),
     );
     if (!redirect) return;

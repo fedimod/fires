@@ -1,7 +1,7 @@
 ---
 prev:
   text: "Definitions: Data Consumer"
-  link: /concepts/terms/data-consumer.html
+  link: /concepts/terms/data-consumer
 next:
   text: "Project Background"
   link: /concepts/background/

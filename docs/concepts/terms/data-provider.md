@@ -1,10 +1,10 @@
 ---
 prev:
   text: "Concepts: Labels"
-  link: /concepts/labels.html
+  link: /concepts/labels
 next:
   text: "Definitions: Data Consumer"
-  link: /concepts/terms/data-consumer.html
+  link: /concepts/terms/data-consumer
 ---
 
 # Data Provider

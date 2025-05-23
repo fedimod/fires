@@ -1,7 +1,7 @@
 ---
 next:
   text: "Definitions: Data Provider"
-  link: ./terms/data-provider.html
+  link: ./terms/data-provider
 ---
 
 # Labels

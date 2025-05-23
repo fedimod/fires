@@ -18,7 +18,7 @@ The Label endpoints within the FIRES protocol are not explicitly defined, howeve
 
 A server that is serving label endpoints DOES NOT need to implement the full FIRES protocol, this allows for servers to exist that only provide labels and nothing else.
 
-Once published, `Label`s SHOULD NOT be deleted, since there may be references to that label in downstream [Datasets](../types/datasets.md), instead, [deprecation](../types/labels.md#deprecation-of-labels) is preferred.
+Once published, `Label`s SHOULD NOT be deleted, since there may be references to that label in downstream [Datasets](../data-model/datasets), instead, [deprecation](../data-model/labels#deprecation-of-labels) is preferred.
 
 
 ## Content Negotiation

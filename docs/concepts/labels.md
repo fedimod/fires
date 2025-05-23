@@ -17,4 +17,4 @@ Data Providers can reuse Labels from different [Label Providers](./terms/label-p
 
 As a Data Provider annotating the recommendations and advisories with Labels enables both machines and humans to better understand the information being presented. For instance, a Data Consumer may choose to automatically apply recommendations with one label, but require human review for another label.
 
-If you're interested to see how labels look in the protocol, see [Reference: Protocol - Labels](../reference/protocol/labels.md).
+If you're interested to see how labels look in the protocol, see [Protocol Reference: Labels](../reference/protocol/data-model/labels.md).

@@ -18,7 +18,13 @@
 
   In some situations, the two settings for the server name and summary were being displayed in the wrong position, e.g., name would appear as summary and summary as name. This turned out to be a bug in how we were fetching the settings back in the middleware that supplies this information to the views.
 
-## 0.1.9
+<details>
+  <summary>
+    <h2>0.1.1 to 0.1.9</h2>
+    Trying to get the release process to work correctly after encountering errors with the process.
+  </summary>
+
+  ## 0.1.9
 
 ### Patch Changes
 
@@ -75,6 +81,10 @@
 - [#110](https://github.com/fedimod/fires/pull/110) [`41ec7d9`](https://github.com/fedimod/fires/commit/41ec7d98d2ba367702b615079355b361bf724f9a) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Release docker images correctly
 
   Previously the docker images for the release were meant to happen on push of tags, but for some reason the tags pushed by the `release.yml` workflow didn't trigger the action to run. I suspect that's because the tags were created via the API instead of via a `git push`. Have switched to using the release published event instead.
+
+  
+</details>
+
 
 ## 0.1.0
 

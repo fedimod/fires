@@ -24,7 +24,7 @@
     Trying to get the release process to work correctly after encountering errors with the process.
   </summary>
 
-  ## 0.1.9
+## 0.1.9
 
 ### Patch Changes
 
@@ -82,9 +82,7 @@
 
   Previously the docker images for the release were meant to happen on push of tags, but for some reason the tags pushed by the `release.yml` workflow didn't trigger the action to run. I suspect that's because the tags were created via the API instead of via a `git push`. Have switched to using the release published event instead.
 
-  
 </details>
-
 
 ## 0.1.0
 

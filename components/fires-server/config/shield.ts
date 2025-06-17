@@ -17,11 +17,12 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   csrf: {
-    // We don't have html forms
-    enabled: false,
-    exceptRoutes: [],
+    enabled: true,
+    exceptRoutes: (ctx) => {
+      return !ctx.request.url().startsWith('/admin')
+    },
     enableXsrfCookie: false,
-    methods: [],
+    methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
   },
 
   /**

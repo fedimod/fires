@@ -4,35 +4,32 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
-      {{ title ? `${title} - ${provider.name}` : provider.name }}
+      {{ title ? `${title} - Admin - ${provider.name}` : `Admin - ${provider.name}` }}
     </title>
     @vite(['resources/styles/app.scss'])
   </head>
-  <body>
+  <body class="admin">
     <div class="root-container">
       <header>
         <h1>
-          {{ provider.name }}
+          {{ provider.name }}: Administration
         </h1>
-        <p class="lead">
-          {{ provider.summary }}
-        </p>
         <nav>
           <ul>
             <li>
-              <a href="{{ route('about') }}">About</a>
+              <a href="{{ route('admin.overview') }}">Overview</a>
             </li>
-            @if(hasLabels)
-              <li>
-                <a href="{{ route('labels.index') }}">Labels</a>
-              </li>
-            @end
-          </ul>
-          <ul>
             <li>
-              <a href="{{ route('admin.login') }}">Admin</a>
+              <a href="{{ route('admin.labels.index') }}">Labels</a>
+            </li>
+            <li>
+              <a href="{{ route('admin.settings') }}">Settings</a>
             </li>
           </ul>
+          <form method="POST" action="{{ route('admin.logout') }}">
+            {{ csrfField() }}
+            <button type="submit" class="w-auto outline secondary">Logout</button>
+          </form>
         </nav>
       </header>
       <main>

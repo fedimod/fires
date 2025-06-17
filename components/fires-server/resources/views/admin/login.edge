@@ -1,0 +1,21 @@
+@layouts.app()
+  @slot('main')
+    <h2>
+      Login
+    </h2>
+
+    @include('partials/flash-messages')
+
+    <form method="POST" action="{{ route('admin.performLogin') }}">
+      {{ csrfField() }}
+      @if(returnPath)
+        <input type="hidden" name="returnPath" value="{{ returnPath }}" />
+      @end
+      <label for="username">Username</label>
+      <input type="text" name="username" value="{{ old('username') || " />
+      <label for="password">Password</label>
+      <input type="password" name="password" />
+      <button type="submit">Login</button>
+    </form>
+  @endslot
+@end

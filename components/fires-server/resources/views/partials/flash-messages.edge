@@ -1,0 +1,40 @@
+@error('E_BAD_CSRF_TOKEN')
+  <div class="notification notification-error">
+    {{ $message }}
+  </div>
+@end
+
+@error('E_UNAUTHORIZED_ACCESS')
+  <div class="notification notification-error">
+    {{ $message }}
+  </div>
+@end
+
+@error('E_INVALID_CREDENTIALS')
+  <div class="notification notification-error">
+    {{ $message }}
+  </div>
+@end
+
+@error('E_VALIDATION_ERROR')
+  <div class="notification notification-error">
+    {{ $message }}
+  </div>
+@end
+
+@flashMessage('notification')
+  <div
+    class="{{ html.classNames([
+      'notification',
+      {
+        'notification-success': $message.type === 'success',
+        'notification-error': $message.type === 'error',
+        'notification-warning': $message.type === 'warning',
+        'notification-info': $message.type === 'info',
+      },
+    ]) }}"
+    role="alert"
+  >
+    {{ $message.message }}
+  </div>
+@end

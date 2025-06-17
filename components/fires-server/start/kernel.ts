@@ -29,6 +29,7 @@ server.use([
   () => import('@adonisjs/vite/vite_middleware'),
   // Prevents multipart/form-data requests by terminating them early
   () => import('#middleware/disable_multipart_requests_middleware'),
+  () => import('@adonisjs/core/bodyparser_middleware'),
 ])
 
 /**
@@ -36,8 +37,9 @@ server.use([
  * requests with a registered route.
  */
 router.use([
+  () => import('@adonisjs/session/session_middleware'),
   () => import('@adonisjs/shield/shield_middleware'),
-  () => import('@adonisjs/core/bodyparser_middleware'),
+  () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('#middleware/localization_middleware'),
   () => import('#middleware/view_data_middleware'),
 ])
@@ -47,6 +49,9 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
-  auth: () => import('#middleware/authentication_middleware'),
-  requireAuth: () => import('#middleware/require_authentication_middleware'),
+  guest: () => import('#middleware/guest_middleware'),
+  adminAuth: () => import('#middleware/admin_auth_middleware'),
+  // For the API:
+  tokenAuth: () => import('#middleware/token_authentication_middleware'),
+  requireTokenAuth: () => import('#middleware/require_token_authentication_middleware'),
 })

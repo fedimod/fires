@@ -3,27 +3,27 @@ import AccessTokenService from '#services/access_token_service'
 import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 
-export default class AuthenticationMiddleware {
+export default class TokenAuthenticationMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
-    ctx.auth = new AuthProvider(ctx)
+    ctx.token = new AuthProvider(ctx)
 
     const authorization = ctx.request.header('authorization', '')
     if (!authorization) {
       return next()
     }
 
-    if (!authorization?.startsWith(ctx.auth.SCHEME)) {
-      return ctx.auth.fail()
+    if (!authorization?.startsWith(ctx.token.SCHEME)) {
+      return ctx.token.fail()
     }
 
-    const unverifiedToken = authorization.slice(ctx.auth.SCHEME.length).trim()
+    const unverifiedToken = authorization.slice(ctx.token.SCHEME.length).trim()
     if (unverifiedToken.length === 0) {
-      return ctx.auth.fail()
+      return ctx.token.fail()
     }
 
     const accessToken = await AccessTokenService.verify(unverifiedToken)
     if (accessToken === null) {
-      return ctx.auth.fail({
+      return ctx.token.fail({
         error: 'invalid_token',
         error_description: 'The access token is not valid',
       })
@@ -31,7 +31,7 @@ export default class AuthenticationMiddleware {
 
     await AccessTokenService.touch(accessToken)
 
-    ctx.auth.setToken(accessToken)
+    ctx.token.setToken(accessToken)
 
     return next()
   }
@@ -74,7 +74,7 @@ export class AuthProvider {
     this.token = token
   }
 
-  hasToken() {
+  exists() {
     return this.token !== undefined
   }
 
@@ -88,6 +88,6 @@ export class AuthProvider {
 
 declare module '@adonisjs/core/http' {
   export interface HttpContext {
-    auth: AuthProvider
+    token: AuthProvider
   }
 }

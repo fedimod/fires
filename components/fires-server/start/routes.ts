@@ -15,6 +15,11 @@ const NodeinfoController = () => import('#controllers/well-known/nodeinfo_contro
 const LabelsController = () => import('#controllers/labels_controller')
 const LabelsApiController = () => import('#controllers/api/labels_controller')
 
+const AdminSessionsController = () => import('#controllers/admin/sessions_controller')
+const AdminOverviewController = () => import('#controllers/admin/overview_controller')
+const AdminLabelsController = () => import('#controllers/admin/labels_controller')
+const AdminSettingsController = () => import('#controllers/admin/settings_controller')
+
 router.get('/', [AboutController, 'index']).as('about')
 router.get('/health', ({ response }) => {
   return response.safeStatus(200).json({ ok: true })
@@ -32,6 +37,29 @@ router
   .group(() => {
     router.resource('labels', LabelsApiController).except(['create', 'edit']).as('labels')
   })
-  .use([middleware.auth(), middleware.requireAuth()])
+  .use([middleware.tokenAuth(), middleware.requireTokenAuth()])
   .prefix('api')
   .as('api')
+
+// Admin panel:
+router.get('/admin', ({ response }) => response.redirect().toRoute('admin.overview'))
+router
+  .group(() => {
+    router.post('logout', [AdminSessionsController, 'logout']).as('logout')
+    router.get('overview', [AdminOverviewController, 'index']).as('overview')
+    router.resource('labels', AdminLabelsController).as('labels')
+
+    router.get('settings', [AdminSettingsController, 'show']).as('settings')
+    router.post('settings', [AdminSettingsController, 'update']).as('settings.update')
+  })
+  .use(middleware.adminAuth())
+  .prefix('admin')
+  .as('admin')
+
+router.post('/admin/login', [AdminSessionsController, 'performLogin']).as('admin.performLogin')
+
+router
+  .group(() => {
+    router.get('/admin/login', [AdminSessionsController, 'login']).as('admin.login')
+  })
+  .use(middleware.guest())

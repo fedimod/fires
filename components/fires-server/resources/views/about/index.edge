@@ -1,8 +1,26 @@
 @layouts.app()
   @slot('main')
     {{ markdown(description) }}
-    <p>
-      <a href="{{ route('labels.index') }}">View Labels</a>
-    </p>
+    @if(hasLabels || appeals_url || documentation_url)
+      <nav>
+        <ul>
+          @if(hasLabels)
+            <li>
+              <a href="{{ route('labels.index') }}">View Labels</a>
+            </li>
+          @end
+          @if(appeals_url)
+            <li>
+              <a href="{{ appeals_url }}" target="_blank">Appeals Information</a>
+            </li>
+          @endif
+          @if(documentation_url)
+            <li>
+              <a href="{{ documentation_url }}" target="_blank">Documentation</a>
+            </li>
+          @endif
+        </ul>
+      </nav>
+    @endif
   @endslot
 @end

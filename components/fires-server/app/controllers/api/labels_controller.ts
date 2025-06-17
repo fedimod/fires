@@ -8,9 +8,9 @@ export default class LabelsApiController {
   /**
    * Handle the index action
    */
-  async index({ response, auth }: HttpContext) {
-    if (!auth.hasAbility('read')) {
-      return auth.insufficientScope()
+  async index({ response, token }: HttpContext) {
+    if (!token.hasAbility('read')) {
+      return token.insufficientScope()
     }
 
     const labels = await Label.all()
@@ -24,9 +24,9 @@ export default class LabelsApiController {
    * Handle the create action
    */
   async store(ctx: HttpContext) {
-    const { request, response, i18n, auth } = ctx
-    if (!auth.hasAbility('admin')) {
-      return auth.insufficientScope()
+    const { request, response, i18n, token } = ctx
+    if (!token.hasAbility('admin')) {
+      return token.insufficientScope()
     }
 
     const data = await request.validateUsing(createLabelValidator)
@@ -44,9 +44,9 @@ export default class LabelsApiController {
    * Handle update action
    */
   async update(ctx: HttpContext) {
-    const { request, response, i18n, auth } = ctx
-    if (!auth.hasAbility('admin')) {
-      return auth.insufficientScope()
+    const { request, response, i18n, token } = ctx
+    if (!token.hasAbility('admin')) {
+      return token.insufficientScope()
     }
 
     const { params, ...update } = await request.validateUsing(updateLabelValidator)
@@ -61,9 +61,9 @@ export default class LabelsApiController {
    * Handle the delete / deprecate action
    */
   async destroy(ctx: HttpContext) {
-    const { request, response, params, auth } = ctx
-    if (!auth.hasAbility('admin')) {
-      return auth.insufficientScope()
+    const { request, response, params, token } = ctx
+    if (!token.hasAbility('admin')) {
+      return token.insufficientScope()
     }
 
     const label = await Label.findOrFail(params.id)

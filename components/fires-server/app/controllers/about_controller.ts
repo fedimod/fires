@@ -3,9 +3,16 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AboutController {
   async index({ view }: HttpContext) {
-    const description = await Setting.find('description')
+    const settings = await Setting.retrieveSettings([
+      'description',
+      'documentation_url',
+      'appeals_url',
+    ])
+
     return view.render('about/index', {
-      description: description?.value ?? 'This FIRES server is not yet configured correctly.',
+      description: settings.description ?? 'This FIRES server is not yet configured correctly.',
+      documentation_url: settings.documentation_url,
+      appeals_url: settings.appeals_url,
     })
   }
 }

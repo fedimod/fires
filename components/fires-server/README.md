@@ -88,6 +88,14 @@ From within the command line, you can run the interactive setup with:
 $ node ace fires:setup
 ```
 
+#### Managing Administrative Users
+
+The following command exists for adding users that can access the admin UI:
+
+- `fires:users:create`
+
+There is currently no mechanism for deleting or disabling a user account.
+
 #### Managing Access Tokens
 
 The following commands exist for managing access tokens (necessary to access the non-standard API for working with Labels and Datasets):

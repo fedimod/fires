@@ -1,8 +1,10 @@
+import Label from '#models/label'
 import Setting from '#models/setting'
 import { SoftwareService } from '#services/software_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
+import db from '@adonisjs/lucid/services/db'
 
 @inject()
 export default class ViewDataMiddleware {
@@ -16,18 +18,18 @@ export default class ViewDataMiddleware {
     }
 
     if (!ctx.request.header('Accept') || ctx.request.accepts(['html', '*/*']) === 'html') {
-      const settings = await Setting.findMany(['name', 'summary'])
-      const name = settings.find((setting) => setting.key === 'name')
-      const summary = settings.find((setting) => setting.key === 'summary')
+      const settings = await Setting.retrieveSettings(['name', 'summary'])
+      const labelsCount = await db.from(Label.table).count('* as total')
 
       ctx.view.share({
         provider: {
-          name: name?.value ?? 'FediMod FIRES Server',
+          name: settings.name ?? 'FediMod FIRES Server',
           summary:
-            summary?.value ??
+            settings.summary ??
             'An server for labels, moderation advisories, and moderation recommendations.',
         },
         software: await this.softwareService.getMetadata(),
+        hasLabels: Number.parseInt(labelsCount[0].total, 10) > 0,
       })
     }
 

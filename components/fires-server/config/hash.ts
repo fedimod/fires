@@ -10,6 +10,7 @@ const hashConfig = defineConfig({
       parallelization: 1,
       maxMemory: 32 * 1024 * 1024,
     }),
+    argon2: drivers.argon2({}),
   },
 })
 

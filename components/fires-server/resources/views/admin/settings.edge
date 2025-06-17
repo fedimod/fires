@@ -1,0 +1,129 @@
+@layouts.admin()
+  @slot('main')
+    <h2>
+      Server Settings
+    </h2>
+
+    @include('partials/flash-messages')
+
+    <form method="POST" action="{{ route('admin.settings.update') }}">
+      {{ csrfField() }}
+
+      <label for="name">Name</label>
+      <input
+        type="text"
+        required
+        class="form-control {{ isInputInvalid('name', flashMessages) }}"
+        id="name"
+        name="name"
+        value="{{ (old('name') || settings.name) ?? "
+      />
+      @inputError('name')
+        <div class="invalid-feedback">
+          @each(message in $messages)
+            <p>
+              {{ message }}
+            </p>
+          @end
+        </div>
+      @end
+      
+      <label for="summary">Summary</label>
+      <textarea
+        rows="3"
+        class="form-control {{ isInputInvalid('summary', flashMessages) }}"
+        id="summary"
+        name="summary"
+      >{{ (old('summary') || settings.summary) ?? "" }}</textarea>
+      @inputError('summary')
+        <div class="invalid-feedback">
+          @each(message in $messages)
+            <p>
+              {{ message }}
+            </p>
+          @end
+        </div>
+      @end
+      
+      <label for="description">Description</label>
+      <small class="form-hint">You can use markdown in the description</small>
+      <textarea
+        rows="12"
+        class="form-control {{ isInputInvalid('description', flashMessages) }}"
+        id="description"
+        name="description"
+      >{{ (old('description') || settings.description) ?? "" }}</textarea>
+      @inputError('description')
+        <div class="invalid-feedback">
+          @each(message in $messages)
+            <p>
+              {{ message }}
+            </p>
+          @end
+        </div>
+      @end
+      
+      <label for="contact_email">Contact Email</label>
+      <input
+        type="email"
+        required
+        class="form-control {{ isInputInvalid('contact_email', flashMessages) }}"
+        id="contact_email"
+        name="contact_email"
+        value="{{ (old('contact_email') || settings.contact_email) ?? "
+      />
+      @inputError('contact_email')
+        <div class="invalid-feedback">
+          @each(message in $messages)
+            <p>
+              {{ message }}
+            </p>
+          @end
+        </div>
+      @end
+      
+      <label for="appeals_url">Appeals URL (optional)</label>
+      <small class="form-hint">This should be a URL to the page at which people can submit appeals for moderation data published by this FIRES server.</small>
+      <input
+        type="url"
+        class="form-control {{ isInputInvalid('appeals_url', flashMessages) }}"
+        id="appeals_url"
+        name="appeals_url"
+        value="{{ (old('appeals_url') || settings.appeals_url) ?? "
+      />
+      @inputError('appeals_url')
+        <div class="invalid-feedback">
+          @each(message in $messages)
+            <p>
+              {{ message }}
+            </p>
+          @end
+        </div>
+      @end
+      
+      <label for="documentation_url">Documentation URL (optional)</label>
+      <small class="form-hint">This should be a URL to the documentation for this FIRES server.</small>
+      <input
+        type="url"
+        class="form-control {{ isInputInvalid('documentation_url', flashMessages) }}"
+        id="documentation_url"
+        name="documentation_url"
+        value="{{ (old('documentation_url') || settings.documentation_url) ?? "
+      />
+      @inputError('documentation_url')
+        <div class="invalid-feedback">
+          @each(message in $messages)
+            <p>
+              {{ message }}
+            </p>
+          @end
+        </div>
+      @end
+      
+      <div class="button-group">
+        <button type="submit">Update Settings</button>
+      </div>
+    </form>
+
+  @endslot
+@end

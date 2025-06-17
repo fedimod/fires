@@ -1,0 +1,60 @@
+@let(formAction = label.id ? `${route('admin.labels.update', { id: label.id })}?_method=PUT` : route('admin.labels.store'))
+
+@include('partials/flash-messages')
+
+<form method="POST" action="{{ formAction }}">
+  {{ csrfField() }}
+
+  <label for="name">Name</label>
+  <input
+    type="text"
+    required
+    class="form-control"
+    id="name"
+    name="name"
+    value="{{ (old('name') || label.name) ?? "
+  />
+  @inputError('name')
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <label for="summary">Summary</label>
+  <textarea rows="3" required class="form-control" id="summary" name="summary">{{ (old('summary') || label.summary) ?? "" }}</textarea>
+  @inputError('summary')
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <label for="description">Description</label>
+  <small class="form-hint">You can use markdown in the description</small>
+  <textarea rows="12" class="form-control" id="description" name="description">{{ (old('description') || label.description) ?? "" }}</textarea>
+  @inputError('description')
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <div class="button-group">
+    <button type="submit">Save Label</button>
+    <a
+      href="{{ label.id ? route('admin.labels.show', { id: label.id }) : route('admin.labels.index') }}"
+      role="button"
+      class="w-100 outline"
+    >Back</a>
+  </div>
+</form>

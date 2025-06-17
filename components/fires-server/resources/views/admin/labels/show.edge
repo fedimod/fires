@@ -1,0 +1,27 @@
+@layouts.admin()
+  @slot('main')
+    @include('partials/flash-messages')
+
+    <div class="d-flex">
+      <h2>
+        Labels: {{label.name}}
+      </h2>
+      <a href="{{ route('admin.labels.edit', { id: label.id }) }}" role="button">Edit</a>
+    </div>
+
+    <div class="label-content">
+      <p>
+        @if(label.summary)
+          {{ label.summary }}
+        @else
+          <em>Summary Missing</em>
+        @end
+      </p>
+      @if(label.description)
+        <div class="label-description">
+          {{ markdown(label.description) }}
+        </div>
+      @end
+    </div>
+  @endslot
+@end

@@ -10,4 +10,12 @@ export default class Setting extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  static async retrieveSettings(keys: string[]): Promise<Record<string, string>> {
+    const rows = await this.findMany(keys)
+    return rows.reduce<Record<string, string>>((settings, record) => {
+      settings[record.key] = record.value
+      return settings
+    }, {})
+  }
 }

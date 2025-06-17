@@ -1,0 +1,197 @@
+@use '@picocss/pico/scss/pico' with (
+  $theme-color: 'red'
+);
+@use '@picocss/pico/scss/pico.colors' as *;
+
+:root,
+:host {
+  --pico-font-size: 120%;
+  --pico-form-element-spacing-vertical: 0.4rem;
+  --pico-form-element-spacing-horizontal: 0.75rem;
+  --pico-notification-spacing-vertical: 0.8rem;
+  --pico-notification-spacing-horizontal: 1.5rem;
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']),
+  :host:not([data-theme='light']) {
+    --pico-background-color: var(--pico-color-zinc-850);
+  }
+}
+
+.root-container {
+  max-width: 70%;
+  margin: 3rem auto;
+}
+
+/* Small (landscape phones) */
+@media (max-width: 576px) {
+  .root-container {
+    max-width: 100%;
+    margin: 3rem 1rem;
+  }
+}
+
+header {
+  border-bottom: 1px solid var(--pico-color-zinc-150);
+  margin-bottom: 3rem;
+}
+
+header nav {
+  align-items: baseline;
+
+  form button {
+    margin-bottom: 0 !important;
+  }
+}
+
+footer {
+  margin-top: 3rem;
+  border-top: 1px solid var(--pico-color-zinc-150);
+  padding-top: 1rem;
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]),
+  :host:not([data-theme]) {
+    header {
+      border-bottom-color: var(--pico-color-zinc-650);
+    }
+    footer {
+      border-top-color: var(--pico-color-zinc-650);
+    }
+  }
+}
+
+footer p {
+  text-align: center;
+  font-size: 0.6rem;
+  color: var(--pico-muted-color);
+}
+
+footer a {
+  opacity: 0.6;
+}
+
+.breadcrumb-link {
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+dl.labels dt {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.label-content {
+  margin-left: 2rem;
+}
+
+.label-description h1 {
+  font-size: 1.4rem;
+}
+
+.label-description h2 {
+  font-size: 1.3rem;
+}
+
+.label-description h3 {
+  font-size: 1.2rem;
+}
+
+.label-description h4 {
+  font-size: 1.1rem;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  > [role='button'] {
+    margin-bottom: 0 !important;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: var(--pico-form-element-spacing-horizontal);
+  flex-direction: row-reverse;
+}
+
+.button-group > button,
+.button-group > a[role='button'] {
+  width: auto;
+  flex: 1;
+  margin-bottom: 0;
+}
+
+a[role='button'] {
+  margin-bottom: var(--pico-spacing);
+}
+
+button[type='submit'] {
+  --pico-background-color: var(--pico-color-green-500);
+  --pico-border-color: var(--pico-color-green-500);
+  --pico-color: white;
+
+  &:is(:hover, :focus, :active) {
+    --pico-background-color: var(--pico-color-green-600);
+    --pico-border-color: var(--pico-color-green-600);
+  }
+}
+
+.notification {
+  padding: var(--pico-notification-spacing-vertical) var(--pico-notification-spacing-horizontal);
+  margin: calc(var(--pico-notification-spacing-vertical) * 2) 0;
+  background: var(--pico-color-zinc-850);
+  color: var(--pico-primary-inverse);
+  border-radius: var(--pico-border-radius);
+}
+
+.notification.notification-error {
+  background-color: var(--pico-color-red-450);
+  color: white;
+}
+
+.notification.notification-success {
+  background-color: var(--pico-color-green-500);
+  color: white;
+}
+
+.notification.notification-warning {
+  background-color: var(--pico-color-amber-200);
+  color: var(--pico-color-amber-950);
+}
+
+.notification.notification-info {
+  background-color: var(--pico-color-indigo-600);
+  color: white;
+}
+
+.form-hint {
+  display: block;
+  margin: var(--pico-form-element-spacing-vertical) 0;
+}
+
+.form-control.is-invalid {
+  border-color: var(--pico-color-red-450);
+}
+
+.invalid-feedback {
+  margin-bottom: var(--pico-typography-spacing-vertical);
+  padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
+  border-radius: var(--pico-border-radius);
+  background-color: var(--pico-color-red-450);
+  color: white;
+
+  > * {
+    color: white;
+  }
+
+  > :only-child {
+    margin-bottom: 0;
+  }
+}

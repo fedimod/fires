@@ -4,6 +4,7 @@ import env from '#start/env'
 
 const i18nConfig = defineConfig({
   defaultLocale: env.get('DEFAULT_LOCALE', 'en'),
+  supportedLocales: ['en'],
 
   formatter: formatters.icu(),
 

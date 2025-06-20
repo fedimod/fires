@@ -1,5 +1,13 @@
 # @fedimod/fires-server
 
+## 0.2.1
+
+### Patch Changes
+
+- [#142](https://github.com/fedimod/fires/pull/142) [`0f67fbd`](https://github.com/fedimod/fires/commit/0f67fbd9099d143e8fccd4074ba6a8e8a4685fe9) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix bugs created due to broken code formatting
+
+  When finishing up the admin panel work, I ran code formatting, and didn't notice that a bunch of the edge.js templates became messed up. This is due to edge.js formatting still being somewhat new and sometimes not handling certain ways of writing code.
+
 ## 0.2.0
 
 ### Minor Changes

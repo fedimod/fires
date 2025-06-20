@@ -16,7 +16,7 @@
         class="form-control {{ isInputInvalid('name', flashMessages) }}"
         id="name"
         name="name"
-        value="{{ (old('name') || settings.name) ?? "
+        value="{{ (old('name') || settings.name) ?? '' }}"
       />
       @inputError('name')
         <div class="invalid-feedback">
@@ -70,7 +70,7 @@
         class="form-control {{ isInputInvalid('contact_email', flashMessages) }}"
         id="contact_email"
         name="contact_email"
-        value="{{ (old('contact_email') || settings.contact_email) ?? "
+        value="{{ (old('contact_email') || settings.contact_email) ?? '' }}"
       />
       @inputError('contact_email')
         <div class="invalid-feedback">
@@ -89,7 +89,7 @@
         class="form-control {{ isInputInvalid('appeals_url', flashMessages) }}"
         id="appeals_url"
         name="appeals_url"
-        value="{{ (old('appeals_url') || settings.appeals_url) ?? "
+        value="{{ (old('appeals_url') || settings.appeals_url) ?? '' }}"
       />
       @inputError('appeals_url')
         <div class="invalid-feedback">
@@ -108,7 +108,7 @@
         class="form-control {{ isInputInvalid('documentation_url', flashMessages) }}"
         id="documentation_url"
         name="documentation_url"
-        value="{{ (old('documentation_url') || settings.documentation_url) ?? "
+        value="{{ (old('documentation_url') || settings.documentation_url) ?? '' }}"
       />
       @inputError('documentation_url')
         <div class="invalid-feedback">

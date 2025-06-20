@@ -12,7 +12,7 @@
     class="form-control"
     id="name"
     name="name"
-    value="{{ (old('name') || label.name) ?? "
+    value="{{ (old('name') || label.name) ?? '' }}"
   />
   @inputError('name')
     <div class="invalid-feedback">

@@ -8,11 +8,11 @@
 
     <form method="POST" action="{{ route('admin.performLogin') }}">
       {{ csrfField() }}
-      @if(returnPath)
-        <input type="hidden" name="returnPath" value="{{ returnPath }}" />
+      @if(returnPath || old('returnPath'))
+        <input type="hidden" name="returnPath" value="{{ old('returnPath') ?? returnPath }}" />
       @end
       <label for="username">Username</label>
-      <input type="text" name="username" value="{{ old('username') || " />
+      <input type="text" name="username" value="{{ old('username') ?? '' }}" />
       <label for="password">Password</label>
       <input type="password" name="password" />
       <button type="submit">Login</button>

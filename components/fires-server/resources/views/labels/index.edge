@@ -1,4 +1,7 @@
 @layouts.app()
+  @slot('head')
+    <link href='{{ route_url('labels.index') }}' rel='alternate' type='application/ld+json'>
+  @end
   @slot('main')
     <h2>
       Labels

@@ -3,14 +3,10 @@ import Label from '#models/label'
 import { CONTEXT, LabelsSerializer } from '#serializers/labels_serializer'
 import { UrlService } from '#services/url_service'
 import { inject } from '@adonisjs/core'
-import router from '@adonisjs/core/services/router'
 
 @inject()
 export default class LabelsController {
-  constructor(
-    protected urlService: UrlService,
-    protected labelsSerializer: LabelsSerializer
-  ) {}
+  constructor(protected labelsSerializer: LabelsSerializer) {}
 
   async index({ response, view }: HttpContext) {
     const labels = await Label.all()
@@ -37,8 +33,6 @@ export default class LabelsController {
         ? await Label.findByOrFail('slug', params.slug)
         : await Label.findOrFail(params.id)
 
-    const collectionId = this.urlService.make('labels.index')
-
     return response.negotiate(
       {
         json: (acceptedType) => {
@@ -52,7 +46,7 @@ export default class LabelsController {
 
           response.json({
             '@context': CONTEXT,
-            ...this.labelsSerializer.singular(label, collectionId),
+            ...this.labelsSerializer.singular(label),
           })
         },
         html() {

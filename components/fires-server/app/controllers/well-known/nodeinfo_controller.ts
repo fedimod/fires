@@ -5,17 +5,14 @@ import { SoftwareService } from '#services/software_service'
 
 @inject()
 export default class NodeInfoController {
-  constructor(
-    protected urlService: UrlService,
-    protected softwareService: SoftwareService
-  ) {}
+  constructor(protected softwareService: SoftwareService) {}
 
   async discovery({ response }: HttpContext) {
     return response.json({
       links: [
         {
           rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1',
-          href: this.urlService.make('nodeinfo.retrieval'),
+          href: UrlService.make('nodeinfo.retrieval'),
         },
       ],
     })

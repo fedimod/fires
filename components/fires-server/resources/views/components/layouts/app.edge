@@ -6,7 +6,10 @@
     <title>
       {{ title ? `${title} - ${provider.name}` : provider.name }}
     </title>
-    @vite(['resources/styles/app.scss'])
+    @vite(['resources/styles/app.scss', 'resources/scripts/app.js'])
+    @if ($slots.head)
+      {{{ await $slots.head() }}}
+    @endif
   </head>
   <body>
     <div class="root-container">

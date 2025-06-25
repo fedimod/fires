@@ -66,9 +66,9 @@ importers:
       argon2:
         specifier: ^0.43.0
         version: 0.43.0
-      dedent:
-        specifier: ^1.5.3
-        version: 1.6.0
+      bcp47-language-tags:
+        specifier: ^1.1.0
+        version: 1.1.0
       edge.js:
         specifier: ^6.2.1
         version: 6.2.1
@@ -1888,6 +1888,9 @@ packages:
   basic-auth@2.0.1:
     resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
     engines: {node: '>= 0.8'}
+
+  bcp47-language-tags@1.1.0:
+    resolution: {integrity: sha512-JPPjQjl7NBQf38PSZRM9hx2R4nHeLvN84mkrD/orci80MEq2rVN78hbraxQhp33DhIU/8cNE+/ukt9pVPPKNNg==}
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -6413,6 +6416,8 @@ snapshots:
   basic-auth@2.0.1:
     dependencies:
       safe-buffer: 5.1.2
+
+  bcp47-language-tags@1.1.0: {}
 
   better-path-resolve@1.0.0:
     dependencies:

@@ -107,7 +107,7 @@ export default defineConfig({
     },
     {
       pattern: 'resources/locales/**/*.{json,yaml,yml}',
-      reloadServer: false,
+      reloadServer: true,
     },
   ],
 

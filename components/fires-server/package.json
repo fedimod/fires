@@ -87,7 +87,7 @@
     "@thisismissem/adonisjs-respond-with": "^2.1.1",
     "@vinejs/vine": "^3.0.0",
     "argon2": "^0.43.0",
-    "dedent": "^1.5.3",
+    "bcp47-language-tags": "^1.1.0",
     "edge.js": "^6.2.1",
     "luxon": "^3.5.0",
     "markdown-it": "^14.1.0",

@@ -1,0 +1,13 @@
+<select name="{{{ name }}}">
+  <option value="" disabled {{ html.attrs({ selected: !selected }) }}>
+    Select a language
+  </option>
+  @each(locale in locales)
+    <option {{ html.attrs({
+          value: locale,
+          selected: selected === locale
+      }) }}>
+      {{ t(`locales.${locale}.name`) }}
+    </option>
+  @end
+</select>

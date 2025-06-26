@@ -31,7 +31,11 @@ export default class LabelsController {
   }
 
   async show({ params, response, view }: HttpContext) {
-    const label = await Label.findOrFail(params.id)
+    const label =
+      typeof params.slug === 'string'
+        ? await Label.findByOrFail('slug', params.slug)
+        : await Label.findOrFail(params.id)
+
     const collectionId = this.urlService.make('labels.index')
 
     return response.negotiate(

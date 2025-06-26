@@ -30,7 +30,17 @@ router.get('/.well-known/nodeinfo', [NodeinfoController, 'discovery']).as('nodei
 router.get('/nodeinfo/2.1', [NodeinfoController, 'retrieval']).as('nodeinfo.retrieval')
 
 // FIRES labels Endpoint
-router.resource('labels', LabelsController).only(['index', 'show'])
+router
+  .get('labels/:id', [LabelsController, 'show'])
+  .where('id', router.matchers.uuid())
+  .as('protocol.labels.show')
+
+router
+  .get('labels/:slug', [LabelsController, 'show'])
+  .where('slug', router.matchers.slug())
+  .as('labels.show')
+
+router.get('labels', [LabelsController, 'index']).as('labels.index')
 
 // Reference Server Management API:
 router
@@ -47,7 +57,10 @@ router
   .group(() => {
     router.post('logout', [AdminSessionsController, 'logout']).as('logout')
     router.get('overview', [AdminOverviewController, 'index']).as('overview')
-    router.resource('labels', AdminLabelsController).as('labels')
+    router
+      .resource('labels', AdminLabelsController)
+      .as('labels')
+      .where('id', router.matchers.uuid())
 
     router.get('settings', [AdminSettingsController, 'show']).as('settings')
     router.post('settings', [AdminSettingsController, 'update']).as('settings.update')

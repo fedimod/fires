@@ -1,4 +1,4 @@
-@layouts.app()
+@layouts.app({ title: `${label.name} - Labels`})
   @slot('main')
     <a href="{{ route('labels.index') }}" class="breadcrumb-link">&laquo; All Labels</a>
     <h2>

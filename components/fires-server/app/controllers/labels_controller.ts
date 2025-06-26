@@ -3,6 +3,7 @@ import Label from '#models/label'
 import { CONTEXT, LabelsSerializer } from '#serializers/labels_serializer'
 import { UrlService } from '#services/url_service'
 import { inject } from '@adonisjs/core'
+import router from '@adonisjs/core/services/router'
 
 @inject()
 export default class LabelsController {
@@ -41,6 +42,10 @@ export default class LabelsController {
     return response.negotiate(
       {
         json: (acceptedType) => {
+          if (typeof params.slug === 'string') {
+            return response.redirect().toRoute('protocol.labels.show', { id: label.id })
+          }
+
           if (acceptedType?.startsWith('application/ld+json')) {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
           }
@@ -51,6 +56,9 @@ export default class LabelsController {
           })
         },
         html() {
+          if (typeof params.id === 'string') {
+            return response.redirect().toRoute('labels.show', { slug: label.slug })
+          }
           return view.render('labels/show', { label })
         },
       },

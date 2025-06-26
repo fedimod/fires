@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ i18n.locale }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Error: {{ title }} | FIRES Server
+    </title>
+    @vite(['resources/styles/app.scss'])
+  </head>
+  <body>
+    <div class="root-container error-container">
+      <main>
+        <h2>
+          Error: {{ title }}
+        </h2>
+        {{{ await $slots.main() }}}
+      </main>
+    </div>
+  </body>
+</html>

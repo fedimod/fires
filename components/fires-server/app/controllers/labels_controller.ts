@@ -1,7 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Label from '#models/label'
 import { CONTEXT, LabelsSerializer } from '#serializers/labels_serializer'
-import { UrlService } from '#services/url_service'
 import { inject } from '@adonisjs/core'
 
 @inject()

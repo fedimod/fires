@@ -24,6 +24,7 @@ test.group('Controllers / labels / content negotiation', (group) => {
     assert.equal(json['totalItems'], 0)
     assert.deepEqual(json['items'], [])
     assert.equal(json['id'], 'https://fires.test/labels')
+    assert.equal(json['url'], 'https://fires.test/labels')
     assert.equal(json['summary'], 'Labels from https://fires.test/')
   })
 
@@ -52,17 +53,53 @@ test.group('Controllers / labels / content negotiation', (group) => {
     assertResponse.contentType(response, 'text/html; charset=utf-8')
   })
 
-  test('correctly negotiates an individual label to HTML', async ({
-    assert,
+  test('correctly negotiates an individual label to HTML, redirecting to the canonical URL', async ({
     assertResponse,
     request,
   }) => {
     const label = await LabelFactory.create()
     const response = await request.get(`/labels/${label.id}`).headers({ accept: 'text/html' }).end()
 
+    assertResponse.status(response, 302)
+    assertResponse.header(response, 'Location', `/labels/${label.slug}`)
+  })
+
+  test('correctly negotiates an individual label to JSON', async ({
+    assert,
+    assertResponse,
+    request,
+  }) => {
+    const label = await LabelFactory.create()
+    const response = await request
+      .get(`/labels/${label.id}`)
+      .headers({ accept: 'application/ld+json' })
+      .end()
+
     assertResponse.status(response, 200)
-    assertResponse.contentType(response, 'text/html; charset=utf-8')
-    assert.ok(response.body.includes(label.name), 'Should contain the label name on the page')
+    assertResponse.contentType(response, 'application/ld+json; charset=utf-8')
+
+    const json = response.json()
+
+    assert.deepEqual(json['@context'], CONTEXT)
+    assert.equal(json.type, 'Label')
+    assert.equal(json.id, `https://fires.test/labels/${label.id}`)
+    assert.equal(json.url, `https://fires.test/labels/${label.slug}`)
+    assert.equal(json.name, label.name)
+    assert.equal(json.summary, label.summary)
+  })
+
+  test('correctly negotiates an individual label to JSON when requesting with the slug, redirecting to the canonical URL', async ({
+    assertResponse,
+    request,
+  }) => {
+    const label = await LabelFactory.create()
+    const response = await request
+      .get(`/labels/${label.slug}`)
+      .headers({ accept: 'application/ld+json' })
+      .end()
+
+    assertResponse.status(response, 302)
+    assertResponse.header(response, 'Location', `/labels/${label.id}`)
   })
 })
 
@@ -128,6 +165,20 @@ test.group('Controllers / labels', (group) => {
     assert.equal(json['type'], 'Label')
     assert.equal(json.name, label.name)
     assert.equal(json.summary, label.summary)
+  })
+
+  test('fetching an individual label as html', async ({ assert, assertResponse, request }) => {
+    const label = await LabelFactory.create()
+
+    const response = await request
+      .get(`/labels/${label.slug}`)
+      .headers({ accept: 'text/html' })
+      .end()
+
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'text/html; charset=utf-8')
+
+    assert.ok(response.body.includes(label.name), 'Should contain the label name on the page')
   })
 
   test('when a label is deprecated, it returns owl:deprecated true', async ({

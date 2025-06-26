@@ -128,7 +128,7 @@ dl.labels dt {
   }
 }
 
-fieldset[role="group"] label {
+fieldset[role='group'] label {
   width: auto;
   min-width: 3rem;
   padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
@@ -203,7 +203,7 @@ button[type='submit'] {
   margin: var(--pico-form-element-spacing-vertical) 0;
 }
 
-[role="group"]:has(+ .form-hint) {
+[role='group']:has(+ .form-hint) {
   margin-bottom: 0;
 
   & + .form-hint {

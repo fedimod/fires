@@ -9,7 +9,9 @@
       <a href="{{ route('admin.labels.edit', { id: label.id }) }}" role="button">Edit</a>
     </div>
 
-    <h4>Summary</h4>
+    <h4>
+      Summary
+    </h4>
     <div class="label-content">
       <p>
         @if(label.summary)
@@ -20,27 +22,45 @@
       </p>
     </div>
 
-    <h4>Description</h4>
+    <h4>
+      Description
+    </h4>
     <div class="label-content">
       @if(label.description)
         <div class="label-description">
           {{ markdown(label.description) }}
         </div>
       @else
-        <p><em>No description provided</em></p>
+        <p>
+          <em>No description provided</em>
+        </p>
       @end
     </div>
 
-    <h4 class="mt-4">Technical Information</h4>
+    <h4 class="mt-4">
+      Technical Information
+    </h4>
     <fieldset role="group" data-copyable>
       <label for="url">URL:</label>
-      <input id="url" type="text" readonly value="{{ route_url('labels.show', { slug: label.slug }) }}" aria-describedby="url-description" />
+      <input
+        id="url"
+        type="text"
+        readonly
+        value="{{ route_url('labels.show', { slug: label.slug }) }}"
+        aria-describedby="url-description"
+      />
     </fieldset>
-    <small class="form-hint" id="url-description">Use this <abbr title="Uniform Resource Locator">URL</abbr> when sharing this label with humans.</small>
+    <small class="form-hint" id="url-description">Use this <abbr title="Uniform Resource Locator">URL</abbr>when sharing this label with humans.</small>
     <fieldset role="group" data-copyable>
       <label for="iri">IRI:</label>
-      <input id="iri" type="text" readonly value="{{ route_url('protocol.labels.show', { id: label.id }) }}" aria-describedby="iri-description" />
+      <input
+        id="iri"
+        type="text"
+        readonly
+        value="{{ route_url('protocol.labels.show', { id: label.id }) }}"
+        aria-describedby="iri-description"
+      />
     </fieldset>
-    <small class="form-hint" id="iri-description">Use this <abbr title="Internationalized Resource Indicator">IRI</abbr> when referring to this label in datasets or software.</small>
+    <small class="form-hint" id="iri-description">Use this <abbr title="Internationalized Resource Indicator">IRI</abbr>when referring to this label in datasets or software.</small>
   @endslot
 @end

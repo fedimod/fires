@@ -1,4 +1,3 @@
-import { inject } from '@adonisjs/core'
 import Label from '#models/label'
 import markdown from '#utils/markdown'
 import { DateTime } from 'luxon'
@@ -8,6 +7,7 @@ import { UrlService } from '#services/url_service'
 interface LabelType {
   '@context'?: (string | Record<string, string>)[]
   'id': string
+  'url': string
   'context': string
   'type': 'Label'
   'name': string
@@ -26,40 +26,39 @@ export const CONTEXT = [
   },
 ]
 
-@inject()
 export class LabelsSerializer {
-  constructor(protected urlService: UrlService) {}
-
   async collection(labels: Label[]) {
     const latest = await Label.query()
       .select('id', 'updatedAt')
       .orderBy('updatedAt', 'desc')
       .first()
 
-    const collectionId = this.urlService.make('labels.index')
+    const collectionId = UrlService.make('labels.index')
 
     return {
       '@context': CONTEXT,
-      'summary': `Labels from ${this.urlService.publicUrl}`,
+      'summary': `Labels from ${UrlService.publicUrl}`,
       'type': 'Collection',
       'id': collectionId,
+      'url': collectionId,
       'updated': latest?.updatedAt.toFormat(XSDDateFormat),
       'totalItems': labels.length,
       'items': labels.map((item) => this.singular(item, collectionId)),
     }
   }
 
-  singular(item: Label, collectionId: string) {
+  singular(item: Label, collectionId?: string) {
     const result: Partial<LabelType> = {}
 
     if (item.deprecatedAt && item.deprecatedAt < DateTime.now()) {
       result['owl:deprecated'] = true
     }
 
-    result.id = this.urlService.make('labels.show', { id: item.id })
+    result.id = UrlService.make('protocol.labels.show', { id: item.id })
+    result.url = UrlService.make('labels.show', { slug: item.slug })
     result.type = 'Label'
     result.name = item.name
-    result.context = collectionId
+    result.context = collectionId ?? UrlService.make('labels.index')
     result.published = item.createdAt.toFormat(XSDDateFormat)
     if (item.updatedAt !== null) {
       result.updated = item.updatedAt.toFormat(XSDDateFormat)

@@ -17,7 +17,9 @@ export default class ViewDataMiddleware {
       return await next()
     }
 
-    if (!ctx.request.header('Accept') || ctx.request.accepts(['html', '*/*']) === 'html') {
+    // This is only needed if we're going to render a HTML page, which is when
+    // the request is explicitly not a JSON request:
+    if (!ctx.request.header('Accept') || ctx.request.accepts(['json', '*/*']) !== 'json') {
       const settings = await Setting.retrieveSettings(['name', 'summary'])
       const labelsCount = await db.from(Label.table).count('* as total')
 

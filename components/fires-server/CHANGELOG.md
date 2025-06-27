@@ -1,5 +1,25 @@
 # @fedimod/fires-server
 
+## 0.3.0
+
+### Minor Changes
+
+- [#144](https://github.com/fedimod/fires/pull/144) [`e7829fb`](https://github.com/fedimod/fires/commit/e7829fb7590d9a4df40535316f06be25fdc860e4) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Improve display of the labels list in the admin panel
+
+- [#147](https://github.com/fedimod/fires/pull/147) [`3f506b8`](https://github.com/fedimod/fires/commit/3f506b8c13d73ed56c331c82d5c630217684939e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add human-friendly URLs to Labels
+
+  This changeset provides prettier URLs for human visitors, whilst still using the unchanging UUID identifier for use in datasets and machine-readable contexts. Additionally, it adds interlinking between the admin panel and the logged out homepage, and introduces copyable input boxes for the URL/IRIs of labels.
+
+  Note: Changing a labels `name` will result in the URL changing for that label, and currently we don't preserve the previous URL and perform redirects, so this will break visitors.
+
+- [#144](https://github.com/fedimod/fires/pull/144) [`e7829fb`](https://github.com/fedimod/fires/commit/e7829fb7590d9a4df40535316f06be25fdc860e4) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add localisation of Labels
+
+  This adds the ability to translate labels into different languages. The localization is supported both in the JSON-LD responses, and in the administration panel which allows you to view a label in different languages, if it has been localized. The admin panel also supports adding and removing label localizations (though this does require javascript), and the API also supports working with localization of labels (though this is untested).
+
+### Patch Changes
+
+- [#145](https://github.com/fedimod/fires/pull/145) [`b24cfdc`](https://github.com/fedimod/fires/commit/b24cfdc494f0067e25f181ae7c8f76d0c33c6213) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add correct error pages for 404 and 5xx errors
+
 ## 0.2.1
 
 ### Patch Changes

@@ -20,12 +20,12 @@ A server that is serving label endpoints DOES NOT need to implement the full FIR
 
 Once published, `Label`s SHOULD NOT be deleted, since there may be references to that label in downstream [Datasets](../data-model/datasets), instead, [deprecation](../data-model/labels#deprecation-of-labels) is preferred.
 
-
 ## Content Negotiation
 
 To support providing humans with a readable version of labels and label collections, the server MUST support either:
-* [content negotiation][2] for content types of `text/html`, `application/json`, and `application/ld+json`, or
-* have a `url` property indicating the URL at which clients can direct people to for a human-readable version.
+
+- [content negotiation][2] for content types of `text/html`, `application/json`, and `application/ld+json`, or
+- have a `url` property indicating the URL at which clients can direct people to for a human-readable version.
 
 So for instance, a collection may have the `id` of `https://labels.fires.example/8b5df8dd-4e31-487c-af7a-d3d48b2cfed0/`, which responds with `application/ld+json`, but the human readable version may be located at `https://labels.fires.example/collections/dtsp`.
 

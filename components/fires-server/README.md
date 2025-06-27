@@ -8,10 +8,14 @@
 - [x] Labels Endpoint
 - [x] non-standard API for managing Labels (still need to figure out a standardisable API here)
 - [x] Basic Web UI for reading data
-- [x] Authentication & Authorization
+- [x] Authentication & Authorization for APIs
+- [x] Web-based Admin UI
 - [ ] Datasets
 
 ## Running in Docker
+
+> [!NOTE]
+> The docker image used below is `ghcr.io/fedimod/fires-server:edge`, if you have followed the manual from the website, you'll need to replace that with `ghcr.io/fedimod/fires-server:v0.3`
 
 First you'll need an [environment file](https://github.com/fedimod/fires/blob/main/components/fires-server/.env.docker), to create this use:
 
@@ -142,6 +146,9 @@ Accept: application/ld+json
 ```
 
 Will return an individual Label as JSON-LD
+
+> [!NOTE]
+> If you request without a JSON `Accept` header, then you'll be redirected to the HTML version of the label.
 
 ### NodeInfo
 

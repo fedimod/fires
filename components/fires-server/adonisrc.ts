@@ -68,6 +68,7 @@ export default defineConfig({
     () => import('#start/routes'),
     () => import('#start/kernel'),
     () => import('#start/events'),
+    () => import('#start/vine'),
     () => import('#start/view'),
   ],
 
@@ -107,7 +108,7 @@ export default defineConfig({
     },
     {
       pattern: 'resources/locales/**/*.{json,yaml,yml}',
-      reloadServer: false,
+      reloadServer: true,
     },
   ],
 

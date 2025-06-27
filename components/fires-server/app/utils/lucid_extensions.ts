@@ -1,6 +1,7 @@
-import { column } from '@adonisjs/lucid/orm'
+import { column, BaseModel, beforeCreate } from '@adonisjs/lucid/orm'
 import { TypedDecorator } from '@adonisjs/lucid/types/model'
 import { Secret } from '@adonisjs/core/helpers'
+import { v7 as uuidv7 } from 'uuid'
 
 export const secretColumn = (): TypedDecorator<Secret<string>> => {
   return function (target: any, propertyKey: string) {
@@ -25,5 +26,17 @@ export const jsonArrayColumn = (): TypedDecorator<string[]> => {
     }
 
     column(descriptor)(target, propertyKey)
+  }
+}
+
+export class UuidBaseModel extends BaseModel {
+  selfAssignPrimaryKey = true
+
+  @column({ isPrimary: true })
+  declare id: string
+
+  @beforeCreate()
+  static assignId(record: any) {
+    record.id = uuidv7()
   }
 }

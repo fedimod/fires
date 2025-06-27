@@ -9,7 +9,8 @@ const md = markdownit({
 
 md.linkify.set({ fuzzyEmail: false })
 
-function render(markdown: string): string {
+function render(markdown?: string): string | undefined {
+  if (!markdown) return undefined
   return md.render(markdown)
 }
 

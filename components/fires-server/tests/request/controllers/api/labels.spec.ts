@@ -102,14 +102,7 @@ test.group('Controllers / api / labels', (group) => {
 
     const json = response.json()
 
-    assert.deepEqual(Object.keys(json), [
-      'name',
-      'language',
-      'id',
-      'slug',
-      'createdAt',
-      'updatedAt',
-    ])
+    assert.deepEqual(Object.keys(json), ['name', 'locale', 'id', 'slug', 'createdAt', 'updatedAt'])
   })
 
   test('updating a label with a new name', async ({ assert, assertResponse, request }) => {

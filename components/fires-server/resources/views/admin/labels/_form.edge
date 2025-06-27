@@ -5,14 +5,25 @@
 <form method="POST" action="{{ formAction }}">
   {{ csrfField() }}
 
+  <input type="hidden" name="locale" value="{{ default_locale }}" />
+
+  <label for="locale">Language</label>
+  @!component('components/locale-select', {
+    name: `locale`,
+    selected: label.locale,
+    disabled: true
+  })
+
   <label for="name">Name</label>
   <input
     type="text"
     required
-    class="form-control"
+    class="{{ html.classNames(['form-control', {
+        'is-invalid': isInputInvalid('name', flashMessages)
+      }]) }}"
     id="name"
     name="name"
-    value="{{ (old('name') || label.name) ?? '' }}"
+    value="{{ (old('name') ?? label.name) ?? '' }}"
   />
   @inputError('name')
     <div class="invalid-feedback">
@@ -25,7 +36,14 @@
   @end
   
   <label for="summary">Summary</label>
-  <textarea rows="3" required class="form-control" id="summary" name="summary">{{ (old('summary') || label.summary) ?? "" }}</textarea>
+  <textarea
+    rows="3"
+    class="{{ html.classNames(['form-control', {
+        'is-invalid': isInputInvalid('summary', flashMessages)
+      }]) }}"
+    id="summary"
+    name="summary"
+  >{{ (old('summary') ?? label.summary) ?? "" }}</textarea>
   @inputError('summary')
     <div class="invalid-feedback">
       @each(message in $messages)
@@ -38,7 +56,14 @@
   
   <label for="description">Description</label>
   <small class="form-hint">You can use markdown in the description</small>
-  <textarea rows="12" class="form-control" id="description" name="description">{{ (old('description') || label.description) ?? "" }}</textarea>
+  <textarea
+    rows="12"
+    class="{{ html.classNames(['form-control', {
+        'is-invalid': isInputInvalid('description', flashMessages)
+      }]) }}"
+    id="description"
+    name="description"
+  >{{ (old('description') ?? label.description) ?? "" }}</textarea>
   @inputError('description')
     <div class="invalid-feedback">
       @each(message in $messages)
@@ -49,6 +74,48 @@
     </div>
   @end
   
+  <hr class="separator" />
+
+  <h3>
+    Translations
+  </h3>
+  <p class="form-hint">
+    You can optionally add translations for the label. Please always ensure any provided translation is in sync with the default value.<br />
+    Translations without any values will be removed.
+  </p>
+  @inputError('translations')
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  <div id="translations">
+    @let(translations = old('translations') ?? label.translations ?? [] )
+
+    <div
+      id="translations-empty"
+      class="{{ html.classNames([
+        'notification',
+        'notification-info',
+        { 'd-hidden': translations.length > 0 }
+      ]) }}"
+    >
+      There are currently no translations provided for this label.
+    </div>
+
+    <div id="translation-rows">
+      @each((translation, index) in translations)
+        <div id="translation-{{ index }}" class="translation-row">
+          @include('admin/labels/_translation_form')
+        </div>
+      @end
+    </div>
+    <button type="button" class="secondary" id="add-translation">Add Translation</button>
+  </div>
+
   <div class="button-group">
     <button type="submit">Save Label</button>
     <a
@@ -58,3 +125,9 @@
     >Back</a>
   </div>
 </form>
+
+<template id="new-translation" shadowrootclonable>
+  @let(translation = newTranslation)
+  @let(index = '')
+  @include('admin/labels/_translation_form')
+</template>

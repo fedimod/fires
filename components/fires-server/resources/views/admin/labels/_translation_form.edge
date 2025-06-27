@@ -1,0 +1,88 @@
+<div>
+  <label for="{{ `translations-${index}-locale` }}">Language</label>
+  <div class="d-flex gap-2">
+    @!component('components/locale-select', {
+      name: `translations[${index}][locale]`,
+      id: `translations-${index}-locale`,
+      classNames: html.classNames(['form-control', {
+        'is-invalid': isInputInvalid(`translations.${index}.locale`, flashMessages)
+      }]),
+      exclude: default_locale,
+      selected: old(`translations.${index}.locale`) ?? translation.locale
+    })
+    <button type="button" data-translation-id="translation-{{ index }}" class="remove-translation">Remove</button>
+  </div>
+  @inputError(`translations.${index}.locale`)
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  <label for="{{ `translations-${index}-name` }}">Name</label>
+  <input
+    type="text"
+    {{ html.attrs({
+        id: `translations-${index}-name`,
+        name: `translations[${index}][name]`,
+        value: (old(`translations[${index}][name]`) ?? translation.name) ?? '',
+        class: html.classNames(['form-control', {
+          'is-invalid': isInputInvalid(`translations.${index}.name`, flashMessages)
+        }])
+      }) }}
+  />
+  @inputError(`translations.${index}.name`)
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <label for="{{ `translations-${index}-summary` }}">Summary</label>
+  <textarea
+    rows="3"
+    {{ html.attrs({
+        id: `translations-${index}-summary`,
+        name: `translations[${index}][summary]`,
+        class: html.classNames(['form-control', {
+          'is-invalid': isInputInvalid(`translations.${index}.summary`, flashMessages)
+        }])
+      }) }}
+  >{{ (old(`translations-${index}-summary`) ?? translation.summary) ?? "" }}</textarea>
+  @inputError(`translations.${index}.summary`)
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <label for="{{ `translations-${index}-description` }}">Description</label>
+  <small class="form-hint">You can use markdown in the description</small>
+  <textarea
+    rows="12"
+    {{ html.attrs({
+        id: `translations-${index}-description`,
+        name: `translations[${index}][description]`,
+        class: html.classNames(['form-control', {
+          'is-invalid': isInputInvalid(`translations.${index}.description`, flashMessages)
+        }])
+      }) }}
+  >{{ (old(`translations[${index}][description]`) ?? translation.description) ?? "" }}</textarea>
+  @inputError(`translations.${index}.description`)
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+</div>

@@ -36,7 +36,7 @@ export default class extends BaseSeeder {
 
           Source: the [IFTAS Trust & Safety Library](https://connect.iftas.org/library/content/csam/) - supporting volunteer moderators in the Fediverse
         `,
-        language: 'en',
+        locale: 'en-US',
       },
       {
         name: 'NCII',
@@ -62,7 +62,7 @@ export default class extends BaseSeeder {
 
           Source: the [IFTAS Trust & Safety Library](https://connect.iftas.org/library/content/ncii/) - supporting volunteer moderators in the Fediverse
         `,
-        language: 'en',
+        locale: 'en-US',
       },
       {
         name: 'Spam',
@@ -80,7 +80,7 @@ export default class extends BaseSeeder {
 
           Source: the [IFTAS Trust & Safety Library](https://connect.iftas.org/library/content/spam/) - supporting volunteer moderators in the Fediverse
         `,
-        language: 'en',
+        locale: 'en-US',
       },
     ])
   }

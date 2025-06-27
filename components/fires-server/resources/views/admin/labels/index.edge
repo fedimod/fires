@@ -1,20 +1,22 @@
 @layouts.admin()
   @slot('main')
-    <div class="d-flex">
+    <div class="d-flex header">
       <h2>
         Labels
       </h2>
-      <a href="{{ route('admin.labels.create') }}" role="button" class="button-small">Create Label</a>
+      <a href="{{ route('admin.labels.create') }}" role="button" class="button-small">Create a Label</a>
     </div>
+
+    <hr />
 
     @include('partials/flash-messages')
 
-    <dl class="labels">
-      @each(label in labels)
-        <dt>
-          {{ label.name }}
-        </dt>
-        <dd class="label-content">
+    @each(label in labels)
+      <div class="d-flex data-row">
+        <div>
+          <h3>
+            <a href="{{ route('admin.labels.show', { id: label.id }) }}">{{ label.name }}</a>
+          </h3>
           <p>
             @if(label.summary)
               {{ label.summary }}
@@ -22,12 +24,20 @@
               <em>Summary Missing</em>
             @end
           </p>
-          <p>
-            <a href="{{ route('admin.labels.show', {id: label.id}) }}">View</a>&nbsp;|&nbsp;
-            <a href="{{ route('admin.labels.edit', {id: label.id}) }}">Edit</a>
-          </p>
-        </dd>
-      @end
-    </dl>
+        </div>
+        <div class="button-group">
+          <a href="{{ route('admin.labels.show', { id: label.id }) }}" role="button" class="secondary">View</a>
+          <a
+            href="{{ route('admin.labels.edit', { id: label.id }) }}"
+            role="button"
+            class="secondary outline"
+          >Edit</a>
+        </div>
+      </div>
+    @else
+      <p>
+        Currently no labels exist on this server
+      </p>
+    @end
   @endslot
 @end

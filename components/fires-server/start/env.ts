@@ -9,9 +9,11 @@
 |
 */
 
+import locales from '#config/locales'
+import { errors } from '@adonisjs/core'
 import { Env } from '@adonisjs/core/env'
 
-export default await Env.create(new URL('../', import.meta.url), {
+const env = await Env.create(new URL('../', import.meta.url), {
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
   LOG_LEVEL: Env.schema.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace'] as const),
 
@@ -57,3 +59,15 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   DEFAULT_LOCALE: Env.schema.string.optional(),
 })
+
+export default env
+
+const locale = env.get('DEFAULT_LOCALE')
+if (locale && !locales.includes(locale)) {
+  throw new errors.E_INVALID_ENV_VARIABLES(
+    'DEFAULT_LOCALE must be listed in the config/locales file'
+  )
+}
+if (!locale) {
+  env.set('DEFAULT_LOCALE', 'en-US')
+}

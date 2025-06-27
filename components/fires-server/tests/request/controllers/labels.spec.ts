@@ -2,8 +2,7 @@ import { test } from '@japa/runner'
 
 import Label from '#models/label'
 import { LabelFactory } from '#database/factories/label_factory'
-import { CONTEXT } from '#serializers/labels_serializer'
-import { XSDDateFormat } from '#utils/jsonld'
+import { XSDDateFormat, JSON_LD_CONTEXT } from '#utils/jsonld'
 
 test.group('Controllers / labels / content negotiation', (group) => {
   group.each.teardown(async () => {
@@ -18,7 +17,7 @@ test.group('Controllers / labels / content negotiation', (group) => {
 
     const json = response.json()
 
-    assert.deepEqual(json['@context'], CONTEXT)
+    assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
 
     assert.equal(json['type'], 'Collection')
     assert.equal(json['totalItems'], 0)
@@ -36,7 +35,7 @@ test.group('Controllers / labels / content negotiation', (group) => {
 
     const json = response.json()
 
-    assert.deepEqual(json['@context'], CONTEXT)
+    assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
   })
 
   test('correctly negotiates to HTML', async ({ assertResponse, request }) => {
@@ -80,7 +79,7 @@ test.group('Controllers / labels / content negotiation', (group) => {
 
     const json = response.json()
 
-    assert.deepEqual(json['@context'], CONTEXT)
+    assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
     assert.equal(json.type, 'Label')
     assert.equal(json.id, `https://fires.test/labels/${label.id}`)
     assert.equal(json.url, `https://fires.test/labels/${label.slug}`)
@@ -116,6 +115,8 @@ test.group('Controllers / labels', (group) => {
     assertResponse.status(response, 200)
     assertResponse.contentType(response, 'application/json; charset=utf-8')
 
+    console.log(response)
+
     const json = response.json()
 
     assert.equal(json['type'], 'Collection')
@@ -142,7 +143,7 @@ test.group('Controllers / labels', (group) => {
 
     const json = response.json()
 
-    assert.deepEqual(json['@context'], CONTEXT)
+    assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
     assert.equal(json['type'], 'Label')
     assert.equal(json.name, label.name)
     assert.equal(json.summary, label.summary)
@@ -161,7 +162,7 @@ test.group('Controllers / labels', (group) => {
 
     const json = response.json()
 
-    assert.deepEqual(json['@context'], CONTEXT)
+    assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
     assert.equal(json['type'], 'Label')
     assert.equal(json.name, label.name)
     assert.equal(json.summary, label.summary)

@@ -1,14 +1,9 @@
 import { DateTime } from 'luxon'
-import { v7 as uuidv7 } from 'uuid'
 import { BaseModel, beforeSave, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { UuidBaseModel } from '#utils/lucid_extensions'
 import stringHelpers from '@adonisjs/core/helpers/string'
 
 export default class Label extends BaseModel {
-  selfAssignPrimaryKey = true
-
-  @column({ isPrimary: true })
-  declare id: string
-
   @column()
   declare language: string
 
@@ -33,9 +28,8 @@ export default class Label extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @beforeCreate()
-  static assignId(label: Label) {
-    label.id = uuidv7()
+  static assignId() {
+    //
   }
 
   @beforeSave()

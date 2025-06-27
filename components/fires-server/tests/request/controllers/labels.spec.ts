@@ -115,8 +115,6 @@ test.group('Controllers / labels', (group) => {
     assertResponse.status(response, 200)
     assertResponse.contentType(response, 'application/json; charset=utf-8')
 
-    console.log(response)
-
     const json = response.json()
 
     assert.equal(json['type'], 'Collection')

@@ -35,8 +35,8 @@ test.group('Controllers / api / labels', (group) => {
     .with<{ method: HttpMethod; endpoint: string }[]>([
       { method: 'get', endpoint: '/api/labels' },
       { method: 'post', endpoint: '/api/labels' },
-      { method: 'patch', endpoint: '/api/labels/123' },
-      { method: 'delete', endpoint: '/api/labels/123' },
+      { method: 'patch', endpoint: '/api/labels/c21450ca-8dd2-4211-b802-57937b772b20' },
+      { method: 'delete', endpoint: '/api/labels/c21450ca-8dd2-4211-b802-57937b772b20' },
     ])
     .run(async ({ assertResponse, request }, { method, endpoint }) => {
       const writeOnlyToken = await createToken(['write'])

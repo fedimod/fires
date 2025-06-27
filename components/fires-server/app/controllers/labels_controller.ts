@@ -10,8 +10,6 @@ export default class LabelsController {
   async index({ response, view }: HttpContext) {
     const labels = await Label.query().preload('translations')
 
-    console.log({ labels })
-
     return response.negotiate(
       {
         json: async (acceptedType) => {

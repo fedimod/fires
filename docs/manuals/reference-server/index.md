@@ -48,7 +48,7 @@ services:
     networks:
       - internal_network
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 2s
       retries: 5
       start_period: 10s
@@ -56,13 +56,13 @@ services:
     volumes:
       - ./postgres17:/var/lib/postgresql/data
     environment:
-      - 'POSTGRES_USER=fires'
-      - 'POSTGRES_PASSWORD=super_secret_password_123'
-      - 'POSTGRES_DB=fires_production'
+      - "POSTGRES_USER=fires"
+      - "POSTGRES_PASSWORD=super_secret_password_123"
+      - "POSTGRES_DB=fires_production"
 
   web:
     container_name: fires-server
-    image: ghcr.io/fedimod/fires-server:0.1
+    image: ghcr.io/fedimod/fires-server:0.3
     restart: always
     env_file: .env.production
     networks:
@@ -72,7 +72,7 @@ services:
       # prettier-ignore
       test: ['CMD-SHELL',"curl -s --noproxy localhost localhost:4444/health | grep -q 'OK' || exit 1"]
     ports:
-      - '127.0.0.1:4444:4444'
+      - "127.0.0.1:4444:4444"
     depends_on:
       postgresql:
         condition: service_healthy

@@ -2,7 +2,7 @@
 import DefaultTheme from "vitepress/theme";
 import { inBrowser, useData, useRouter } from "vitepress";
 import { watch } from "vue";
-import { redirects } from "./redirects.ts"
+import { redirects } from "./redirects.ts";
 
 const { page } = useData();
 const { go } = useRouter();

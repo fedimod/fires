@@ -4,6 +4,7 @@ import Label from '#models/label'
 import { createLabelValidator, updateLabelValidator } from '#validators/label'
 import { DateTime } from 'luxon'
 import { defaultLocale } from '#utils/locale'
+import LabelTranslation from '#models/label_translation'
 
 export default class LabelsApiController {
   /**
@@ -30,11 +31,25 @@ export default class LabelsApiController {
       return token.insufficientScope()
     }
 
-    const data = await request.validateUsing(createLabelValidator)
+    const { translations, ...data } = await request.validateUsing(createLabelValidator)
     const label = await Label.create({
       ...data,
       locale: data.locale ?? defaultLocale,
     })
+
+    const presentTranslations = translations.filter(
+      (translation) => translation.name || translation.summary || translation.description
+    )
+
+    if (presentTranslations.length > 0) {
+      // Update or create other translations
+      await LabelTranslation.updateOrCreateMany(
+        'locale',
+        presentTranslations.map((translation) => {
+          return { ...translation, labelId: label.id }
+        })
+      )
+    }
 
     return response.json(label.serialize())
   }
@@ -48,10 +63,32 @@ export default class LabelsApiController {
       return token.insufficientScope()
     }
 
-    const { params, ...update } = await request.validateUsing(updateLabelValidator)
+    const { params, translations, ...update } = await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)
 
     await label.merge({ ...update, locale: update.locale ?? defaultLocale }).save()
+
+    const presentTranslations = translations.filter(
+      (translation) => translation.name || translation.summary || translation.description
+    )
+
+    // Remove translations that no longer exist:
+    await LabelTranslation.query()
+      .whereNotIn(
+        'locale',
+        presentTranslations.map((translation) => translation.locale)
+      )
+      .delete()
+
+    if (translations.length > 0) {
+      // Update or create other translations
+      await LabelTranslation.updateOrCreateMany(
+        'locale',
+        presentTranslations.map((translation) => {
+          return { ...translation, labelId: label.id }
+        })
+      )
+    }
 
     return response.json(label.serialize())
   }

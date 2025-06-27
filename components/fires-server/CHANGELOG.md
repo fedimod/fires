@@ -1,5 +1,17 @@
 # @fedimod/fires-server
 
+## 0.3.1
+
+### Patch Changes
+
+- [#150](https://github.com/fedimod/fires/pull/150) [`a35c76d`](https://github.com/fedimod/fires/commit/a35c76d4dd601fac52f4f0221fb5312d16deb0da) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix bug when attempting to create a new label
+
+  When attempting to create a new label after the addition of translations, an error would be thrown due to trying to load the relationships for an unpersisted model. Additionally, the locale select show incorrect data during this flow.
+
+  Furthermore, when creating a label with translations, those translations were not saved.
+
+- [#150](https://github.com/fedimod/fires/pull/150) [`5f0f68f`](https://github.com/fedimod/fires/commit/5f0f68f9988f9a0d4d837763f177ec2a88c1c3c3) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix creating or updating a label with translations via the API
+
 ## 0.3.0
 
 ### Minor Changes

@@ -2,10 +2,12 @@ import locales from '#config/locales'
 import vine from '@vinejs/vine'
 import { FieldContext } from '@vinejs/vine/types'
 
+export type Options = {}
+
 /**
  * Implementation
  */
-async function locale(value: unknown, _options: {}, field: FieldContext) {
+async function locale(value: unknown, _options: Options, field: FieldContext) {
   /**
    * We do not want to deal with non-string
    * values. The "string" rule will handle the

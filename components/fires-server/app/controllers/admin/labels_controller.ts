@@ -47,7 +47,7 @@ export default class LabelsController {
   /**
    * Show individual record
    */
-  async show({ request, response, params, session, view, i18n }: HttpContext) {
+  async show({ request, response, params, session, view }: HttpContext) {
     const [error, validated] = await showLabelValidator.tryValidate({
       params: params,
       ...request.all(),

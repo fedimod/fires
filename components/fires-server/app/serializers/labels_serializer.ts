@@ -1,32 +1,8 @@
 import Label from '#models/label'
 import markdown from '#utils/markdown'
 import { DateTime } from 'luxon'
-import {
-  JSON_LD_CONTEXT,
-  JsonLdDocument,
-  LocaleMapType,
-  ObjectType,
-  XSDDateFormat,
-} from '#utils/jsonld'
+import { JSON_LD_CONTEXT, JsonLdDocument, ObjectType, XSDDateFormat } from '#utils/jsonld'
 import { UrlService } from '#services/url_service'
-import { describe } from 'node:test'
-
-type LabelType = ObjectType & {
-  url: string
-  context: string
-  published: string
-  name: string | undefined
-  summary: string | undefined
-  content: string | undefined
-}
-type LocalisedLabelType = ObjectType & {
-  url: string
-  context: string
-  published: string
-  nameMap: LocaleMapType
-  summaryMap: LocaleMapType
-  contentMap: LocaleMapType
-}
 
 export class LabelsSerializer {
   async collection(labels: Label[]): Promise<JsonLdDocument> {

@@ -1,33 +1,35 @@
 import Label from '#models/label'
 import markdown from '#utils/markdown'
 import { DateTime } from 'luxon'
-import { XSDDateFormat } from '#utils/jsonld'
+import {
+  JSON_LD_CONTEXT,
+  JsonLdDocument,
+  LocaleMapType,
+  ObjectType,
+  XSDDateFormat,
+} from '#utils/jsonld'
 import { UrlService } from '#services/url_service'
+import { describe } from 'node:test'
 
-interface LabelType {
-  '@context'?: (string | Record<string, string>)[]
-  'id': string
-  'url': string
-  'context': string
-  'type': 'Label'
-  'name': string
-  'published': string
-  'updated'?: string
-  'content'?: string
-  'summary'?: string
-  'owl:deprecated'?: boolean
+type LabelType = ObjectType & {
+  url: string
+  context: string
+  published: string
+  name: string | undefined
+  summary: string | undefined
+  content: string | undefined
+}
+type LocalisedLabelType = ObjectType & {
+  url: string
+  context: string
+  published: string
+  nameMap: LocaleMapType
+  summaryMap: LocaleMapType
+  contentMap: LocaleMapType
 }
 
-export const CONTEXT = [
-  'https://www.w3.org/ns/activitystreams',
-  {
-    owl: 'http://www.w3.org/2002/07/owl#',
-    Label: 'https://fires.fedimod.org/ns#Label',
-  },
-]
-
 export class LabelsSerializer {
-  async collection(labels: Label[]) {
+  async collection(labels: Label[]): Promise<JsonLdDocument> {
     const latest = await Label.query()
       .select('id', 'updatedAt')
       .orderBy('updatedAt', 'desc')
@@ -36,37 +38,77 @@ export class LabelsSerializer {
     const collectionId = UrlService.make('labels.index')
 
     return {
-      '@context': CONTEXT,
-      'summary': `Labels from ${UrlService.publicUrl}`,
-      'type': 'Collection',
+      '@context': JSON_LD_CONTEXT,
       'id': collectionId,
       'url': collectionId,
+      'type': 'Collection',
+      'summary': `Labels from ${UrlService.publicUrl}`,
       'updated': latest?.updatedAt.toFormat(XSDDateFormat),
       'totalItems': labels.length,
-      'items': labels.map((item) => this.singular(item, collectionId)),
+      'items': labels.map((label) => this.item(label, collectionId)),
     }
   }
 
-  singular(item: Label, collectionId?: string) {
-    const result: Partial<LabelType> = {}
+  async singular(label: Label): Promise<JsonLdDocument> {
+    const collectionId = UrlService.make('labels.index')
+
+    return {
+      '@context': JSON_LD_CONTEXT,
+      ...this.item(label, collectionId),
+    }
+  }
+
+  item(item: Label, collectionId: string): ObjectType {
+    const id = UrlService.make('protocol.labels.show', { id: item.id })
+    const url = UrlService.make('labels.show', { slug: item.slug })
+    const baseObject: ObjectType = {
+      id: id,
+      url: url,
+      type: 'Label',
+      context: collectionId,
+      published: item.createdAt.toFormat(XSDDateFormat),
+    }
+
+    if (item.updatedAt !== null) {
+      baseObject.updated = item.updatedAt.toFormat(XSDDateFormat)
+    }
 
     if (item.deprecatedAt && item.deprecatedAt < DateTime.now()) {
-      result['owl:deprecated'] = true
+      baseObject['owl:deprecated'] = true
     }
 
-    result.id = UrlService.make('protocol.labels.show', { id: item.id })
-    result.url = UrlService.make('labels.show', { slug: item.slug })
-    result.type = 'Label'
-    result.name = item.name
-    result.context = collectionId ?? UrlService.make('labels.index')
-    result.published = item.createdAt.toFormat(XSDDateFormat)
-    if (item.updatedAt !== null) {
-      result.updated = item.updatedAt.toFormat(XSDDateFormat)
+    if (item.translations && item.translations.length > 0) {
+      const object = {
+        ...baseObject,
+        nameMap: {
+          [item.locale]: item.name,
+        },
+        summaryMap: {
+          [item.locale]: item.summary ?? undefined,
+        },
+        contentMap: {
+          [item.locale]: markdown.render(item.description),
+        },
+      }
+
+      item.translations.forEach((translation) => {
+        object.nameMap[translation.locale] = translation.name
+        object.summaryMap[translation.locale] = translation.summary ?? item.summary ?? undefined
+        object.contentMap[translation.locale] = markdown.render(
+          translation.description ?? item.description
+        )
+      })
+
+      return object
     }
 
-    if (item.summary) result.summary = item.summary
-    if (item.description) result.content = markdown.render(item.description)
+    const object = {
+      ...baseObject,
+      name: item.name,
+      summary: item.summary,
+      description: markdown.render(item.description),
+    }
 
-    return result
+    return object
   }
 }

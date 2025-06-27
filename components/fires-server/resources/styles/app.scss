@@ -96,6 +96,10 @@ footer a {
   margin-top: calc(var(--pico-spacing) * 2.5);
 }
 
+.ml-3 {
+  margin-left: calc(var(--pico-spacing) * 2);
+}
+
 .breadcrumb-link {
   margin-bottom: 0.6rem;
   display: block;
@@ -145,6 +149,10 @@ dl.labels dt {
 
   > [role='button'] {
     margin-bottom: 0 !important;
+  }
+
+  &.gap-2 {
+    gap: var(--pico-spacing);
   }
 }
 
@@ -214,8 +222,8 @@ button[type='submit'] {
 }
 
 .notification.notification-info {
-  background-color: var(--pico-color-indigo-600);
-  color: white;
+  background-color: var(--pico-color-zinc-800);
+  color: var(--pico-color-zinc-250);
 }
 
 .form-hint {
@@ -249,4 +257,25 @@ button[type='submit'] {
   > :only-child {
     margin-bottom: 0;
   }
+}
+
+.separator {
+  border-bottom: 1px solid var(--fires-row-separator-color);
+  margin-bottom: var(--pico-spacing);
+  padding-bottom: var(--pico-spacing);
+}
+
+#translations {
+  margin-left: calc(var(--pico-spacing) * 2);
+  margin-bottom: calc(var(--pico-spacing) * 2);
+}
+
+#translations-empty {
+  margin: calc(var(--pico-spacing) * 2) 0;
+}
+
+#translations .translation-row {
+  margin: calc(var(--pico-spacing) * 2) 0;
+  border-bottom: 1px solid var(--fires-row-separator-color);
+  padding-bottom: var(--pico-spacing);
 }

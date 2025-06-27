@@ -14,7 +14,9 @@
     @each(label in labels)
       <div class="d-flex data-row">
         <div>
-          <h3><a href="{{ route('admin.labels.show', { id: label.id }) }}">{{ label.name }}</a></h3>
+          <h3>
+            <a href="{{ route('admin.labels.show', { id: label.id }) }}">{{ label.name }}</a>
+          </h3>
           <p>
             @if(label.summary)
               {{ label.summary }}
@@ -25,11 +27,17 @@
         </div>
         <div class="button-group">
           <a href="{{ route('admin.labels.show', { id: label.id }) }}" role="button" class="secondary">View</a>
-          <a href="{{ route('admin.labels.edit', { id: label.id }) }}" role="button" class="secondary outline">Edit</a>
+          <a
+            href="{{ route('admin.labels.edit', { id: label.id }) }}"
+            role="button"
+            class="secondary outline"
+          >Edit</a>
         </div>
       </div>
     @else
-      <p>Currently no labels exist on this server</p>
+      <p>
+        Currently no labels exist on this server
+      </p>
     @end
   @endslot
 @end

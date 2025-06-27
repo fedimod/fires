@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Label from '#models/label'
-import { CONTEXT, LabelsSerializer } from '#serializers/labels_serializer'
+import { LabelsSerializer } from '#serializers/labels_serializer'
 import { inject } from '@adonisjs/core'
 
 @inject()
@@ -8,7 +8,10 @@ export default class LabelsController {
   constructor(protected labelsSerializer: LabelsSerializer) {}
 
   async index({ response, view }: HttpContext) {
-    const labels = await Label.all()
+    const labels = await Label.query().preload('translations')
+
+    console.log({ labels })
+
     return response.negotiate(
       {
         json: async (acceptedType) => {
@@ -34,7 +37,7 @@ export default class LabelsController {
 
     return response.negotiate(
       {
-        json: (acceptedType) => {
+        json: async (acceptedType) => {
           if (typeof params.slug === 'string') {
             return response.redirect().toRoute('protocol.labels.show', { id: label.id })
           }
@@ -43,10 +46,9 @@ export default class LabelsController {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
           }
 
-          response.json({
-            '@context': CONTEXT,
-            ...this.labelsSerializer.singular(label),
-          })
+          await label.load('translations')
+
+          response.json(await this.labelsSerializer.singular(label))
         },
         html() {
           if (typeof params.id === 'string') {

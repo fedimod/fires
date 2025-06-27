@@ -3,8 +3,8 @@ import { defineConfig, formatters, loaders } from '@adonisjs/i18n'
 import env from '#start/env'
 
 const i18nConfig = defineConfig({
-  defaultLocale: env.get('DEFAULT_LOCALE', 'en'),
-  supportedLocales: ['en'],
+  defaultLocale: env.get('DEFAULT_LOCALE', 'en-US'),
+  supportedLocales: ['en-US'],
 
   formatter: formatters.icu(),
 

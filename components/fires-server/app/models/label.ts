@@ -1,11 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { beforeSave, column, hasMany } from '@adonisjs/lucid/orm'
 import { UuidBaseModel } from '#utils/lucid_extensions'
 import stringHelpers from '@adonisjs/core/helpers/string'
+import LabelTranslation from '#models/label_translation'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 
-export default class Label extends BaseModel {
+export default class Label extends UuidBaseModel {
   @column()
-  declare language: string
+  declare locale: string
 
   @column()
   declare slug: string
@@ -28,9 +30,8 @@ export default class Label extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  static assignId() {
-    //
-  }
+  @hasMany(() => LabelTranslation)
+  declare translations: HasMany<typeof LabelTranslation>
 
   @beforeSave()
   static async setSlug(label: Label) {

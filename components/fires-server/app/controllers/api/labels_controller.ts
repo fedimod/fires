@@ -3,6 +3,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Label from '#models/label'
 import { createLabelValidator, updateLabelValidator } from '#validators/label'
 import { DateTime } from 'luxon'
+import { defaultLocale } from '#utils/locale'
 
 export default class LabelsApiController {
   /**
@@ -24,17 +25,15 @@ export default class LabelsApiController {
    * Handle the create action
    */
   async store(ctx: HttpContext) {
-    const { request, response, i18n, token } = ctx
+    const { request, response, token } = ctx
     if (!token.hasAbility('admin')) {
       return token.insufficientScope()
     }
 
     const data = await request.validateUsing(createLabelValidator)
-    const language = i18n.locale
-
     const label = await Label.create({
       ...data,
-      language,
+      locale: data.locale ?? defaultLocale,
     })
 
     return response.json(label.serialize())
@@ -44,7 +43,7 @@ export default class LabelsApiController {
    * Handle update action
    */
   async update(ctx: HttpContext) {
-    const { request, response, i18n, token } = ctx
+    const { request, response, token } = ctx
     if (!token.hasAbility('admin')) {
       return token.insufficientScope()
     }
@@ -52,7 +51,7 @@ export default class LabelsApiController {
     const { params, ...update } = await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)
 
-    await label.merge({ ...update, language: i18n.locale }).save()
+    await label.merge({ ...update, locale: update.locale ?? defaultLocale }).save()
 
     return response.json(label.serialize())
   }

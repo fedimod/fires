@@ -1,5 +1,5 @@
 import { column, BaseModel, beforeCreate } from '@adonisjs/lucid/orm'
-import { LucidModel, TypedDecorator } from '@adonisjs/lucid/types/model'
+import { TypedDecorator } from '@adonisjs/lucid/types/model'
 import { Secret } from '@adonisjs/core/helpers'
 import { v7 as uuidv7 } from 'uuid'
 

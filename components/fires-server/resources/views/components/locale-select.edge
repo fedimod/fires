@@ -1,13 +1,34 @@
-<select name="{{{ name }}}">
-  <option value="" disabled {{ html.attrs({ selected: !selected }) }}>
-    Select a language
-  </option>
-  @each(locale in locales)
-    <option {{ html.attrs({
-          value: locale,
-          selected: selected === locale
-      }) }}>
-      {{ t(`locales.${locale}.name`) }}
+<select {{ html.attrs({
+  name: name,
+  id: id,
+  class: classNames,
+  disabled: disabled
+}) }}>
+  @if(disabled && selected)
+    <option
+      {{ html.attrs({
+        value: selected,
+        selected: true,
+        disabled: true
+    }) }}
+    >
+      {{ t(`locales.${selected}.name`) }}
     </option>
+  @else
+    <option value="" disabled {{ html.attrs({ selected: !selected }) }}>
+      Select a language
+    </option>
+    @each(locale in locales)
+      @if(locale !== exclude)
+        <option
+          {{ html.attrs({
+              value: locale,
+              selected: selected === locale || !selected && default_locale
+          }) }}
+        >
+          {{ t(`locales.${locale}.name`) }}
+        </option>
+      @end
+    @end
   @end
 </select>

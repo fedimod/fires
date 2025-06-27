@@ -1,4 +1,5 @@
 import Label from '#models/label'
+import LabelTranslation from '#models/label_translation'
 import { createLabelValidator, updateLabelValidator } from '#validators/label'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -19,22 +20,19 @@ export default class LabelsController {
    */
   async create({ view }: HttpContext) {
     const label = new Label()
+    await label.load('translations')
     return view.render('admin/labels/create', {
       label: label.serialize(),
+      newTranslation: new LabelTranslation(),
     })
   }
 
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response, session, i18n }: HttpContext) {
+  async store({ request, response, session }: HttpContext) {
     const data = await request.validateUsing(createLabelValidator)
-    const language = i18n.locale
-
-    const label = await Label.create({
-      ...data,
-      language,
-    })
+    const label = await Label.create(data)
 
     session.flash('notification', {
       type: 'success',
@@ -60,20 +58,45 @@ export default class LabelsController {
    */
   async edit({ params, view }: HttpContext) {
     const label = await Label.findOrFail(params.id)
+    await label.load('translations')
 
     return view.render('admin/labels/edit', {
       label: label.serialize(),
+      newTranslation: new LabelTranslation(),
     })
   }
 
   /**
    * Handle form submission for the edit action
    */
-  async update({ request, response, session, i18n }: HttpContext) {
-    const { params, ...update } = await request.validateUsing(updateLabelValidator)
+  async update({ request, response, session, logger }: HttpContext) {
+    logger.info(request.all())
+    const { params, translations, ...update } = await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)
 
-    await label.merge({ ...update, language: i18n.locale }).save()
+    await label.merge(update).save()
+
+    const presentTranslations = translations.filter(
+      (translation) => translation.name || translation.summary || translation.description
+    )
+
+    // Remove translations that no longer exist:
+    await LabelTranslation.query()
+      .whereNotIn(
+        'locale',
+        presentTranslations.map((translation) => translation.locale)
+      )
+      .delete()
+
+    if (translations.length > 0) {
+      // Update or create other translations
+      await LabelTranslation.updateOrCreateMany(
+        'locale',
+        presentTranslations.map((translation) => {
+          return { ...translation, labelId: label.id }
+        })
+      )
+    }
 
     session.flash('notification', {
       type: 'success',

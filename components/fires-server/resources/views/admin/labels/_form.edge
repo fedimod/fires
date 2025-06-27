@@ -6,8 +6,10 @@
   {{ csrfField() }}
 
   <label for="locale">Language</label>
+  {{-- The hidden field is what actually sets the locale, not the select which
+  is just for UI and isn't submitted with the form because it's disabled --}}
+  <input type="hidden" name="locale" value="{{ label.locale ?? default_locale }}" />
   @!component('components/locale-select', {
-    name: `locale`,
     selected: label.locale ?? default_locale,
     disabled: true
   })

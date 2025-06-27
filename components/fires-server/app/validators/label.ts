@@ -66,3 +66,13 @@ export const updateLabelValidator = vine.compile(
     ...labelSchema.getProperties(),
   })
 )
+
+export const showLabelValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      id: vine.string().uuid(),
+    }),
+
+    locale: vine.string().locale().optional(),
+  })
+)

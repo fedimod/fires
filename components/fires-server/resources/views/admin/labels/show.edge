@@ -2,20 +2,58 @@
   @slot('main')
     @include('partials/flash-messages')
 
+    @let(localizedLabel = localized ?? label)
+
     <div class="d-flex">
       <h2>
-        Labels: {{label.name}}
+        Labels: {{ label.name }}
       </h2>
       <a href="{{ route('admin.labels.edit', { id: label.id }) }}" role="button">Edit</a>
     </div>
 
+    @if(label.translations.length > 0)
+      <h4>
+        Translations
+      </h4>
+      <ul>
+        <li>
+          <a href="{{ route('admin.labels.show', { id: label.id }) }}">{{ t(`locales.${label.locale}.name`) }}</a>
+        </li>
+        @each(translation in label.translations)
+          <li>
+            <a
+              href="{{ route('admin.labels.show', { id: label.id }, { qs: { locale: translation.locale } }) }}"
+            >{{ t(`locales.${translation.locale}.name`) }}</a>
+            @if(locale === translation.locale)
+              (currently viewing)
+            @end
+          </li>
+        @end
+      </ul>
+    @end
+    
+    @if(localized)
+      <h4>
+        Name
+      </h4>
+      <div class="label-content">
+        <p>
+          {{ localized.name }}
+        </p>
+      </div>
+    @end
+    
     <h4>
       Summary
     </h4>
     <div class="label-content">
       <p>
         @if(label.summary)
-          {{ label.summary }}
+          @if(localized)
+            {{ localized.summary }}
+          @else
+            {{ label.summary }}
+          @end
         @else
           <em>Summary Missing</em>
         @end
@@ -28,7 +66,11 @@
     <div class="label-content">
       @if(label.description)
         <div class="label-description">
-          {{ markdown(label.description) }}
+          @if(localized)
+            {{ markdown(localized.description) }}
+          @else
+            {{ markdown(label.description) }}
+          @end
         </div>
       @else
         <p>

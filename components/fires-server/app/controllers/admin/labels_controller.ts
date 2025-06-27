@@ -1,6 +1,7 @@
 import Label from '#models/label'
 import LabelTranslation from '#models/label_translation'
-import { createLabelValidator, updateLabelValidator } from '#validators/label'
+import { defaultLocale } from '#utils/locale'
+import { createLabelValidator, showLabelValidator, updateLabelValidator } from '#validators/label'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LabelsController {
@@ -21,6 +22,7 @@ export default class LabelsController {
   async create({ view }: HttpContext) {
     const label = new Label()
     await label.load('translations')
+
     return view.render('admin/labels/create', {
       label: label.serialize(),
       newTranslation: new LabelTranslation(),
@@ -45,11 +47,52 @@ export default class LabelsController {
   /**
    * Show individual record
    */
-  async show({ params, view }: HttpContext) {
-    const label = await Label.findOrFail(params.id)
+  async show({ request, response, params, session, view, i18n }: HttpContext) {
+    const [error, validated] = await showLabelValidator.tryValidate({
+      params: params,
+      ...request.all(),
+    })
+    const id = error === null ? validated.params.id : params.id
+
+    const label = await Label.findOrFail(id)
+    await label.load('translations', (query) => {
+      query.select('locale')
+    })
+
+    // The typings in Vine.js have error.messages as any instead of the records they actually are.
+    if (
+      error?.messages.some(
+        (err: { rule: string; field: string }) => err.rule === 'locale' && err.field === 'locale'
+      )
+    ) {
+      session.flash('notification', {
+        type: 'info',
+        message: `The requested locale is not valid, showing the default locale`,
+      })
+
+      return response.redirect().toRoute('admin.labels.show', { id: label.id })
+    }
+    let localized = null
+    if (validated?.locale && validated.locale !== label.locale) {
+      localized = await LabelTranslation.findBy({
+        locale: validated.locale,
+        label_id: label.id,
+      })
+
+      if (localized === null) {
+        session.flash('notification', {
+          type: 'info',
+          message: `The requested locale does not exist, showing the default locale`,
+        })
+
+        return response.redirect().toRoute('admin.labels.show', { id: label.id })
+      }
+    }
 
     return view.render('admin/labels/show', {
       label: label.serialize(),
+      localized: localized ? localized.serialize() : null,
+      locale: validated?.locale ?? label.locale ?? defaultLocale,
     })
   }
 
@@ -69,8 +112,7 @@ export default class LabelsController {
   /**
    * Handle form submission for the edit action
    */
-  async update({ request, response, session, logger }: HttpContext) {
-    logger.info(request.all())
+  async update({ request, response, session }: HttpContext) {
     const { params, translations, ...update } = await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)
 

@@ -33,7 +33,7 @@ export default class LabelsController {
    */
   async store({ request, response, session }: HttpContext) {
     const { translations, ...labelData } = await request.validateUsing(createLabelValidator)
-    const label = await Label.create(labelData)
+    const label = await Label.create({ ...labelData, locale: labelData.locale ?? defaultLocale })
 
     const presentTranslations = translations.filter(
       (translation) => translation.name || translation.summary || translation.description
@@ -129,7 +129,7 @@ export default class LabelsController {
     const { params, translations, ...update } = await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)
 
-    await label.merge(update).save()
+    await label.merge({ ...update, locale: update.locale ?? defaultLocale }).save()
 
     const presentTranslations = translations.filter(
       (translation) => translation.name || translation.summary || translation.description

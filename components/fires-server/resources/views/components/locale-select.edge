@@ -5,13 +5,10 @@
   disabled: disabled
 }) }}>
   @if(disabled && selected)
-    <option
-      {{ html.attrs({
+    <option {{ html.attrs({
         value: selected,
-        selected: true,
-        disabled: true
-    }) }}
-    >
+        selected: true
+    }) }}>
       {{ t(`locales.${selected}.name`) }}
     </option>
   @else

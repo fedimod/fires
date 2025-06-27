@@ -5,12 +5,10 @@
 <form method="POST" action="{{ formAction }}">
   {{ csrfField() }}
 
-  <input type="hidden" name="locale" value="{{ default_locale }}" />
-
   <label for="locale">Language</label>
   @!component('components/locale-select', {
     name: `locale`,
-    selected: label.locale,
+    selected: label.locale ?? default_locale,
     disabled: true
   })
 

@@ -21,7 +21,6 @@ export default class LabelsController {
    */
   async create({ view }: HttpContext) {
     const label = new Label()
-    await label.load('translations')
 
     return view.render('admin/labels/create', {
       label: label.serialize(),
@@ -33,8 +32,22 @@ export default class LabelsController {
    * Handle form submission for the create action
    */
   async store({ request, response, session }: HttpContext) {
-    const data = await request.validateUsing(createLabelValidator)
-    const label = await Label.create(data)
+    const { translations, ...labelData } = await request.validateUsing(createLabelValidator)
+    const label = await Label.create(labelData)
+
+    const presentTranslations = translations.filter(
+      (translation) => translation.name || translation.summary || translation.description
+    )
+
+    if (presentTranslations.length > 0) {
+      // Update or create other translations
+      await LabelTranslation.updateOrCreateMany(
+        'locale',
+        presentTranslations.map((translation) => {
+          return { ...translation, labelId: label.id }
+        })
+      )
+    }
 
     session.flash('notification', {
       type: 'success',

@@ -8,7 +8,7 @@
         'is-invalid': isInputInvalid(`translations.${index}.locale`, flashMessages)
       }]),
       exclude: default_locale,
-      selected: old(`translations.${index}.locale`) ?? translation.locale
+      selected: old(`translations.${index}.locale`) ?? translation.locale ?? default_locale
     })
     <button type="button" data-translation-id="translation-{{ index }}" class="remove-translation">Remove</button>
   </div>

@@ -1,5 +1,17 @@
 # @fedimod/fires-server
 
+## 0.3.3
+
+### Patch Changes
+
+- [#160](https://github.com/fedimod/fires/pull/160) [`05b6d27`](https://github.com/fedimod/fires/commit/05b6d2771014bd0b8ad85c365c793beae381eac4) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Implement deprecation of labels in Admin UI and Web UI
+
+- [#160](https://github.com/fedimod/fires/pull/160) [`4a55522`](https://github.com/fedimod/fires/commit/4a55522668f01673b671e3a09bb83ec399338e74) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix bug when updating a label and adding more translations
+
+- [#160](https://github.com/fedimod/fires/pull/160) [`bba8136`](https://github.com/fedimod/fires/commit/bba813607fd0f74fc18d2fa7fdcf9d571a42e49b) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add display of number of translations for each label in the Admin UI
+
+- [#160](https://github.com/fedimod/fires/pull/160) [`33027fa`](https://github.com/fedimod/fires/commit/33027fa2bed014fee245f0ca2fdb99df66f292e1) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Update database seeders to create an Admin user and some label translations
+
 ## 0.3.2
 
 ### Patch Changes

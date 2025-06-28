@@ -1,0 +1,15 @@
+<div class="data-row">
+  <h3>
+    <a href="{{ route('labels.show', { slug: label.slug }) }}">{{ label.name }}</a>
+    @if(label.deprecatedAt)
+      <span class="badge badge-deprecated">Deprecated</span>
+    @end
+  </h3>
+  <p>
+    @if(label.summary)
+      {{ label.summary }}
+    @else
+      <em>Summary Missing</em>
+    @end
+  </p>
+</div>

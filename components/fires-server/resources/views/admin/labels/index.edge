@@ -12,41 +12,17 @@
     @include('partials/flash-messages')
 
     @each(label in labels)
-      <div class="d-flex data-row">
-        <div>
-          <h3>
-            <a href="{{ route('admin.labels.show', { id: label.id }) }}">{{ label.name }}</a>
-          </h3>
-          <p>
-            @if(label.summary)
-              {{ label.summary }}
-            @else
-              <em>Summary Missing</em>
-            @end
-          </p>
-          <p class="mt-1">
-            <small>
-              @if(label.translations_count > 0)
-                {{ t('messages.translations.count', { count: label.translations_count }) }}
-              @else
-                {{ t('messages.translations.not_translated') }}
-              @end
-            </small>
-          </p>
-        </div>
-        <div class="button-group">
-          <a href="{{ route('admin.labels.show', { id: label.id }) }}" role="button" class="secondary">View</a>
-          <a
-            href="{{ route('admin.labels.edit', { id: label.id }) }}"
-            role="button"
-            class="secondary outline"
-          >Edit</a>
-        </div>
-      </div>
+      @include('admin/labels/_label')
     @else
-      <p>
-        Currently no labels exist on this server
-      </p>
+      @if(deprecatedLabels.length === 0)
+        <p>
+          Currently no labels exist on this server
+        </p>
+      @end
+    @end
+    
+    @each(label in deprecatedLabels)
+      @include('admin/labels/_label')
     @end
   @endslot
 @end

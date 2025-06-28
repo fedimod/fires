@@ -8,8 +8,6 @@ export default class LabelsController {
   constructor(protected labelsSerializer: LabelsSerializer) {}
 
   async index({ response, view }: HttpContext) {
-    const labels = await Label.query().preload('translations')
-
     return response.negotiate(
       {
         json: async (acceptedType) => {
@@ -17,10 +15,35 @@ export default class LabelsController {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
           }
 
+          const labels = await Label.query().preload('translations')
+
           response.json(await this.labelsSerializer.collection(labels))
         },
-        html() {
-          return view.render('labels/index', { labels })
+        html: async () => {
+          const labels = await Label.query()
+            .whereNull('deprecatedAt')
+            .orderBy('id', 'desc')
+            .withCount('translations')
+
+          const deprecatedLabels = await Label.query()
+            .whereNotNull('deprecatedAt')
+            .orderBy('id', 'desc')
+            .withCount('translations')
+
+          return view.render('labels/index', {
+            labels: labels.map((label) => {
+              return {
+                ...label.serialize(),
+                translations_count: Number.parseInt(label.$extras.translations_count, 10),
+              }
+            }),
+            deprecatedLabels: deprecatedLabels.map((label) => {
+              return {
+                ...label.serialize(),
+                translations_count: Number.parseInt(label.$extras.translations_count, 10),
+              }
+            }),
+          })
         },
       },
       { defaultHandler: 'html' }

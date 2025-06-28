@@ -7,10 +7,21 @@
     />
   @end
   @slot('main')
-    <a href="{{ route('labels.index') }}" class="breadcrumb-link">&laquo; All Labels</a>
-    <h2>
-      Labels: {{label.name}}
-    </h2>
+    <div class="header">
+      <div class="breadcrumbs">
+        <a href="{{ route('labels.index') }}" class="breadcrumb-link">&laquo; All Labels</a>
+      </div>
+      <h2>
+        Labels: {{label.name}}
+      </h2>
+    </div>
+
+    @if(label.deprecatedAt)
+      <div class="notification notification-deprecated">
+        {{ t('messages.labels.deprecated_message', { deprecatedAt: toDate(label.deprecatedAt) }) }}
+      </div>
+    @end
+    
     <h4>
       Summary
     </h4>

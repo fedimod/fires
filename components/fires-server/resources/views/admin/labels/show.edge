@@ -11,6 +11,12 @@
       <a href="{{ route('admin.labels.edit', { id: label.id }) }}" role="button">Edit</a>
     </div>
 
+    @if(label.deprecatedAt)
+      <div class="notification notification-deprecated">
+        {{ t('messages.labels.deprecated_message', { deprecatedAt: toDate(label.deprecatedAt) }) }}
+      </div>
+    @end
+    
     @if(label.translations.length > 0)
       <h4>
         Translations

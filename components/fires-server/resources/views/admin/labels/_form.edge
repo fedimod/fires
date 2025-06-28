@@ -1,6 +1,12 @@
-@let(formAction = label.id ? `${route('admin.labels.update', { id: label.id })}?_method=PUT` : route('admin.labels.store'))
+@let(formAction = label.id ? route('admin.labels.update', { id: label.id }, { qs: { _method: "PUT"}}) : route('admin.labels.store'))
 
 @include('partials/flash-messages')
+
+@if(label.deprecatedAt)
+  <div class="notification notification-deprecated">
+    {{ t('messages.labels.deprecated_message', { deprecatedAt: toDate(label.deprecatedAt) }) }}
+  </div>
+@end
 
 <form method="POST" action="{{ formAction }}">
   {{ csrfField() }}
@@ -75,6 +81,46 @@
     </div>
   @end
   
+  @let(deprecated = old('deprecated') ?? label.deprecatedAt !== null)
+  @if(label.id)
+    <p>
+      Deprecated
+    </p>
+    <small class="form-hint">Instead of deleting labels, we recommend deprecating them instead, as to not break links to the label from elsewhere.</small>
+    <label for="deprecated">
+      <input
+        type="checkbox"
+        class="{{ html.classNames(['form-control', {
+            'is-invalid': isInputInvalid('name', flashMessages)
+          }]) }}"
+        id="deprecated"
+        name="deprecated"
+        @if(deprecated)
+        checked
+        @end
+      />
+      Mark this label as deprecated.
+    </label>
+    @inputError('deprecated')
+      <div class="invalid-feedback">
+        @each(message in $messages)
+          <p>
+            {{ message }}
+          </p>
+        @end
+      </div>
+    @end
+  @end
+  
+  <div class="button-group mt-4">
+    <button type="submit">Save Label</button>
+    <a
+      href="{{ label.id ? route('admin.labels.show', { id: label.id }) : route('admin.labels.index') }}"
+      role="button"
+      class="w-100 outline"
+    >Cancel</a>
+  </div>
+
   <hr class="separator" />
 
   <h3>
@@ -123,7 +169,7 @@
       href="{{ label.id ? route('admin.labels.show', { id: label.id }) : route('admin.labels.index') }}"
       role="button"
       class="w-100 outline"
-    >Back</a>
+    >Cancel</a>
   </div>
 </form>
 

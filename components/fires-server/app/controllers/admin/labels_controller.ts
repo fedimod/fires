@@ -3,16 +3,31 @@ import LabelTranslation from '#models/label_translation'
 import { defaultLocale } from '#utils/locale'
 import { createLabelValidator, showLabelValidator, updateLabelValidator } from '#validators/label'
 import type { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
 
 export default class LabelsController {
   /**
    * Display a list of resource
    */
   async index({ view }: HttpContext) {
-    const labels = await Label.query().orderBy('id', 'desc').withCount('translations')
+    const labels = await Label.query()
+      .whereNull('deprecatedAt')
+      .orderBy('id', 'desc')
+      .withCount('translations')
+
+    const deprecatedLabels = await Label.query()
+      .whereNotNull('deprecatedAt')
+      .orderBy('id', 'desc')
+      .withCount('translations')
 
     return view.render('admin/labels/index', {
       labels: labels.map((label) => {
+        return {
+          ...label.serialize(),
+          translations_count: Number.parseInt(label.$extras.translations_count, 10),
+        }
+      }),
+      deprecatedLabels: deprecatedLabels.map((label) => {
         return {
           ...label.serialize(),
           translations_count: Number.parseInt(label.$extras.translations_count, 10),
@@ -130,10 +145,17 @@ export default class LabelsController {
    * Handle form submission for the edit action
    */
   async update({ request, response, session }: HttpContext) {
-    const { params, translations, ...update } = await request.validateUsing(updateLabelValidator)
+    const { params, deprecated, translations, ...update } =
+      await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)
 
-    await label.merge({ ...update, locale: update.locale ?? defaultLocale }).save()
+    await label
+      .merge({
+        ...update,
+        locale: update.locale ?? defaultLocale,
+        deprecatedAt: deprecated === true ? DateTime.now() : null,
+      })
+      .save()
 
     const presentTranslations = translations.filter(
       (translation) => translation.name || translation.summary || translation.description

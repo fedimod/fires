@@ -9,9 +9,9 @@ export const LabelFactory = factory
     return {
       id: uuidv7(),
       name: faker.lorem.words(5),
-      locale: faker.helpers.arrayElement(['en-US', 'de-DE', 'pt-PT']),
       summary: faker.lorem.sentence({ min: 1, max: 3 }),
       description: faker.lorem.paragraphs(3),
+      locale: faker.helpers.arrayElement(['en-US', 'de-DE', 'pt-PT']),
       deprecatedAt: null,
     }
   })

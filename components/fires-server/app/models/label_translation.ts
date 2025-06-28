@@ -5,11 +5,6 @@ import Label from '#models/label'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class LabelTranslation extends UuidBaseModel {
-  selfAssignPrimaryKey = true
-
-  @column({ isPrimary: true })
-  declare id: string
-
   @column()
   declare labelId: string
 

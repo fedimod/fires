@@ -1,9 +1,31 @@
 {
+  "locales": {
+    "select_option": "Select a language"
+  },
   "translations": {
     "count": "Translated into {count, plural, one {one other language} other {# other languages}}",
     "not_translated": "Not currently translated"
   },
   "labels": {
     "deprecated_message": "This label was deprecated on {deprecatedAt, date, long}."
+  },
+  "changes": {
+    "types": {
+      "advisory": "Advisory",
+      "recommendation": "Recommendation",
+      "retraction": "Retraction"
+    },
+    "entity_kinds": {
+      "select_option": "Select an option",
+      "domain": "Domain",
+      "actor": "Actor"
+    },
+    "recommended_policy": {
+      "select_option": "Select an policy",
+      "accept": "Accept",
+      "filter": "Filter",
+      "reject": "Reject",
+      "drop": "Drop"
+    }
   }
 }

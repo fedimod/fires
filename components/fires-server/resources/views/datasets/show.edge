@@ -1,7 +1,7 @@
-@layouts.app({ title: `${label.name} - Labels`})
+@layouts.app()
   @slot('head')
     <link
-      href="{{ route_url('protocol.labels.show', { id: label.id }) }}"
+      href="{{ route_url('protocol.datasets.show', { id: dataset.id }) }}"
       rel="alternate"
       type="application/ld+json"
     />
@@ -9,27 +9,20 @@
   @slot('main')
     <div class="header">
       <div class="breadcrumbs">
-        <a href="{{ route('labels.index') }}" class="breadcrumb-link">&laquo; All Labels</a>
+        <a href="{{ route('datasets.index') }}" class="breadcrumb-link">&laquo; All Datasets</a>
       </div>
       <h2>
-        Labels: {{label.name}}
+        Dataset: {{dataset.name}}
       </h2>
     </div>
 
-    @if(label.deprecatedAt)
-      <div class="notification notification-deprecated">
-        {{ t('messages.labels.deprecated_message', { deprecatedAt: toDate(label.deprecatedAt) }) }}
-      </div>
-    @end
-    
     <h4>
       Summary
     </h4>
-
     <div class="label-content">
       <p>
-        @if(label.summary)
-          {{ label.summary }}
+        @if(dataset.summary)
+          {{ dataset.summary }}
         @else
           <em>Summary Missing</em>
         @end
@@ -40,9 +33,9 @@
       Description
     </h4>
     <div class="label-content">
-      @if(label.description)
+      @if(dataset.description)
         <div class="label-description">
-          {{ markdown(label.description) }}
+          {{ markdown(dataset.description) }}
         </div>
       @else
         <p>
@@ -60,7 +53,7 @@
         id="iri"
         type="text"
         readonly
-        value="{{ route_url('protocol.labels.show', { id: label.id }) }}"
+        value="{{ route_url('protocol.datasets.show', { id: dataset.id }) }}"
         aria-describedby="iri-description"
       />
     </fieldset>

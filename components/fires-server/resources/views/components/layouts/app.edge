@@ -30,6 +30,11 @@
                 <a href="{{ route('labels.index') }}">Labels</a>
               </li>
             @end
+            @if(hasDatasets)
+              <li>
+                <a href="{{ route('datasets.index') }}">Datasets</a>
+              </li>
+            @end
           </ul>
           <ul>
             <li>

@@ -1,14 +1,9 @@
 @layouts.app()
   @slot('main')
     {{{ description }}}
-    @if(hasLabels || appeals_url || documentation_url)
+    @if(appeals_url || documentation_url)
       <nav>
         <ul>
-          @if(hasLabels)
-            <li>
-              <a href="{{ route('labels.index') }}">View Labels</a>
-            </li>
-          @end
           @if(appeals_url)
             <li>
               <a href="{{ appeals_url }}" target="_blank">Appeals Information</a>

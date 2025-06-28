@@ -1,3 +1,4 @@
+import Dataset from '#models/dataset'
 import Label from '#models/label'
 import Setting from '#models/setting'
 import { SoftwareService } from '#services/software_service'
@@ -31,6 +32,7 @@ export default class ViewDataMiddleware {
         },
         software: softwareInfo,
         hasLabels: configuration.hasLabels,
+        hasDatasets: configuration.hasDatasets,
       })
     }
 
@@ -44,6 +46,7 @@ export default class ViewDataMiddleware {
       factory: async () => {
         const settings = await Setting.retrieveSettings(['name', 'summary'])
         const labelsCount = await db.from(Label.table).count('* as total')
+        const datasetsCount = await db.from(Dataset.table).count('* as total')
 
         return {
           name: settings.name || 'FediMod FIRES Server',
@@ -51,6 +54,7 @@ export default class ViewDataMiddleware {
             settings.summary ||
             'An server for labels, moderation advisories, and moderation recommendations.',
           hasLabels: Number.parseInt(labelsCount[0].total, 10) > 0,
+          hasDatasets: Number.parseInt(datasetsCount[0].total, 10) > 0,
         }
       },
       ttl: '60m',

@@ -42,7 +42,12 @@ export default class NodeInfoController {
       openRegistrations: false,
       // no usage data
       usage: {},
-      metadata: {},
+      metadata: {
+        fires: {
+          labels: UrlService.make('labels.index'),
+          datasets: UrlService.make('datasets.index'),
+        },
+      },
     })
   }
 }

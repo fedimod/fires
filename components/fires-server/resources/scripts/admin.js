@@ -66,3 +66,61 @@ document.addEventListener('click', (event) => {
     addTranslation()
   }
 })
+
+// ------------------------------------------------------------
+// Dataset Changes UI
+// ------------------------------------------------------------
+const entityKindSelector = document.getElementById('entity_kind')
+const entityKeyInput = document.getElementById('entity_key')
+const entityKeyValidators = {
+  domain: {
+    minLength: 3,
+    maxLength: 256,
+    pattern: '([\\-\\w]{1,63}\\.)+([\\-\\w]{1,63})',
+    placeholder: 'domain.example',
+  },
+  actor: {
+    type: 'url',
+    placeholder: 'https://social.example/actor/123',
+    minLength: 11,
+  },
+}
+
+if (entityKeyInput && entityKindSelector) {
+  function updateInput(selected) {
+    const validator = entityKeyValidators[selected]
+    if (validator) {
+      entityKeyInput.setAttribute('placeholder', validator.placeholder ?? '')
+      entityKeyInput.setAttribute('type', validator.type ?? 'text')
+
+      if (validator.minLength) {
+        entityKeyInput.setAttribute('minLength', validator.minLength)
+      } else {
+        entityKeyInput.removeAttribute('minLength')
+      }
+
+      if (validator.maxLength) {
+        entityKeyInput.setAttribute('maxLength', validator.maxLength)
+      } else {
+        entityKeyInput.removeAttribute('maxLength')
+      }
+
+      if (validator.pattern) {
+        entityKeyInput.setAttribute('pattern', validator.pattern)
+      } else {
+        entityKeyInput.removeAttribute('pattern')
+      }
+    } else {
+      entityKeyInput.setAttribute('type', 'text')
+      entityKeyInput.removeAttribute('minLength')
+      entityKeyInput.removeAttribute('maxLength')
+      entityKeyInput.removeAttribute('pattern')
+      entityKeyInput.removeAttribute('placeholder')
+    }
+  }
+
+  updateInput(entityKindSelector.value)
+  entityKindSelector.addEventListener('change', function (ev) {
+    updateInput(ev.currentTarget.value)
+  })
+}

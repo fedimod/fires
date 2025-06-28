@@ -49,6 +49,7 @@ const env = await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   DATABASE_URL: Env.schema.string(),
+  DATABASE_POOL_MIN: Env.schema.number.optional(),
   DATABASE_POOL_MAX: Env.schema.number.optional(),
   DATABASE_AUTOMIGRATE: Env.schema.boolean.optional(),
 

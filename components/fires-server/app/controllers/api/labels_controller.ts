@@ -5,6 +5,7 @@ import { createLabelValidator, updateLabelValidator } from '#validators/label'
 import { DateTime } from 'luxon'
 import { defaultLocale } from '#utils/locale'
 import LabelTranslation from '#models/label_translation'
+import cache from '@adonisjs/cache/services/main'
 
 export default class LabelsApiController {
   /**
@@ -51,6 +52,8 @@ export default class LabelsApiController {
       )
     }
 
+    await cache.deleteByTag({ tags: ['labels'] })
+
     return response.json(label.serialize())
   }
 
@@ -90,6 +93,8 @@ export default class LabelsApiController {
       )
     }
 
+    await cache.deleteByTag({ tags: ['labels'] })
+
     return response.json(label.serialize())
   }
 
@@ -106,10 +111,13 @@ export default class LabelsApiController {
 
     if (request.input('force') === 'true') {
       await label.delete()
+      await cache.deleteByTag({ tags: ['labels'] })
+
       return response.noContent()
     }
 
     await label.merge({ deprecatedAt: DateTime.now() }).save()
+    await cache.deleteByTag({ tags: ['labels'] })
 
     return response.json(label.serialize())
   }

@@ -1,0 +1,60 @@
+@layouts.admin()
+  @slot('main')
+    <div class="header">
+      <div class="breadcrumbs">
+        <a href="{{ route('admin.datasets.show', { id: dataset.id }) }}" class="breadcrumb-link">&laquo; Dataset: {{ dataset.name }}</a>
+      </div>
+      <h2>
+        Changes <small>({{ total }})</small>
+      </h2>
+    </div>
+
+    @if(changes.length == 0)
+    <p>This dataset does not contain any advisories or recommendations yet. <a
+        href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id })}}">Create One</a>
+    </p>
+    @else
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30ch;"></th>
+          <th>Kind</th>
+          <th style="width: 100ch;">Entity</th>
+          <th>Policy</th>
+          <th style="width: 15%;">Labels</th>
+          <th style="width: 70ch">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(record in changes)
+        <tr>
+          <td>{{ t(`messages.changes.types.${record.type}`) }}</td>
+          <td>{{ t(`messages.changes.entity_kinds.${record.entityKind}`) }}</td>
+          <td>{{ record.entityKey }}</td>
+          <td style="text-align: center">{{ t(`messages.changes.recommended_policy.${record.recommendedPolicy}`) }}</td>
+          <td>
+            @each(labelId in record.labels)
+            <span class="label-badge">{{ labels.get(labelId).name }}</span>
+            @end
+          </td>
+          <td>{{ formatDate(record.createdAt, 'HH:mm:ss') }} on {{ formatDate(record.createdAt, 'yyyy-MM-dd') }}</td>
+        </tr>
+        @end
+      </tbody>
+    </table>
+    @endif
+
+    <div class="button-group">
+    @if(nextUrl)
+      <a href="{{ nextUrl }}" class="secondary" role="button">Next Page</a>
+    @else
+      <button disabled class="secondary">Next Page</button>
+    @end
+    @if(prevUrl)
+      <a href="{{ prevUrl }}" class="secondary" role="button">Prev Page</a>
+    @else
+      <button disabled class="secondary">Prev Page</button>
+    @end
+    </div>
+  @endslot
+@end

@@ -5,6 +5,8 @@ import stringHelpers from '@adonisjs/core/helpers/string'
 import LabelTranslation from '#models/label_translation'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 
+export type LabelMap = Map<string, Label>
+
 export default class Label extends UuidBaseModel {
   @column()
   declare locale: string
@@ -42,5 +44,13 @@ export default class Label extends UuidBaseModel {
         strict: true,
       })
     }
+  }
+
+  static async findUniqueByIds(ids: string[]): Promise<LabelMap> {
+    const labels = await Label.findMany(Array.from(new Set(ids)))
+    return labels.reduce((acc, label) => {
+      acc.set(label.id, label)
+      return acc
+    }, new Map())
   }
 }

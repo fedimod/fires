@@ -1,0 +1,26 @@
+@layouts.app()
+  @slot('main')
+    <div class="header">
+      <div class="breadcrumbs">
+      </div>
+      <h2>
+        Datasets
+      </h2>
+    </div>
+
+    @each(dataset in datasets)
+      <div class="data-row">
+        <h3>
+          <a href="{{ route('datasets.show', { slug: dataset.slug }) }}">{{ dataset.name }}</a>
+        </h3>
+        <p>
+          @if(dataset.summary)
+            {{ dataset.summary }}
+          @else
+            <em>Summary Missing</em>
+          @end
+        </p>
+      </div>
+    @end
+  @endslot
+@end

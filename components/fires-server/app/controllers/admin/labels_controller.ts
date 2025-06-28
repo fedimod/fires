@@ -46,8 +46,7 @@ export default class LabelsController {
 
     if (presentTranslations.length > 0) {
       // Update or create other translations
-      await LabelTranslation.updateOrCreateMany(
-        'locale',
+      await LabelTranslation.createMany(
         presentTranslations.map((translation) => {
           return { ...translation, labelId: label.id }
         })
@@ -151,7 +150,7 @@ export default class LabelsController {
     if (translations.length > 0) {
       // Update or create other translations
       await LabelTranslation.updateOrCreateMany(
-        'locale',
+        ['locale', 'labelId'],
         presentTranslations.map((translation) => {
           return { ...translation, labelId: label.id }
         })

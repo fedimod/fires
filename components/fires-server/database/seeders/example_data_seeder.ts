@@ -1,5 +1,7 @@
 import Label from '#models/label'
+import LabelTranslation from '#models/label_translation'
 import Setting from '#models/setting'
+import User from '#models/user'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import dedent from 'dedent'
 
@@ -17,7 +19,14 @@ export default class extends BaseSeeder {
       },
     ])
 
-    await Label.updateOrCreateMany('name', [
+    if ((await User.findBy('username', 'admin')) === null) {
+      await User.create({
+        username: 'admin',
+        password: 'password',
+      })
+    }
+
+    const labels = await Label.updateOrCreateMany('name', [
       {
         name: 'CSAM',
         summary: 'Child Sexual Abuse Material',
@@ -83,5 +92,37 @@ export default class extends BaseSeeder {
         locale: 'en-US',
       },
     ])
+
+    await LabelTranslation.updateOrCreateMany(
+      ['labelId', 'locale'],
+      [
+        {
+          labelId: labels[0].id,
+          name: 'Contenu pédopornographique (CSAM/CSEA)',
+          summary: `Le CSAM (« Child Sexual Abuse Material ») est du contenu  (images ou vidéos) qui montre une personne mineure impliquée ou décrite comme engagée dans une activité sexuelle explicite. Le CSEA ( «Child Sexual Exploitation and Abuse » ) est une catégorie plus large qui englobe le CSAM, tout contenu pédopornographique, et inclut le grooming (séduction malintentionnée des enfants).`,
+          description: dedent`
+            Le terme «Imagerie simulée d'exploitation sexuelle et abus de mineurs» (Simulated Child Sexual Exploitation and Abuse Imagery) recouvre toute représentation de mineur, fictive ou modifiée, à caractère pornographique, sans la participation directe d'un mineur.
+
+            Les experts, les groupes de survivants et les professionnels découragent l'utilisation des termes «pornographie juvénile» ou «pornographie infantile», encore utilisés dans de multiples juridictions et traités internationaux.
+
+            Le CSAM est illégal dans presque toutes les juridictions, ce qui fait de sa détection et de sa suppression une priorité élevée pour les services en ligne.
+
+            Source: [IFTAS Trust & Safety Library](https://connect.iftas.org/library/content/csam/)
+          `,
+          locale: 'fr-FR',
+        },
+        {
+          labelId: labels[2].id,
+          name: 'Spam',
+          summary: dedent`
+            Ce sont des messages non sollicités et de basse qualité, souvent (mais pas nécessairement) envoyés massivement à des fins publicitaires par le biais de divers médias électroniques, y compris le courriel, la messagerie et les réseaux sociaux.
+          `,
+          description: dedent`
+            Source: [IFTAS Trust & Safety Library](https://connect.iftas.org/library/content/spam/)
+          `,
+          locale: 'fr-FR',
+        },
+      ]
+    )
   }
 }

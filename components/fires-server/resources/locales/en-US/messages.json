@@ -1,1 +1,6 @@
-{}
+{
+  "translations": {
+    "count": "Translated into {count, plural, one {one other language} other {# other languages}}",
+    "not_translated": "Not currently translated"
+  }
+}

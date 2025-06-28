@@ -92,6 +92,10 @@ footer a {
   display: none;
 }
 
+.mt-1 {
+  margin-top: var(--pico-spacing);
+}
+
 .mt-4 {
   margin-top: calc(var(--pico-spacing) * 2.5);
 }

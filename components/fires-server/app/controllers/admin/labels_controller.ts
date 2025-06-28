@@ -9,10 +9,15 @@ export default class LabelsController {
    * Display a list of resource
    */
   async index({ view }: HttpContext) {
-    const labels = await Label.all()
+    const labels = await Label.query().orderBy('id', 'desc').withCount('translations')
 
     return view.render('admin/labels/index', {
-      labels: labels.map((label) => label.serialize()),
+      labels: labels.map((label) => {
+        return {
+          ...label.serialize(),
+          translations_count: Number.parseInt(label.$extras.translations_count, 10),
+        }
+      }),
     })
   }
 

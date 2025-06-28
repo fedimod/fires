@@ -24,6 +24,15 @@
               <em>Summary Missing</em>
             @end
           </p>
+          <p class="mt-1">
+            <small>
+              @if(label.translations_count > 0)
+                {{ t('messages.translations.count', { count: label.translations_count }) }}
+              @else
+                {{ t('messages.translations.not_translated') }}
+              @end
+            </small>
+          </p>
         </div>
         <div class="button-group">
           <a href="{{ route('admin.labels.show', { id: label.id }) }}" role="button" class="secondary">View</a>

@@ -3,27 +3,18 @@
     <link href="{{ route_url('labels.index') }}" rel="alternate" type="application/ld+json" />
   @end
   @slot('main')
-    <h2>
-      Labels
-    </h2>
-    <dl class="labels">
-      @each(label in labels)
-        <dt>
-          {{ label.name }}
-        </dt>
-        <dd class="label-content">
-          <p>
-            @if(label.summary)
-              {{ label.summary }}
-            @else
-              <em>Summary Missing</em>
-            @end
-          </p>
-          <p>
-            <a href="{{ route('labels.show', { slug: label.slug }) }}">Read more</a>
-          </p>
-        </dd>
-      @end
-    </dl>
+    <div class="header">
+      <div class="breadcrumbs">
+      </div>
+      <h2>
+        Labels
+      </h2>
+    </div>
+    @each(label in labels)
+      @include('labels/_label')
+    @end
+    @each(label in deprecatedLabels)
+      @include('labels/_label')
+    @end
   @endslot
 @end

@@ -64,6 +64,8 @@ export const updateLabelValidator = vine.compile(
     }),
 
     ...labelSchema.getProperties(),
+
+    deprecated: vine.boolean().optional(),
   })
 )
 

@@ -1,0 +1,34 @@
+<div class="d-flex data-row">
+  <div>
+    <h3>
+      <a href="{{ route('admin.labels.show', { id: label.id }) }}">{{ label.name }}</a>
+      @if(label.deprecatedAt)
+        <span class="badge badge-deprecated">Deprecated</span>
+      @end
+    </h3>
+    <p>
+      @if(label.summary)
+        {{ label.summary }}
+      @else
+        <em>Summary Missing</em>
+      @end
+    </p>
+    <p class="mt-1">
+      <small>
+        @if(label.translations_count > 0)
+          {{ t('messages.translations.count', { count: label.translations_count }) }}
+        @else
+          {{ t('messages.translations.not_translated') }}
+        @end
+      </small>
+    </p>
+  </div>
+  <div class="button-group">
+    <a href="{{ route('admin.labels.show', { id: label.id }) }}" role="button" class="secondary">View</a>
+    <a
+      href="{{ route('admin.labels.edit', { id: label.id }) }}"
+      role="button"
+      class="secondary outline"
+    >Edit</a>
+  </div>
+</div>

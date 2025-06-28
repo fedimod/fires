@@ -2,6 +2,7 @@ import { I18n } from '@adonisjs/i18n'
 import i18nManager from '@adonisjs/i18n/services/main'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { type HttpContext, RequestValidator } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
 
 /**
  * The "LocalizationMiddleware" middleware uses i18n service to share
@@ -31,6 +32,9 @@ export default class LocalizationMiddleware {
   }
 
   async handle(ctx: HttpContext, next: NextFn) {
+    if (app.inDev) {
+      await i18nManager.reloadTranslations()
+    }
     /**
      * Finding user language
      */

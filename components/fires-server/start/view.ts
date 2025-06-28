@@ -3,6 +3,7 @@ import env from '#start/env'
 import locales from '#config/locales'
 import markdown from '#utils/markdown'
 import { UrlService } from '#services/url_service'
+import { DateTime } from 'luxon'
 
 edge.global('route_url', (...args: Parameters<typeof UrlService.make>) => {
   return UrlService.make(...args)
@@ -10,6 +11,10 @@ edge.global('route_url', (...args: Parameters<typeof UrlService.make>) => {
 
 edge.global('markdown', (value: string) => {
   return edge.globals.html.safe(markdown.render(value))
+})
+
+edge.global('toDate', (value: string) => {
+  return DateTime.fromISO(value)
 })
 
 edge.global('isInputInvalid', (name: string, flashMessages: any) => {

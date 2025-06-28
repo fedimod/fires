@@ -11,12 +11,16 @@
   --pico-notification-spacing-vertical: 0.8rem;
   --pico-notification-spacing-horizontal: 1.5rem;
 
+  --fires-deprecated-badge-color: var(--pico-color-zinc-100);
+  --fires-deprecated-badge-text-color: var(--pico-color-zinc-600);
   --fires-row-separator-color: var(--pico-color-zinc-150);
 }
 
 @media only screen and (prefers-color-scheme: dark) {
   :root:not([data-theme='light']),
   :host:not([data-theme='light']) {
+    --fires-deprecated-badge-text-color: var(--pico-color-zinc-200);
+    --fires-deprecated-badge-color: var(--pico-color-zinc-700);
     --pico-background-color: var(--pico-color-zinc-850);
     --fires-row-separator-color: var(--pico-color-zinc-750);
   }
@@ -43,7 +47,7 @@
 header {
   border-bottom: 1px solid var(--pico-color-zinc-150);
   padding-bottom: var(--pico-spacing);
-  margin-bottom: calc(var(--pico-spacing) * 3);
+  margin-bottom: var(--pico-spacing);
 }
 
 header nav {
@@ -61,9 +65,17 @@ footer {
 }
 
 .header {
-  border-bottom: 1px solid var(--fires-row-separator-color);
   margin-bottom: var(--pico-spacing);
   padding-bottom: var(--pico-spacing);
+
+  h2 {
+    margin-bottom: 0;
+  }
+
+  .breadcrumbs {
+    height: 1.8rem;
+    margin-bottom: calc(var(--pico-spacing) / 2);
+  }
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -92,17 +104,16 @@ footer a {
   display: none;
 }
 
+.mt-1 {
+  margin-top: var(--pico-spacing);
+}
+
 .mt-4 {
   margin-top: calc(var(--pico-spacing) * 2.5);
 }
 
 .ml-3 {
   margin-left: calc(var(--pico-spacing) * 2);
-}
-
-.breadcrumb-link {
-  margin-bottom: 0.6rem;
-  display: block;
 }
 
 dl.labels dt {
@@ -198,6 +209,20 @@ button[type='submit'] {
   text-align: center;
 }
 
+.badge {
+  font-size: 0.5rem;
+  font-weight: 500;
+  margin: 0 var(--pico-spacing) 0;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--pico-border-radius);
+  display: inline-block;
+
+  &.badge-deprecated {
+    background: var(--fires-deprecated-badge-color);
+    color: var(--fires-deprecated-badge-text-color);
+  }
+}
+
 .notification {
   padding: var(--pico-notification-spacing-vertical) var(--pico-notification-spacing-horizontal);
   margin: calc(var(--pico-notification-spacing-vertical) * 2) 0;
@@ -217,8 +242,13 @@ button[type='submit'] {
 }
 
 .notification.notification-warning {
-  background-color: var(--pico-color-amber-200);
-  color: var(--pico-color-amber-950);
+  background-color: var(--pico-color-pumpkin-300);
+  color: var(--pico-color-pumpkin-950);
+}
+
+.notification.notification-deprecated {
+  background-color: var(--fires-deprecated-badge-color);
+  color: var(--fires-deprecated-badge-text-color);
 }
 
 .notification.notification-info {

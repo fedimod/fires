@@ -5,6 +5,7 @@ import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import db from '@adonisjs/lucid/services/db'
+import cache from '@adonisjs/cache/services/main'
 
 @inject()
 export default class ViewDataMiddleware {
@@ -20,21 +21,39 @@ export default class ViewDataMiddleware {
     // This is only needed if we're going to render a HTML page, which is when
     // the request is explicitly not a JSON request:
     if (!ctx.request.header('Accept') || ctx.request.accepts(['json', '*/*']) !== 'json') {
-      const settings = await Setting.retrieveSettings(['name', 'summary'])
-      const labelsCount = await db.from(Label.table).count('* as total')
+      const configuration = await this.getConfiguration()
+      const softwareInfo = await this.softwareService.getMetadata()
 
       ctx.view.share({
         provider: {
-          name: settings.name ?? 'FediMod FIRES Server',
-          summary:
-            settings.summary ??
-            'An server for labels, moderation advisories, and moderation recommendations.',
+          name: configuration.name,
+          summary: configuration.summary,
         },
-        software: await this.softwareService.getMetadata(),
-        hasLabels: Number.parseInt(labelsCount[0].total, 10) > 0,
+        software: softwareInfo,
+        hasLabels: configuration.hasLabels,
       })
     }
 
     return await next()
+  }
+
+  private getConfiguration() {
+    return cache.getOrSet({
+      key: `configuration`,
+      tags: ['labels', 'settings'],
+      factory: async () => {
+        const settings = await Setting.retrieveSettings(['name', 'summary'])
+        const labelsCount = await db.from(Label.table).count('* as total')
+
+        return {
+          name: settings.name || 'FediMod FIRES Server',
+          summary:
+            settings.summary ||
+            'An server for labels, moderation advisories, and moderation recommendations.',
+          hasLabels: Number.parseInt(labelsCount[0].total, 10) > 0,
+        }
+      },
+      ttl: '60m',
+    })
   }
 }

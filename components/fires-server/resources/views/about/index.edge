@@ -1,6 +1,6 @@
 @layouts.app()
   @slot('main')
-    {{ markdown(description) }}
+    {{{ description }}}
     @if(hasLabels || appeals_url || documentation_url)
       <nav>
         <ul>

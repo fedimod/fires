@@ -1,5 +1,6 @@
 import Setting from '#models/setting'
 import { settingsValidator } from '#validators/settings'
+import cache from '@adonisjs/cache/services/main'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SettingsController {
@@ -39,6 +40,7 @@ export default class SettingsController {
     })
 
     await Setting.updateOrCreateMany('key', updatedSettings)
+    await cache.deleteByTag({ tags: ['settings'] })
 
     session.flash('notification', {
       type: 'success',

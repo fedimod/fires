@@ -42,7 +42,7 @@ export default class ViewDataMiddleware {
   private getConfiguration() {
     return cache.getOrSet({
       key: `configuration`,
-      tags: ['labels', 'settings'],
+      tags: ['labels', 'datasets'],
       factory: async () => {
         const settings = await Setting.retrieveSettings(['name', 'summary'])
         const labelsCount = await db.from(Label.table).count('* as total')

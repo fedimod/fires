@@ -40,6 +40,7 @@ export default class DatasetsController {
     const dataset = await Dataset.create({ ...create, locale: create.locale ?? defaultLocale })
 
     await cache.deleteByTag({ tags: ['datasets'] })
+    await cache.delete({ key: 'configuration' })
 
     session.flash('notification', {
       type: 'success',
@@ -88,6 +89,7 @@ export default class DatasetsController {
     await dataset.merge({ ...update, locale: update.locale ?? defaultLocale }).save()
 
     await cache.deleteByTag({ tags: ['datasets'] })
+    await cache.delete({ key: 'configuration' })
 
     session.flash('notification', {
       type: 'success',
@@ -114,7 +116,9 @@ export default class DatasetsController {
     await cache.deleteMany({
       keys: [`dataset::snapshot::${dataset.id}`, `dataset::latest::${dataset.id}`],
     })
+
     await cache.deleteByTag({ tags: ['datasets'] })
+    await cache.delete({ key: 'configuration' })
 
     session.flash('notification', {
       type: 'success',

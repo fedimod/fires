@@ -40,7 +40,7 @@ export default class SettingsController {
     })
 
     await Setting.updateOrCreateMany('key', updatedSettings)
-    await cache.deleteByTag({ tags: ['settings'] })
+    await cache.delete({ key: 'configuration' })
 
     session.flash('notification', {
       type: 'success',

@@ -70,6 +70,7 @@ export default class LabelsController {
     }
 
     await cache.deleteByTag({ tags: ['labels'] })
+    await cache.delete({ key: 'configuration' })
 
     session.flash('notification', {
       type: 'success',
@@ -183,6 +184,7 @@ export default class LabelsController {
     }
 
     await cache.deleteByTag({ tags: ['labels'] })
+    await cache.delete({ key: 'configuration' })
 
     session.flash('notification', {
       type: 'success',

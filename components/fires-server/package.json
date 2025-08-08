@@ -83,7 +83,7 @@
     "@adonisjs/shield": "^8.2.0",
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^4.0.0",
-    "@fedify/fedify": "^1.4.6",
+    "@fedify/fedify": "^1.5.5",
     "@picocss/pico": "^2.0.6",
     "@thisismissem/adonisjs-respond-with": "^2.1.1",
     "@vinejs/vine": "^3.0.0",

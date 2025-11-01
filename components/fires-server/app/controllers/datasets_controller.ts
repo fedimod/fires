@@ -1,6 +1,5 @@
 import Dataset from '#models/dataset'
 import { DatasetSerializer } from '#serializers/dataset_serializer'
-import { getJsonLdContext } from '#utils/jsonld'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 

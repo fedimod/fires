@@ -1,7 +1,7 @@
 import Dataset from '#models/dataset'
 import DatasetChange, { GENISIS_ID } from '#models/dataset_change'
 import { UrlService } from '#services/url_service'
-import { getJsonLdContext, ObjectType, XSDDateFormat } from '#utils/jsonld'
+import { getJsonLdContext, JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
 
 const typeMap = {
   recommendation: 'Recommendation',
@@ -26,17 +26,6 @@ export const ChangeFields = [
   'recommended_filters',
 ]
 
-const context = getJsonLdContext(['dataset'])
-const pageContext = getJsonLdContext([
-  'dataset',
-  ...ChangeFields,
-  // values from typeMap:
-  'Recommendation',
-  'Advisory',
-  'Retraction',
-  'Tombstone',
-])
-
 export class ChangeSerializer {
   private pageUrl(collectionId: string, id: string | undefined): string | undefined {
     if (!id) return undefined
@@ -55,7 +44,7 @@ export class ChangeSerializer {
     const lastUrl = this.pageUrl(collectionId, last?.id)
 
     return {
-      '@context': page ? pageContext : context,
+      '@context': JSON_LD_CONTEXT,
       'id': page ? pageId : collectionId,
       'partOf': page ? collectionId : undefined,
       'type': page ? 'OrderedCollectionPage' : 'OrderedCollection',

@@ -1,9 +1,7 @@
-import { getJsonLdContext, ObjectType, XSDDateFormat } from '#utils/jsonld'
+import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
 import markdown from '#utils/markdown'
 import { UrlService } from '#services/url_service'
 import Dataset from '#models/dataset'
-
-const context = getJsonLdContext(['Dataset', 'changes', 'snapshot'])
 
 type SingularOptions = {
   context: boolean
@@ -12,7 +10,7 @@ type SingularOptions = {
 export class DatasetSerializer {
   async collection(datasets: Dataset[]) {
     return {
-      '@context': context,
+      '@context': JSON_LD_CONTEXT,
       'type': 'Collection',
       'totalItems': datasets.length,
       'items': await Promise.all(
@@ -29,7 +27,7 @@ export class DatasetSerializer {
     const url = UrlService.make('datasets.show', { slug: dataset.slug })
 
     const result: ObjectType = {
-      '@context': options.context ? context : undefined,
+      '@context': options.context ? JSON_LD_CONTEXT : undefined,
       'type': 'Dataset',
       'id': id,
       'url': url,

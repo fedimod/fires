@@ -2,27 +2,11 @@ export const XSDDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
 export const JSON_LD_CONTEXT = [
   'https://www.w3.org/ns/activitystreams',
+  'https://fires.fedimod.org/ns/fires',
   {
     owl: 'http://www.w3.org/2002/07/owl#',
-    fires: 'https://fires.fedimod.org/ns#',
   },
 ]
-
-export function getJsonLdContext(fields: string[]) {
-  const fieldContext = fields.reduce<Record<string, string>>((context, field) => {
-    context[field] = `fires:${field}`
-    return context
-  }, {})
-
-  return [
-    'https://www.w3.org/ns/activitystreams',
-    {
-      owl: 'http://www.w3.org/2002/07/owl#',
-      fires: 'https://fires.fedimod.org/ns#',
-      ...fieldContext,
-    },
-  ]
-}
 
 export type ObjectType = {
   type: string

@@ -1,5 +1,4 @@
 import Dataset from '#models/dataset'
-import { DatasetSnapshots } from '#models/dataset_snapshots'
 import { SnapshotSerializer } from '#serializers/snapshot_serializer'
 import SnapshotService from '#services/snapshot_service'
 import { snapshotRequestValidator } from '#validators/snapshot'

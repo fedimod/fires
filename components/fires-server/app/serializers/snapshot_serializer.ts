@@ -1,11 +1,9 @@
 import Dataset from '#models/dataset'
 import { Snapshot } from '#services/snapshot_service'
 import { UrlService } from '#services/url_service'
-import { getJsonLdContext, JsonLdDocument, XSDDateFormat } from '#utils/jsonld'
+import { JSON_LD_CONTEXT, JsonLdDocument, XSDDateFormat } from '#utils/jsonld'
 import { inject } from '@adonisjs/core'
 import { ChangeFields, ChangeSerializer } from './change_serializer.js'
-
-const context = getJsonLdContext(['dataset', ...ChangeFields])
 
 @inject()
 export class SnapshotSerializer {
@@ -17,7 +15,7 @@ export class SnapshotSerializer {
     const latestRecord = snapshot.records.at(0)
 
     const response: JsonLdDocument = {
-      '@context': context,
+      '@context': JSON_LD_CONTEXT,
       'id': collectionId,
       'type': 'OrderedCollection',
       'summary': `Snapshot for ${dataset.name} dataset`,

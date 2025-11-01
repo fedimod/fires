@@ -1,10 +1,9 @@
 import Label from '#models/label'
 import markdown from '#utils/markdown'
 import { DateTime } from 'luxon'
-import { getJsonLdContext, JsonLdDocument, ObjectType, XSDDateFormat } from '#utils/jsonld'
+import { JSON_LD_CONTEXT, JsonLdDocument, ObjectType, XSDDateFormat } from '#utils/jsonld'
 import { UrlService } from '#services/url_service'
 
-const context = getJsonLdContext(['Label'])
 export class LabelsSerializer {
   async collection(labels: Label[]): Promise<JsonLdDocument> {
     const latest = await Label.query()
@@ -15,7 +14,7 @@ export class LabelsSerializer {
     const collectionId = UrlService.make('labels.index')
 
     return {
-      '@context': context,
+      '@context': JSON_LD_CONTEXT,
       'id': collectionId,
       'url': collectionId,
       'type': 'Collection',
@@ -30,7 +29,7 @@ export class LabelsSerializer {
     const collectionId = UrlService.make('labels.index')
 
     return {
-      '@context': context,
+      '@context': JSON_LD_CONTEXT,
       ...this.item(label, collectionId),
     }
   }

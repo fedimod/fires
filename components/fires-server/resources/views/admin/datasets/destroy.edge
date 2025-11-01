@@ -1,0 +1,29 @@
+@layouts.admin()
+  @slot('main')
+    @include('partials/flash-messages')
+
+    <div class="d-flex">
+      <h2>
+        Dataset: Deleting {{dataset.name}}
+      </h2>
+    </div>
+
+    <form
+      method="POST"
+      action="{{ route('admin.datasets.destroy', { id: dataset.id }, { qs: { _method: 'DELETE' }}) }}"
+    >
+      {{ csrfField() }}
+      <p>
+        Deleting a dataset will permanently remove all data associated with this dataset and will result downstream consumers of the dataset no longer being able to consume it.
+      </p>
+      <div class="button-group">
+        <button type="submit">Delete Dataset</button>
+        <a
+          href="{{ route('admin.datasets.show', { id: dataset.id }) }}"
+          role="button"
+          class="w-100 outline"
+        >Back</a>
+      </div>
+    </form>
+  @endslot
+@end

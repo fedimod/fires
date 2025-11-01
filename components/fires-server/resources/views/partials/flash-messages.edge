@@ -23,18 +23,5 @@
 @end
 
 @flashMessage('notification')
-  <div
-    class="{{ html.classNames([
-      'notification',
-      {
-        'notification-success': $message.type === 'success',
-        'notification-error': $message.type === 'error',
-        'notification-warning': $message.type === 'warning',
-        'notification-info': $message.type === 'info',
-      },
-    ]) }}"
-    role="alert"
-  >
-    {{ $message.message }}
-  </div>
+  @!component('components/notification', { message: $message })
 @end

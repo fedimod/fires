@@ -1,0 +1,148 @@
+@layouts.admin()
+  @slot('main')
+    @include('partials/flash-messages')
+
+    <div class="d-flex">
+      <h2>
+        Dataset: {{dataset.name}}
+      </h2>
+      <div class="button-group">
+        <a href="{{ route('admin.datasets.edit', { id: dataset.id }) }}" role="button">Edit</a>
+        <a href="{{ route('admin.datasets.confirm_destroy', { id: dataset.id }) }}" role="button">Delete</a>
+      </div>
+    </div>
+
+    <h4>
+      Summary
+    </h4>
+    <div class="label-content">
+      <p>
+        @if(dataset.summary)
+          {{ dataset.summary }}
+        @else
+          <em>Summary Missing</em>
+        @end
+      </p>
+    </div>
+
+    <h4>
+      Description
+    </h4>
+    <div class="label-content">
+      @if(dataset.description)
+        <div class="label-description">
+          {{ markdown(dataset.description) }}
+        </div>
+      @else
+        <p>
+          <em>No description provided</em>
+        </p>
+      @end
+    </div>
+
+    <details class="mt-4">
+      <summary>
+        <h4>
+          Technical Information
+        </h4>
+      </summary>
+      <fieldset role="group" data-copyable>
+        <label for="url">URL:</label>
+        <input
+          id="url"
+          type="text"
+          readonly
+          value="{{ route_url('datasets.show', { slug: dataset.slug }) }}"
+          aria-describedby="url-description"
+        />
+      </fieldset>
+      <small class="form-hint" id="url-description">Use this <abbr title="Uniform Resource Locator">URL</abbr>when sharing
+        this label with humans.</small>
+      <fieldset role="group" data-copyable>
+        <label for="iri">IRI:</label>
+        <input
+          id="iri"
+          type="text"
+          readonly
+          value="{{ route_url('protocol.datasets.show', { id: dataset.id }) }}"
+          aria-describedby="iri-description"
+        />
+      </fieldset>
+      <small class="form-hint" id="iri-description">Use this <abbr title="Internationalized Resource Indicator">IRI</abbr>when
+        referring to this label in datasets or software.</small>
+    </details>
+
+    <div class="d-flex">
+      <h4>
+        Policies
+      </h4>
+      <div class="button-group">
+        <a href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }) }}" role="button">Add a change</a>
+      </div>
+    </div>
+    @if(totalChanges != 0)
+      <p>
+        There have been <a href="{{ route('admin.datasets.changes.index', { dataset_id: dataset.id }) }}">{{ totalChanges }}
+          changes</a>over time for this dataset.
+      </p>
+    @end
+    @if(snapshot.length == 0)
+      <p>
+        This dataset does not contain any advisories or recommendations yet. <a href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }) }}">Create One</a>
+      </p>
+    @else
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30ch;">
+            </th>
+            <th>
+              Kind
+            </th>
+            <th style="width: 100ch;">
+              Entity
+            </th>
+            <th>
+              Policy
+            </th>
+            <th style="width: 15%;">
+              Labels
+            </th>
+            <th>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(record in snapshot)
+            <tr>
+              <td>
+                {{ t(`messages.changes.types.${record.type}`) }}
+              </td>
+              <td>
+                {{ t(`messages.changes.entity_kinds.${record.entityKind}`) }}
+              </td>
+              <td>
+                {{ record.entityKey }}
+              </td>
+              <td style="text-align: center">
+                {{ t(`messages.changes.recommended_policy.${record.recommendedPolicy}`) }}
+              </td>
+              <td>
+                @each(labelId in record.labels)
+                  <span class="label-badge">{{ labels.get(labelId).name }}</span>
+                @end
+              </td>
+              <td>
+                <a
+                  href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }, { qs: { change_id: record.id } }) }}"
+                  role="button"
+                  class="secondary"
+                >Revise</a>
+              </td>
+            </tr>
+          @end
+        </tbody>
+      </table>
+    @endif
+  @endslot
+@end

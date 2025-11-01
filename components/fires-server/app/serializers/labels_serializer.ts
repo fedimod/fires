@@ -42,7 +42,8 @@ export class LabelsSerializer {
       url: url,
       type: 'Label',
       context: collectionId,
-      published: item.createdAt.toFormat(XSDDateFormat),
+      created: item.createdAt.toFormat(XSDDateFormat),
+      published: (item.updatedAt ?? item.createdAt).toFormat(XSDDateFormat),
     }
 
     if (item.updatedAt !== null) {

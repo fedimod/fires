@@ -11,6 +11,8 @@
   --pico-notification-spacing-vertical: 0.8rem;
   --pico-notification-spacing-horizontal: 1.5rem;
 
+  --fires-label-badge-color: var(--pico-color-zinc-750);
+  --fires-label-badge-text: var(--pico-color-zinc-200);
   --fires-deprecated-badge-color: var(--pico-color-zinc-100);
   --fires-deprecated-badge-text-color: var(--pico-color-zinc-600);
   --fires-row-separator-color: var(--pico-color-zinc-150);
@@ -324,4 +326,55 @@ button[type='submit'] {
   margin: calc(var(--pico-spacing) * 2) 0;
   border-bottom: 1px solid var(--fires-row-separator-color);
   padding-bottom: var(--pico-spacing);
+}
+
+details summary {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  align-items: first baseline;
+}
+
+details summary :is(h1, h2, h3, h4, h5, h6) {
+  display: inline-block;
+}
+
+details summary::after {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1rem;
+  background-size: 1.5rem auto;
+  margin-inline-start: 0;
+}
+
+.entity-input {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+
+  select {
+    width: min(30%, 30ch);
+  }
+}
+
+.label-chooser {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-areas: 'a a a a';
+
+  margin-block-end: 2rem;
+}
+
+.label-badge {
+  display: inline-block;
+  padding: 0.1rem 0.3rem;
+  margin: 0.3rem 0.1rem 0 0;
+  background-color: var(--fires-label-badge-color);
+  color: var(--fires-label-badge-text);
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+h2 small {
+  color: var(--pico-secondary-hover-background);
 }

@@ -141,15 +141,9 @@
   @end
   <div id="translations">
     @let(translations = old('translations') ?? label.translations ?? [] )
+    @assign(classNames = html.classNames([ 'notification', 'notification-info', { 'd-hidden': !!translations.length } ]) )
 
-    <div
-      id="translations-empty"
-      class="{{ html.classNames([
-        'notification',
-        'notification-info',
-        { 'd-hidden': translations.length > 0 }
-      ]) }}"
-    >
+    <div id="translations-empty" class="{{ classNames }}">
       There are currently no translations provided for this label.
     </div>
 

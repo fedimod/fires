@@ -20,6 +20,7 @@ const dbConfig = defineConfig({
       client: 'pg',
       connection: clientConfig,
       pool: {
+        min: env.get('DATABASE_POOL_MIN', 2),
         max: env.get('DATABASE_POOL_MAX', 2),
       },
       migrations: {

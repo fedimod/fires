@@ -1,0 +1,59 @@
+import { belongsTo, column } from '@adonisjs/lucid/orm'
+import { jsonArrayColumn, UuidBaseModel } from '#utils/lucid_extensions'
+import { DateTime } from 'luxon'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import Dataset from './dataset.js'
+
+export const GENISIS_ID = '00000000-0000-7000-0000-000000000000'
+
+export type EntityKind = (typeof DatasetChange.entities)[number]
+export type ChangeTypes = (typeof DatasetChange.types)[number]
+export type RecommendedPolicies = (typeof DatasetChange.policies)[number]
+
+export default class DatasetChange extends UuidBaseModel {
+  static entities = ['domain', 'actor'] as const
+  static types = ['advisory', 'recommendation', 'retraction', 'tombstone'] as const
+  static policies = ['accept', 'filter', 'reject', 'drop'] as const
+
+  @column()
+  declare datasetId: string
+
+  @belongsTo(() => Dataset)
+  declare dataset: BelongsTo<typeof Dataset>
+
+  @column()
+  declare entityKind: EntityKind
+
+  @column()
+  declare entityKey: string
+
+  @column()
+  declare type: ChangeTypes
+
+  @jsonArrayColumn()
+  declare labels: string[]
+
+  @column()
+  declare recommendedPolicy?: RecommendedPolicies
+
+  @column()
+  declare recommendedFilters: string[]
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  static async latestForEntity(
+    dataset_id: string,
+    entity_kind: EntityKind,
+    entity_key: string
+  ): Promise<DatasetChange | null> {
+    return DatasetChange.query()
+      .where({
+        dataset_id: dataset_id,
+        entity_kind: entity_kind,
+        entity_key: entity_key,
+      })
+      .orderBy('id', 'desc')
+      .first()
+  }
+}

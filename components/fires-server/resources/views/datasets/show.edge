@@ -1,0 +1,65 @@
+@layouts.app()
+  @slot('head')
+    <link
+      href="{{ route_url('protocol.datasets.show', { id: dataset.id }) }}"
+      rel="alternate"
+      type="application/ld+json"
+    />
+  @end
+  @slot('main')
+    <div class="header">
+      <div class="breadcrumbs">
+        <a href="{{ route('datasets.index') }}" class="breadcrumb-link">&laquo; All Datasets</a>
+      </div>
+      <h2>
+        Dataset: {{dataset.name}}
+      </h2>
+    </div>
+
+    <h4>
+      Summary
+    </h4>
+    <div class="label-content">
+      <p>
+        @if(dataset.summary)
+          {{ dataset.summary }}
+        @else
+          <em>Summary Missing</em>
+        @end
+      </p>
+    </div>
+
+    <h4>
+      Description
+    </h4>
+    <div class="label-content">
+      @if(dataset.description)
+        <div class="label-description">
+          {{ markdown(dataset.description) }}
+        </div>
+      @else
+        <p>
+          <em>No further description available.</em>
+        </p>
+      @end
+    </div>
+
+    <h4 class="mt-4">
+      Technical Information
+    </h4>
+    <fieldset role="group" data-copyable>
+      <label for="iri">IRI:</label>
+      <input
+        id="iri"
+        type="text"
+        readonly
+        value="{{ route_url('protocol.datasets.show', { id: dataset.id }) }}"
+        aria-describedby="iri-description"
+      />
+    </fieldset>
+    <small id="iri-description">
+      Use this <abbr title="Internationalized Resource Indicator">IRI</abbr>
+      when referring to this label in datasets or software.
+    </small>
+  @endslot
+@end

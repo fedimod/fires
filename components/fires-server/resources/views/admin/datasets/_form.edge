@@ -1,0 +1,62 @@
+@let(formAction = dataset.id ? route('admin.datasets.update', { id: dataset.id }, { qs: { _method: 'PUT' }}) : route('admin.datasets.store'))
+
+@include('partials/flash-messages')
+
+<form method="POST" action="{{ formAction }}">
+  {{ csrfField() }}
+
+  <label for="name">Name</label>
+  <small class="form-hint">Note: changing the name will result in the URL of the dataset changing, which may break links to this dataset from consumers.</small>
+  <input
+    type="text"
+    required
+    class="form-control"
+    id="name"
+    name="name"
+    autocomplete="off"
+    value="{{ (old('name') || dataset.name) ?? '' }}"
+  />
+  @inputError('name')
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <label for="summary">Summary</label>
+  <textarea rows="3" class="form-control" id="summary" name="summary">{{ (old('summary') || dataset.summary) ?? "" }}</textarea>
+  @inputError('summary')
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <label for="description">Description</label>
+  <small class="form-hint">You can use markdown in the description</small>
+  <textarea rows="12" class="form-control" id="description" name="description">{{ (old('description') || dataset.description) ?? "" }}</textarea>
+  @inputError('description')
+    <div class="invalid-feedback">
+      @each(message in $messages)
+        <p>
+          {{ message }}
+        </p>
+      @end
+    </div>
+  @end
+  
+  <div class="button-group">
+    <button type="submit">Save Dataset</button>
+    <a
+      href="{{ dataset.id ? route('admin.datasets.show', { id: dataset.id }) : route('admin.datasets.index') }}"
+      role="button"
+      class="w-100 outline"
+    >Back</a>
+  </div>
+</form>

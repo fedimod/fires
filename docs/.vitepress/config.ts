@@ -2,6 +2,9 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  rewrites: {
+    "ns/fires": "/context/fires.jsonld",
+  },
   title: "FediMod FIRES",
   description: "Fediverse moderation Intelligence Replication Endpoint Server",
   head: [

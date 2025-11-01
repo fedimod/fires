@@ -1,3 +1,4 @@
+import Dataset from '#models/dataset'
 import Label from '#models/label'
 import LabelTranslation from '#models/label_translation'
 import Setting from '#models/setting'
@@ -124,5 +125,11 @@ export default class extends BaseSeeder {
         },
       ]
     )
+
+    await Dataset.create({
+      name: 'Example Dataset',
+      summary: 'An example dataset to show off the FIRES protocol',
+      locale: 'en-US',
+    })
   }
 }

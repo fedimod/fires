@@ -1,0 +1,42 @@
+@layouts.admin()
+  @slot('main')
+    <div class="d-flex header">
+      <h2>
+        Datasets
+      </h2>
+      <a href="{{ route('admin.datasets.create') }}" role="button" class="button-small">Create a Dataset</a>
+    </div>
+    <hr />
+
+    @include('partials/flash-messages')
+
+    @each(dataset in datasets)
+      <div class="d-flex data-row">
+        <div>
+          <h3>
+            <a href="{{ route('admin.datasets.show', {id: dataset.id}) }}">{{ dataset.name }}</a>
+          </h3>
+          <p>
+            @if(dataset.summary)
+              {{ dataset.summary }}
+            @else
+              <em>Summary Missing</em>
+            @end
+          </p>
+        </div>
+        <div class="button-group">
+          <a href="{{ route('admin.datasets.show', {id: dataset.id}) }}" role="button" class="secondary">View</a>
+          <a
+            href="{{ route('admin.datasets.edit', {id: dataset.id}) }}"
+            role="button"
+            class="secondary outline"
+          >Edit</a>
+        </div>
+      </div>
+    @else
+      <p>
+        Currently no datasets exist
+      </p>
+    @end
+  @endslot
+@end

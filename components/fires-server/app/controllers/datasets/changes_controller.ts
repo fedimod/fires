@@ -42,6 +42,7 @@ export default class ChangesController {
     const nextChange = since ? (changes.at(10) ?? null) : null
 
     return await this.changeSerializer.collection(dataset, {
+      since: since,
       page: !!since,
       last: lastChange,
       next: nextChange,

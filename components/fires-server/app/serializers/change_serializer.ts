@@ -11,6 +11,7 @@ const typeMap = {
 }
 
 export type ChangesParams = {
+  since: string
   page: boolean
   last: DatasetChange | null
   next: DatasetChange | null
@@ -35,11 +36,12 @@ export class ChangeSerializer {
     return url.href
   }
 
-  async collection(dataset: Dataset, { page, last, next, records, total }: ChangesParams) {
+  async collection(dataset: Dataset, { since, page, last, next, records, total }: ChangesParams) {
     const collectionId = UrlService.make('protocol.datasets.changes', { dataset_id: dataset.id })
     const datasetId = UrlService.make('protocol.datasets.show', { id: dataset.id })
-    const pageId = this.pageUrl(collectionId, records?.at(0)?.id)
-    const nextUrl = total > 0 ? this.pageUrl(collectionId, next?.id) : undefined
+    const lastRecordId = records?.at(-1)?.id
+    const pageId = this.pageUrl(collectionId, since)
+    const nextUrl = this.pageUrl(collectionId, next?.id ?? lastRecordId)
     const firstUrl = total > 0 ? this.pageUrl(collectionId, GENISIS_ID) : undefined
     const lastUrl = this.pageUrl(collectionId, last?.id)
 

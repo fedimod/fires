@@ -1,4 +1,3 @@
-import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
 const NodeinfoController = () => import('#controllers/well-known/nodeinfo_controller')

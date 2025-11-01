@@ -3,7 +3,7 @@ import { Snapshot } from '#services/snapshot_service'
 import { UrlService } from '#services/url_service'
 import { JSON_LD_CONTEXT, JsonLdDocument, XSDDateFormat } from '#utils/jsonld'
 import { inject } from '@adonisjs/core'
-import { ChangeFields, ChangeSerializer } from './change_serializer.js'
+import { ChangeSerializer } from './change_serializer.js'
 
 @inject()
 export class SnapshotSerializer {

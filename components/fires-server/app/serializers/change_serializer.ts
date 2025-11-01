@@ -1,7 +1,7 @@
 import Dataset from '#models/dataset'
 import DatasetChange, { GENISIS_ID } from '#models/dataset_change'
 import { UrlService } from '#services/url_service'
-import { getJsonLdContext, JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
+import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
 
 const typeMap = {
   recommendation: 'Recommendation',
@@ -11,7 +11,7 @@ const typeMap = {
 }
 
 export type ChangesParams = {
-  since: string
+  since?: string
   page: boolean
   last: DatasetChange | null
   next: DatasetChange | null

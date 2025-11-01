@@ -1,18 +1,13 @@
 import Dataset from '#models/dataset'
 import DatasetChange, { GENISIS_ID } from '#models/dataset_change'
 import { UrlService } from '#services/url_service'
-import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
+import { getJsonLdContext, ObjectType, XSDDateFormat } from '#utils/jsonld'
 
 const typeMap = {
   recommendation: 'Recommendation',
   advisory: 'Advisory',
   retraction: 'Retraction',
   tombstone: 'Tombstone',
-}
-
-const entityKindMap = {
-  domain: 'Domain',
-  actor: 'Actor',
 }
 
 export type ChangesParams = {
@@ -22,6 +17,25 @@ export type ChangesParams = {
   records?: DatasetChange[]
   total: number
 }
+
+export const ChangeFields = [
+  'entity_kind',
+  'entity_key',
+  'labels',
+  'recommended_policy',
+  'recommended_filters',
+]
+
+const context = getJsonLdContext(['dataset'])
+const pageContext = getJsonLdContext([
+  'dataset',
+  ...ChangeFields,
+  // values from typeMap:
+  'Recommendation',
+  'Advisory',
+  'Retraction',
+  'Tombstone',
+])
 
 export class ChangeSerializer {
   private pageUrl(collectionId: string, id: string | undefined): string | undefined {
@@ -41,11 +55,11 @@ export class ChangeSerializer {
     const lastUrl = this.pageUrl(collectionId, last?.id)
 
     return {
-      '@context': JSON_LD_CONTEXT,
+      '@context': page ? pageContext : context,
       'id': page ? pageId : collectionId,
       'partOf': page ? collectionId : undefined,
       'type': page ? 'OrderedCollectionPage' : 'OrderedCollection',
-      'fires:dataset': datasetId,
+      'dataset': datasetId,
       'totalItems': total,
       'first': firstUrl,
       'last': lastUrl,
@@ -69,14 +83,12 @@ export class ChangeSerializer {
     const response: ObjectType = {
       id: id,
       type: typeMap[change.type],
-      created: change.createdAt.toFormat(XSDDateFormat),
+      published: change.createdAt.toFormat(XSDDateFormat),
     }
 
     if (change.type !== 'tombstone') {
-      response['entity'] = {
-        type: entityKindMap[change.entityKind],
-        value: change.entityKey,
-      }
+      response['entity_kind'] = change.entityKind
+      response['entity_key'] = change.entityKey
 
       response['labels'] = change.labels.map((label) => {
         return UrlService.make('protocol.labels.show', { id: label })

@@ -1,6 +1,6 @@
 import Dataset from '#models/dataset'
 import { DatasetSerializer } from '#serializers/dataset_serializer'
-import { JSON_LD_CONTEXT } from '#utils/jsonld'
+import { getJsonLdContext } from '#utils/jsonld'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -13,14 +13,7 @@ export default class DatasetsController {
 
     return response.negotiate({
       json: async () => {
-        return response.json({
-          '@context': JSON_LD_CONTEXT,
-          'type': 'Collection',
-          'total': datasets.length,
-          'items': await Promise.all(
-            datasets.map((dataset) => this.datasetSerializer.singular(dataset))
-          ),
-        })
+        return response.json(await this.datasetSerializer.collection(datasets))
       },
       html: async () => {
         return view.render('datasets/index', {
@@ -43,10 +36,7 @@ export default class DatasetsController {
             return response.redirect().toRoute('protocol.datasets.show', { id: dataset.id })
           }
 
-          return response.json({
-            '@context': JSON_LD_CONTEXT,
-            ...(await this.datasetSerializer.singular(dataset)),
-          })
+          return response.json(await this.datasetSerializer.singular(dataset))
         },
         html() {
           if (typeof params.id === 'string') {

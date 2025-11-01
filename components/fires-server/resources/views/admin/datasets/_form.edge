@@ -25,7 +25,7 @@
       @end
     </div>
   @end
-
+  
   <label for="summary">Summary</label>
   <textarea rows="3" class="form-control" id="summary" name="summary">{{ (old('summary') || dataset.summary) ?? "" }}</textarea>
   @inputError('summary')
@@ -37,7 +37,7 @@
       @end
     </div>
   @end
-
+  
   <label for="description">Description</label>
   <small class="form-hint">You can use markdown in the description</small>
   <textarea rows="12" class="form-control" id="description" name="description">{{ (old('description') || dataset.description) ?? "" }}</textarea>
@@ -50,7 +50,7 @@
       @end
     </div>
   @end
-
+  
   <div class="button-group">
     <button type="submit">Save Dataset</button>
     <a

@@ -4,13 +4,12 @@
   @!component('components/notification', { message: notification })
 @end
 
-<form method="POST" novalidate action="{{ route('admin.datasets.changes.store', { dataset_id: dataset.id }) }}">
+<form method="POST" action="{{ route('admin.datasets.changes.store', { dataset_id: dataset.id }) }}">
   {{ csrfField() }}
-
   @if(baseChange)
-  <input type="hidden" name="change_id" value="{{ baseChange.id }}"/>
+    <input type="hidden" name="change_id" value="{{ baseChange.id }}" />
   @end
-
+  
   <label for="type">Type</label>
   @assign(existingType = old(`type`) ?? baseChange?.type)
   <select name="type" class="form-control" required>
@@ -73,7 +72,7 @@
       @end
     </div>
   @end
-
+  
   <label for="recommended_policy">Recommended Policy</label>
   @assign(existingPolicy = old(`recommended_policy`) ?? baseChange?.recommendedPolicy)
   <select name="recommended_policy" class="form-control" required>
@@ -98,10 +97,16 @@
   <fieldset name="labels" class="label-chooser">
     @assign(existingLabels = (old(`labels`) ?? baseChange?.labels ?? []))
     @each(label in labels)
-      <label for="labels-{{label.id}}">
-        <input type="checkbox" id="labels-{{label.id}}" name="labels[]" value="{{ label.id }}" {{ html.attrs({
-          checked: existingLabels.includes(label.id)
-        }) }}>&nbsp;{{ label.name }} {{label.deprecatedAt ? '(deprecated)' : ''}}
+      <label for="labels-{{ label.id }}">
+        <input
+          type="checkbox"
+          id="labels-{{ label.id }}"
+          name="labels[]"
+          value="{{ label.id }}"
+          {{ html.attrs({
+                    checked: existingLabels.includes(label.id)
+            }) }}
+        />&nbsp;{{ label.name }} {{label.deprecatedAt ? '(deprecated)' : ''}}
       </label>
     @end
   </fieldset>
@@ -120,7 +125,7 @@
   @end --}}
 
   <div class="button-group">
-    <button type="submit">{{ baseChange ? 'Create update' : 'Create new'}}</button>
+    <button type="submit">{{ baseChange ? 'Create update' : 'Create new' }}</button>
     <a
       href="{{ route('admin.datasets.show', { id: dataset.id }) }}"
       role="button"

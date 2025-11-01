@@ -41,7 +41,7 @@
       @end
     </div>
   @end
-
+  
   <label for="summary">Summary</label>
   <textarea
     rows="3"
@@ -60,7 +60,7 @@
       @end
     </div>
   @end
-
+  
   <label for="description">Description</label>
   <small class="form-hint">You can use markdown in the description</small>
   <textarea
@@ -80,7 +80,7 @@
       @end
     </div>
   @end
-
+  
   @let(deprecated = old('deprecated') ?? label.deprecatedAt !== null)
   @if(label.id)
     <p>
@@ -111,7 +111,7 @@
       </div>
     @end
   @end
-
+  
   <div class="button-group mt-4">
     <button type="submit">Save Label</button>
     <a
@@ -141,15 +141,9 @@
   @end
   <div id="translations">
     @let(translations = old('translations') ?? label.translations ?? [] )
+    @assign(classNames = html.classNames([ 'notification', 'notification-info', { 'd-hidden': !!translations.length } ]) )
 
-    <div
-      id="translations-empty"
-      class="{{ html.classNames([
-        'notification',
-        'notification-info',
-        { 'd-hidden': translations.length > 0 }
-      ]) }}"
-    >
+    <div id="translations-empty" class="{{ classNames }}">
       There are currently no translations provided for this label.
     </div>
 

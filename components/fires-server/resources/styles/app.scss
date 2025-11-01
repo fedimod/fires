@@ -12,7 +12,7 @@
   --pico-notification-spacing-horizontal: 1.5rem;
 
   --fires-label-badge-color: var(--pico-color-zinc-750);
-    --fires-label-badge-text: var(--pico-color-zinc-200);
+  --fires-label-badge-text: var(--pico-color-zinc-200);
   --fires-deprecated-badge-color: var(--pico-color-zinc-100);
   --fires-deprecated-badge-text-color: var(--pico-color-zinc-600);
   --fires-row-separator-color: var(--pico-color-zinc-150);
@@ -360,7 +360,7 @@ details summary::after {
 .label-chooser {
   display: grid;
   grid-auto-columns: 1fr;
-  grid-template-areas: "a a a a";
+  grid-template-areas: 'a a a a';
 
   margin-block-end: 2rem;
 }

@@ -177,7 +177,6 @@
   ```
 
   Which will prompt you for the following questions:
-
   - Please give your new FIRES server a short description
   - What is your contact email? (publicly available)
   - What is the contact fediverse account?
@@ -194,7 +193,6 @@
 - [#50](https://github.com/fedimod/fires/pull/50) [`647e6af`](https://github.com/fedimod/fires/commit/647e6af2c551214855c0c617e30202a2900ad62e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add required PUBLIC_URL environment variable
 
 - [#36](https://github.com/fedimod/fires/pull/36) [`791d620`](https://github.com/fedimod/fires/commit/791d6206fb6a8bfa1e79c02952a3e5b71d36c636) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Bootstrap fires-server component
-
   - Sets up an adonis.js application with postgresql, lucid, vite, edge.js, and pico.css
   - Adds database configuration for using SSL CA Certificates (needed for people to deploy with providers like DigitalOcean's Managed Databases)
   - Disables multipart/form-data requests, as the FIRES server doesn't need to handle these, but there's no way to disable them in Adonis.js yet. See: https://github.com/adonisjs/bodyparser/pull/66
@@ -220,7 +218,6 @@
 - [#103](https://github.com/fedimod/fires/pull/103) [`8c3372c`](https://github.com/fedimod/fires/commit/8c3372c3972c623b02ed92a59a3d9654b069d418) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add CLI commands for Access Tokens
 
   This change introduces the following `node ace` commands to manage access tokens on the FIRES reference server:
-
   - `fires:tokens:list`
   - `fires:tokens:create`
   - `fires:tokens:delete <token_prefix>`

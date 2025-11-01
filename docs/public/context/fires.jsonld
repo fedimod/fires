@@ -1,0 +1,37 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "_:",
+    "fires": "https://fires.fedimod.org/ns#",
+    "Label": "fires:Label",
+    "Dataset": "fires:Dataset",
+    "Recommendation": "fires:Recommendation",
+    "Advisory": "fires:Advisory",
+    "Retraction": "fires:Retraction",
+    "Tombstone": "fires:Tombstone",
+    "changes": {
+      "@id": "fires:changes",
+      "@type": "@id"
+    },
+    "snapshot": {
+      "@id": "fires:snapshot",
+      "@type": "@id"
+    },
+    "dataset": {
+      "@id": "fires:dataset",
+      "@type": "@id"
+    },
+    "labels": {
+      "@id": "fires:labels",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "entity_kind": "fires:entity_kind",
+    "entity_key": "fires:entity_key",
+    "recommended_policy": "fires:recommended_policy",
+    "recommended_filters": {
+      "@id": "fires:recommended_filters",
+      "@container": "@set"
+    }
+  }
+}

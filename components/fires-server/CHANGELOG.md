@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.4.2
+
+### Patch Changes
+
+- [#174](https://github.com/fedimod/fires/pull/174) [`2cdb27d`](https://github.com/fedimod/fires/commit/2cdb27dec3a04c6233d9de079baf838e4750e83f) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix dockerfile using outdated package version for curl
+
 ## 0.4.1
 
 ### Patch Changes

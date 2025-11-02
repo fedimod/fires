@@ -62,7 +62,7 @@ services:
 
   web:
     container_name: fires-server
-    image: ghcr.io/fedimod/fires-server:0.3
+    image: ghcr.io/fedimod/fires-server:0.4
     restart: always
     env_file: .env.production
     networks:

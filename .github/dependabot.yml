@@ -8,8 +8,6 @@ updates:
   - package-ecosystem: "npm"
     directories: 
       - "/"
-      - "/docs/"
-      - "/components/fires-server"
     schedule:
       interval: "monthly"
 

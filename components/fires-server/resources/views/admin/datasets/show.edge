@@ -83,7 +83,7 @@
     @if(totalChanges != 0)
       <p>
         There have been <a href="{{ route('admin.datasets.changes.index', { dataset_id: dataset.id }) }}">{{ totalChanges }}
-          changes</a>over time for this dataset.
+          changes</a>{{ ' ' }}over time for this dataset.
       </p>
     @end
     @if(snapshot.length == 0)

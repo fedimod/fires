@@ -1,5 +1,11 @@
 # @fedimod/fires-docs
 
+## 1.3.1
+
+### Patch Changes
+
+- [#172](https://github.com/fedimod/fires/pull/172) [`1f2cceb`](https://github.com/fedimod/fires/commit/1f2ccebedabd848d612c47f2f1c8ab43efecb59a) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix JSON-LD context as GitHub Pages can't handle the redirect correctly
+
 ## 1.3.0
 
 ### Minor Changes

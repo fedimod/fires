@@ -140,7 +140,7 @@ jobs:
           ref: ${{ inputs.git_ref }}
 
       - name: Download digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           path: ${{ runner.temp }}/digests
           # `hashFiles` is used to disambiguate between streaming and non-streaming images

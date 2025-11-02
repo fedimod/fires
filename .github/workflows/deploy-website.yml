@@ -38,7 +38,7 @@ jobs:
         run: pnpm install --filter @fedimod/fires-docs
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Build with VitePress
         run: pnpm run --filter @fedimod/fires-docs build

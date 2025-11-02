@@ -5,12 +5,25 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directories: 
+      - "/"
+      - "/docs/"
+      - "/components/fires-server"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
-  - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "docker"
+    directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+
+  - package-ecosystem: "docker-compose"
+    directory: "/components/fires-server"
+    schedule:
+      interval: "monthly"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"

@@ -2,7 +2,7 @@ services:
   postgresql:
     container_name: fires-postgresql
     restart: always
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     shm_size: 256mb
     networks:
       - internal_network

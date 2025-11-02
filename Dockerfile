@@ -74,7 +74,7 @@ RUN \
   apk add \
   tini=0.19.0-r3 \
   tzdata=2025b-r0 \
-  curl=8.12.1-r1 \
+  curl=8.14.1-r2 \
   jq=1.7.1-r0;
 
 # Configure pnpm

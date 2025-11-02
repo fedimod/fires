@@ -68,7 +68,7 @@
     "timekeeper": "^2.3.1",
     "ts-node-maintained": "^10.9.5",
     "typescript": "~5.7",
-    "vite": "^6.4.1",
+    "vite": "^7.1.12",
     "yalc": "1.0.0-pre.53"
   },
   "dependencies": {

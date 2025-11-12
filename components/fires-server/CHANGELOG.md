@@ -1,5 +1,22 @@
 # @fedimod/fires-server
 
+## 0.5.0
+
+### Minor Changes
+
+- [#202](https://github.com/fedimod/fires/pull/202) [`9b622a7`](https://github.com/fedimod/fires/commit/9b622a7a5de0087ad6e3f8230417463ea5440743) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Implement CSV Imports for Datasets
+
+  This implements the ability to import data into a FIRES server from existing domain block CSV files.
+
+  What's not implemented during imports is labelling data, since there's simply no way to fit it into the current admin panel design (I'm toying with a redesign). Originally I tried to detect the labels from the public comment, but it just didn't make much sense.
+
+- [#203](https://github.com/fedimod/fires/pull/203) [`662184f`](https://github.com/fedimod/fires/commit/662184fcf4abde7a1caaef15cd082058b634d056) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix error with dataset changes accidentally redirect
+
+  I'd accidentally gotten wrong the UUID format for the genesis (first) dataset change UUID,
+  it should have been `00000000-0000-7000-A000-000000000000` not `00000000-0000-7000-0000-000000000000`.
+
+  This caused a validation error to be thrown which resulted in the request being redirected to the homepage.
+
 ## 0.4.2
 
 ### Patch Changes

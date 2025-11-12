@@ -44,13 +44,11 @@ export default class ImportsController {
       return response.redirect().back()
     }
 
-    // db?
-
     return view.render('admin/imports/review', {
       dataset: dataset.serialize(),
-      created: results.new, //.map((change) => change.serialize()),
-      changed: results.changed, //.map((change) => change.serialize()),
-      unchanged: results.unchanged, //.map((change) => change.serialize()),
+      created: results.new,
+      changed: results.changed,
+      unchanged: results.unchanged,
       missing: results.missing,
       defaultType: data.defaultType,
     })

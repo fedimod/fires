@@ -7,13 +7,23 @@ import Dataset from './dataset.js'
 export const GENISIS_ID = '00000000-0000-7000-0000-000000000000'
 
 export type EntityKind = (typeof DatasetChange.entities)[number]
-export type ChangeTypes = (typeof DatasetChange.types)[number]
-export type RecommendedPolicies = (typeof DatasetChange.policies)[number]
+export type ChangeType = (typeof DatasetChange.types)[number]
+export type RecommendedPolicy = (typeof DatasetChange.policies)[number]
 
 export default class DatasetChange extends UuidBaseModel {
   static entities = ['domain', 'actor'] as const
   static types = ['advisory', 'recommendation', 'retraction', 'tombstone'] as const
   static policies = ['accept', 'filter', 'reject', 'drop'] as const
+
+  static changeTypes: ChangeType[] = ['advisory', 'recommendation'] as const
+
+  serializeExtras() {
+    return {
+      comment: this.$extras.comment,
+    }
+  }
+
+  declare comment: string
 
   @column()
   declare datasetId: string
@@ -28,13 +38,13 @@ export default class DatasetChange extends UuidBaseModel {
   declare entityKey: string
 
   @column()
-  declare type: ChangeTypes
+  declare type: ChangeType
 
   @jsonArrayColumn()
   declare labels: string[]
 
   @column()
-  declare recommendedPolicy?: RecommendedPolicies
+  declare recommendedPolicy?: RecommendedPolicy
 
   @column()
   declare recommendedFilters: string[]

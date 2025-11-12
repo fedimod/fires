@@ -1,0 +1,7 @@
+#domain,#severity,#reject_media,#reject_reports,#public_comment,#obfuscate
+13bells.com,suspend,FALSE,FALSE,iftas:hate-speech;online-harassment,TRUE
+1611.social,suspend,FALSE,FALSE,iftas:hate-speech;online-harassment,TRUE
+9yo.punipoka.pink,suspend,FALSE,FALSE,iftas:csam,TRUE
+ap.invalid,suspend,FALSE,FALSE,iftas:canary,TRUE
+,,,,,
+activitypub-proxy.cf,suspend,FALSE,FALSE,iftas:service-abuse,TRUE

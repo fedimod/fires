@@ -48,7 +48,7 @@
               <td>
                 {{ record.entityKey }}
               </td>
-              <td style="text-align: center">
+              <td class="text-center">
                 {{ t(`messages.changes.recommended_policy.${record.recommendedPolicy}`) }}
               </td>
               <td>
@@ -64,7 +64,7 @@
         </tbody>
       </table>
     @endif
-    
+
     <div class="button-group">
       @if(nextUrl)
         <a href="{{ nextUrl }}" class="secondary" role="button">Next Page</a>

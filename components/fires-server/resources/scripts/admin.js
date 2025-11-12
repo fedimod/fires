@@ -124,3 +124,24 @@ if (entityKeyInput && entityKindSelector) {
     updateInput(ev.currentTarget.value)
   })
 }
+
+const importReviewForm = document.getElementById('import-review')
+const missingCount = document.getElementById('missing-count')
+if (importReviewForm && missingCount) {
+  importReviewForm.addEventListener('click', (event) => {
+    if (!event.target) return
+    if (event.target.classList.contains('remove-row')) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      const container = event.target.parentNode.parentNode
+
+      container.removeChild(event.target.parentNode)
+      if (container.children.length == 1) {
+        document.getElementById('no-missing-record').classList.remove('d-hidden')
+      }
+
+      missingCount.textContent = container.children.length - 1
+    }
+  })
+}

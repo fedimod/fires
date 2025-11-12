@@ -9,7 +9,9 @@ export default class DisableMultipartRequestsMiddleware {
   async handle({ request, response }: HttpContext, next: NextFn) {
     const type = request.is(['multipart/form-data'])
 
-    if (type === 'multipart/form-data') {
+    // Admin routes have authentication in front of them, as such we can safely
+    // accept multipart form-data for those endpoints.
+    if (type === 'multipart/form-data' && !request.url().startsWith('/admin')) {
       return response.status(400).json({ error: 'Bad request' })
     }
 

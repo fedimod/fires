@@ -1,0 +1,5 @@
+"domain","severity","reject_media","reject_reports","private_comment","public_comment","obfuscate"
+"qoto.org","suspend",True,True,,,True
+"sealion.club","suspend",False,False,,,True
+"develop.gab.com","suspend",True,True,,,True
+"gab.ai","suspend",True,True,,,True

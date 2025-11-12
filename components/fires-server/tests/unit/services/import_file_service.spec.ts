@@ -3,30 +3,15 @@ import { fixturePath } from '#tests/helpers/fixtures'
 import app from '@adonisjs/core/services/app'
 import { ImportFileService } from '#services/import_file_service'
 import Dataset from '#models/dataset'
-import Label from '#models/label'
 import { randomUUID } from 'node:crypto'
 
 test.group('ImportFileService', (group) => {
   let dataset: Dataset
-  let labels: Label[]
   group.each.setup(async () => {
     dataset = await Dataset.create({ name: `Test: ${randomUUID()}`, locale: 'en' })
-    labels = await Label.createMany([
-      {
-        name: 'hate-speech',
-        slug: 'hate-speech',
-        locale: 'en',
-      },
-      {
-        name: 'Online Harassment',
-        slug: 'online-harassment',
-        locale: 'en',
-      },
-    ])
   })
   group.each.teardown(async () => {
     await Dataset.query().delete()
-    await Label.query().delete()
   })
 
   test('Imports into an empty dataset - {filename}')

@@ -29,7 +29,7 @@ test.group('ImportFileService', (group) => {
     await Label.query().delete()
   })
 
-  test('Imports into an empty dataset')
+  test('Imports into an empty dataset - {filename}')
     .with([
       { filename: 'domain-only.csv', changes: 7 },
       { filename: 'fediblockhole.csv', changes: 4 },

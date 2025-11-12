@@ -22,7 +22,7 @@ export default class DatasetChangesController {
     const changes = await DatasetChange.query()
       .where('datasetId', dataset.id)
       .orderBy('id', 'desc')
-      .paginate(page ?? 1, 10)
+      .paginate(page ?? 1, 100)
 
     changes.baseUrl(request.url())
 

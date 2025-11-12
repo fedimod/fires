@@ -1,42 +1,67 @@
 <div class="grid row">
-  <input type="hidden" name="changes[{{index}}][entity_kind]" value="{{ record.entityKind }}" {{ html.attrs({ disabled: noUpdate }) }} />
-  <input type="hidden" name="changes[{{index}}][entity_key]" value="{{ record.entityKey }}"  {{ html.attrs({ disabled: noUpdate }) }} />
-  <input type="hidden" name="changes[{{index}}][recommended_policy]" value="{{ record.recommendedPolicy }}"  {{ html.attrs({ disabled: noUpdate }) }} />
+  <input
+    type="hidden"
+    name="changes[{{ index }}][entity_kind]"
+    value="{{ record.entityKind }}"
+    {{ html.attrs({ disabled: noUpdate }) }}
+  />
+  <input
+    type="hidden"
+    name="changes[{{ index }}][entity_key]"
+    value="{{ record.entityKey }}"
+    {{ html.attrs({ disabled: noUpdate }) }}
+  />
+  <input
+    type="hidden"
+    name="changes[{{ index }}][recommended_policy]"
+    value="{{ record.recommendedPolicy }}"
+    {{ html.attrs({ disabled: noUpdate }) }}
+  />
 
-  <select class="form-control" required {{ html.attrs({
-    name: `changes[${index}][type]`,
+  <select
+    name="changes[{{ index }}][type]"
+    class="form-control"
+    required
+    {{ html.attrs({
     readonly: !!retraction || noUpdate,
     disabled: noUpdate,
-  })}}>
+  }) }}
+  >
     @if(retraction)
-      <option
-        {{ html.attrs({
+      <option {{ html.attrs({
             value: 'retraction',
             selected: true
-        }) }}
-      >
+        }) }}>
         {{ t(`messages.changes.types.retraction`) }}
       </option>
     @else
-    @each(type in change_types)
-      <option
-        {{ html.attrs({
+      @each(type in change_types)
+        <option {{ html.attrs({
             value: type,
             selected: type == record.type
-        }) }}
-      >
-        {{ t(`messages.changes.types.${type}`) }}
-      </option>
-    @end
+        }) }}>
+          {{ t(`messages.changes.types.${type}`) }}
+        </option>
+      @end
     @end
   </select>
-  <span><input type="text" disabled value="{{ t(`messages.changes.entity_kinds.${record.entityKind}`) }}" /></span>
+  <span>
+    <input type="text" disabled value="{{ t(`messages.changes.entity_kinds.${record.entityKind}`) }}" />
+  </span>
   <span>
     <input type="text" disabled value="{{ record.entityKey }}" />
   </span>
   <span class="text-center">
     @if(record.$original.recommendedPolicy && record.recommendedPolicy != record.$original.recommendedPolicy)
-      <ins>{{ record.recommendedPolicy }}<ins> (previous: <del>{{ record.$original.recommendedPolicy }}</del>)
+      <ins>
+        {{ record.recommendedPolicy }}
+      </ins>
+
+      (previous:
+      <del>
+        {{ record.$original.recommendedPolicy }}
+      </del>
+      )
     @else
       {{ record.recommendedPolicy }}
     @endif

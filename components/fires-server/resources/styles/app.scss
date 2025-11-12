@@ -1,7 +1,7 @@
-@use "@picocss/pico/scss/pico" with (
-  $theme-color: "red"
+@use '@picocss/pico/scss/pico' with (
+  $theme-color: 'red'
 );
-@use "@picocss/pico/scss/pico.colors" as *;
+@use '@picocss/pico/scss/pico.colors' as *;
 
 :root,
 :host {
@@ -20,8 +20,8 @@
 }
 
 @media only screen and (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]),
-  :host:not([data-theme="light"]) {
+  :root:not([data-theme='light']),
+  :host:not([data-theme='light']) {
     --fires-deprecated-badge-text-color: var(--pico-color-zinc-200);
     --fires-deprecated-badge-color: var(--pico-color-zinc-700);
     --pico-background-color: var(--pico-color-zinc-850);
@@ -60,7 +60,7 @@ main :is(a[href*="://"], a[target="_blank"]):not(:is(.no-icon, svg a, :has(img, 
     height: 11px;
     background: currentColor;
     color: inherit;
-    content: "";
+    content: '';
     flex-shrink: 0;
     mask-image: var(--external-link-icon);
     -webkit-mask-image: var(--external-link-icon);
@@ -123,7 +123,9 @@ footer a {
   opacity: 0.6;
 }
 
-h2 small, h3 small, h4 small {
+h2 small,
+h3 small,
+h4 small {
   color: var(--pico-secondary-hover-background);
 }
 
@@ -140,7 +142,7 @@ p.lead {
 }
 
 .text-center {
-  text-align: center
+  text-align: center;
 }
 
 .mt-1 {
@@ -197,7 +199,7 @@ dl.labels dt {
   justify-content: space-between;
   align-items: baseline;
 
-  > [role="button"] {
+  > [role='button'] {
     margin-bottom: 0 !important;
   }
 
@@ -206,7 +208,7 @@ dl.labels dt {
   }
 }
 
-fieldset[role="group"] label {
+fieldset[role='group'] label {
   width: auto;
   min-width: 3rem;
   padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
@@ -220,17 +222,17 @@ fieldset[role="group"] label {
 }
 
 .button-group > button,
-.button-group > a[role="button"] {
+.button-group > a[role='button'] {
   width: auto;
   flex: 1;
   margin-bottom: 0;
 }
 
-a[role="button"] {
+a[role='button'] {
   margin-bottom: var(--pico-spacing);
 }
 
-button[type="submit"] {
+button[type='submit'] {
   --pico-background-color: var(--pico-color-green-500);
   --pico-border-color: var(--pico-color-green-500);
   --pico-color: white;
@@ -302,7 +304,7 @@ button[type="submit"] {
   color: var(--pico-muted-color);
 }
 
-input:is([type="file"]) {
+input:is([type='file']) {
   margin-bottom: 0;
 
   + .form-hint {
@@ -310,7 +312,7 @@ input:is([type="file"]) {
   }
 }
 
-[role="group"]:has(+ .form-hint) {
+[role='group']:has(+ .form-hint) {
   margin-bottom: 0;
 
   & + .form-hint {
@@ -391,7 +393,7 @@ details summary::after {
 .label-chooser {
   display: grid;
   grid-auto-columns: 1fr;
-  grid-template-areas: "a a a a";
+  grid-template-areas: 'a a a a';
 
   margin-block-end: 2rem;
 }
@@ -407,7 +409,8 @@ details summary::after {
 }
 
 #import-review {
-  details, .section {
+  details,
+  .section {
     padding-bottom: var(--pico-spacing);
   }
 
@@ -426,11 +429,12 @@ details summary::after {
       margin: var(--pico-spacing) 0;
     }
 
-    input[disabled], select[disabled],
-    input[readonly], select[readonly] {
+    input[disabled],
+    select[disabled],
+    input[readonly],
+    select[readonly] {
       opacity: 1;
       pointer-events: none;
     }
   }
 }
-

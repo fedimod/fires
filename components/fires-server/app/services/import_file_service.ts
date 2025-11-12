@@ -34,7 +34,7 @@ type ImportRecord = {
 }
 
 function cleanInput(input: string): string {
-  return input.toLowerCase().trim().replaceAll('"', '').replaceAll("'", '')
+  return input.toLowerCase().trim()
 }
 
 function parseSeverity(input: string): Severity {
@@ -73,18 +73,11 @@ export class ImportFileService {
   ): Promise<ImportResults> {
     const snapshot = await this.snapshotService.getSnapshot(dataset.id)
 
-    console.log({
-      records: snapshot.records.map((record) => ({
-        entityKind: record.entityKind,
-        entityKey: record.entityKey,
-        policy: record.recommendedPolicy,
-      })),
-    })
-
     const parser = createReadStream(filePath, { encoding: 'utf-8' }).pipe(
       parse({
         delimiter: ',',
         encoding: 'utf-8',
+        skipEmptyLines: true,
       })
     )
 
@@ -109,7 +102,7 @@ export class ImportFileService {
           }
         }
 
-        // Drop the first row if mastodon or fediblockhole
+        // Drop the first row if mastodon or fediblockhole, since it's the header:
         if (format === 'fediblockhole' || format === 'mastodon') {
           continue
         }
@@ -227,7 +220,6 @@ export class ImportFileService {
   ): DatasetChange {
     const policy = this.calculatePolicy(record)
 
-    // Add in the extra properties:
     change.merge(
       {
         type: defaultType,
@@ -242,6 +234,7 @@ export class ImportFileService {
     const isUpdate = !change.$isNew && change.$isDirty
     const result = isUpdate ? new DatasetChange() : change
     if (isUpdate) {
+      // Add in the extra properties:
       result.merge(change.serialize(), true)
       result.$original = { ...change.$original }
     }

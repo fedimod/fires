@@ -13,7 +13,7 @@ services:
       start_period: 10s
       timeout: 10s
     volumes:
-      - ./postgres17:/var/lib/postgresql/data
+      - ./data/postgresql:/var/lib/postgresql/18/docker
     environment:
       - 'POSTGRES_HOST_AUTH_METHOD=trust'
       - 'POSTGRES_DB=fires_production'

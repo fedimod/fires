@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Dataset from './dataset.js'
 
-export const GENISIS_ID = '00000000-0000-7000-0000-000000000000'
+export const GENISIS_ID = '00000000-0000-7000-A000-000000000000'
 
 export type EntityKind = (typeof DatasetChange.entities)[number]
 export type ChangeTypes = (typeof DatasetChange.types)[number]

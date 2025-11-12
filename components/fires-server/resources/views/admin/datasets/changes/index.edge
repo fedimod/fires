@@ -28,10 +28,10 @@
             <th>
               Policy
             </th>
-            <th style="width: 15%;">
+            <th style="max-width: 15%;">
               Labels
             </th>
-            <th style="width: 70ch">
+            <th style="width: 75ch">
               Date
             </th>
           </tr>
@@ -48,7 +48,7 @@
               <td>
                 {{ record.entityKey }}
               </td>
-              <td style="text-align: center">
+              <td class="text-center">
                 {{ t(`messages.changes.recommended_policy.${record.recommendedPolicy}`) }}
               </td>
               <td>

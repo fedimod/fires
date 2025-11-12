@@ -1,0 +1,134 @@
+@layouts.admin()
+  @slot('main')
+    <hgroup>
+      <h2>
+        Import data: Review
+      </h2>
+      <p>
+        Dataset: {{dataset.name}}
+      </p>
+    </hgroup>
+
+    <div class="notification notification-warning" role="alert">
+      This tool is currently in alpha, and may produce incorrect results.
+    </div>
+
+    <p class="lead">
+      Please carefully review the changes proposed by this import below.
+    </p>
+
+    <form method="POST" id="import-review" action="{{ route('admin.imports.perform') }}">
+      {{ csrfField() }}
+      <input type="hidden" name="dataset_id" value="{{ dataset.id }}" />
+
+      @if(created.length)
+        <details>
+          <summary>
+            <h4>
+              New Changes <small>({{ created.length }})</small>
+            </h4>
+          </summary>
+
+          @!component('admin/imports/_review_header_row')
+          @each((record, index) in created)
+            @!component('admin/imports/_review_row', {
+            record,
+            index: index + 1
+            })
+          @end
+        </details>
+      @else
+        <div class="section">
+          <h4>
+            New Changes <small>({{ created.length }})</small>
+          </h4>
+        </div>
+      @end
+      
+      @if(changed.length)
+        <details>
+          <summary>
+            <h4>
+              Revisions <small>({{ changed.length }})</small>
+            </h4>
+          </summary>
+
+          @!component('admin/imports/_review_header_row')
+          @each((record, index) in changed)
+            @!component('admin/imports/_review_row', {
+            record,
+            index: index + created.length + 1
+            })
+          @end
+        </details>
+      @else
+        <div class="section">
+          <h4>
+            Revisions <small>({{ changed.length }})</small>
+          </h4>
+        </div>
+      @end
+      
+      @if(missing.length)
+        <details>
+          <summary>
+            <h4>
+              Possible Retractions <small>(<span id="missing-count">{{ missing.length }}</span>)</small>
+            </h4>
+          </summary>
+
+          <p>
+            These entries were not found in the data to import, but currently exist within the dataset. If they should be removed
+            from the dataset, mark them as retractions, otherwise ignore them:
+          </p>
+
+          @if(missing.length)
+            @!component('admin/imports/_review_header_row', { retraction: true })
+          @endif
+          <div class="rows">
+            {{-- This gets shown dynamically with javascript --}}
+            <div id="no-missing-record" class="d-hidden text-center">
+              There are no more missing records
+            </div>
+
+            @each((record, index) in missing)
+              @!component('admin/imports/_review_row', {
+              record,
+              retraction: true,
+              index: index + created.length + changed.length + 1
+              })
+            @end
+          </div>
+        </details>
+      @endif
+      
+      @if(unchanged.length)
+        <details>
+          <summary>
+            <h4>
+              Unchanged <small>({{ unchanged.length }})</small>
+            </h4>
+          </summary>
+
+          @if(unchanged.length)
+            @!component('admin/imports/_review_header_row')
+          @endif
+          @each(record in unchanged)
+            @!component('admin/imports/_review_row', {
+              record,
+              noUpdate: true
+            })
+          @end
+        </details>
+      @else
+        <div class="section">
+          <h4>
+            Unchanged <small>({{ unchanged.length }})</small>
+          </h4>
+        </div>
+      @end
+      
+      <button type="submit">Import</button>
+    </form>
+  @endslot
+@end

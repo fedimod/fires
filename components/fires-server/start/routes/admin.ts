@@ -6,6 +6,7 @@ const AdminOverviewController = () => import('#controllers/admin/overview_contro
 const AdminLabelsController = () => import('#controllers/admin/labels_controller')
 const AdminDatasetsController = () => import('#controllers/admin/datasets_controller')
 const AdminDatasetChangesController = () => import('#controllers/admin/dataset_changes_controller')
+const AdminImportsController = () => import('#controllers/admin/imports_controller')
 const AdminSettingsController = () => import('#controllers/admin/settings_controller')
 
 router.get('/admin', ({ response }) => response.redirect().toRoute('admin.overview'))
@@ -34,6 +35,16 @@ router
           .where('dataset_id', router.matchers.uuid())
       })
       .as('datasets')
+
+    router
+      .group(() => {
+        router.get('/', [AdminImportsController, 'index']).as('index')
+        router.get('/prepare', [AdminImportsController, 'failedImport']).as('failed')
+        router.post('/prepare', [AdminImportsController, 'prepare']).as('prepare')
+        router.post('/perform', [AdminImportsController, 'perform']).as('perform')
+      })
+      .as('imports')
+      .prefix('import')
 
     router.get('settings', [AdminSettingsController, 'show']).as('settings')
     router.post('settings', [AdminSettingsController, 'update']).as('settings.update')

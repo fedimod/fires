@@ -1,0 +1,95 @@
+@layouts.admin()
+  @slot('main')
+    <h2>
+      Import data
+    </h2>
+
+    <div class="notification notification-warning" role="alert">
+      This tool is currently in alpha, and may produce incorrect results.
+    </div>
+
+    <p class="lead">
+      FIRES currently accepts the import of CSV files into datasets.
+      The file uploaded should follow either the CSV formats for <a href="https://docs.joinmastodon.org/admin/moderation/#blocklist" target="_blank">Mastodon Blocklists</a>
+      or <a
+        href="https://github.com/eigenmagic/fediblockhole?tab=readme-ov-file#url-sources"
+        target="_blank"
+      >Fediblockhole</a>,
+      or be a newline separated list of domains or Object URIs.
+    </p>
+
+    @if(datasets.length == 0)
+      <div class="notification notification-info" role="alert">
+        In order to perform an import, you need to have at least one dataset created first. <a href="{{ route('admin.datasets.create') }}">Create a dataset</a>
+      </div>
+    @else
+      @include('partials/flash-messages')
+
+      <form method="POST" enctype="multipart/form-data" action="{{ route('admin.imports.prepare') }}">
+        {{ csrfField() }}
+
+        <label for="dataset">Dataset</label>
+        @inputError('dataset')
+          <div class="invalid-feedback">
+            @each(message in $messages)
+              <p>
+                {{ message }}
+              </p>
+            @end
+          </div>
+        @end
+        <select name="dataset" class="form-control" required>
+          @each(dataset in datasets)
+            <option
+              {{ html.attrs({
+                value: dataset.id,
+                selected: old('dataset') == dataset.id
+            }) }}
+            >
+              {{ dataset.name }}
+            </option>
+          @end
+        </select>
+
+        <label for="defaultType">Default Change Type</label>
+        <small class="form-hint">This defines how new records should be created in the dataset</small>
+        @inputError('defaultType')
+          <div class="invalid-feedback">
+            @each(message in $messages)
+              <p>
+                {{ message }}
+              </p>
+            @end
+          </div>
+        @end
+        <select name="defaultType" class="form-control" required>
+          @each(type in change_types)
+            <option
+              {{ html.attrs({
+                value: type,
+                selected: type == 'recommendation'
+            }) }}
+            >
+              {{ t(`messages.changes.types.${type}`) }}
+            </option>
+          @end
+        </select>
+
+        <label for="file">File to import</label>
+        @inputError('file')
+          <div class="invalid-feedback">
+            @each(message in $messages)
+              <p>
+                {{ message }}
+              </p>
+            @end
+          </div>
+        @end
+        <input type="file" name="file" id="file" accept=".csv, text/csv" />
+        <small class="form-hint">Should be a .csv file, header lines are automatically detected and ignored.</small>
+
+        <button type="submit">Start import</button>
+      </form>
+    @end
+  @endslot
+@end

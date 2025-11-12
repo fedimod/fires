@@ -25,3 +25,5 @@ yarn-error.log
 .DS_Store
 
 postgres17
+data/*
+!data/.gitkeep

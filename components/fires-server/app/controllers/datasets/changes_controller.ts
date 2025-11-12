@@ -11,8 +11,20 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class ChangesController {
   constructor(protected changeSerializer: ChangeSerializer) {}
 
-  async list({ request }: HttpContext) {
-    const { params, since } = await request.validateUsing(datasetChangesRequestValidator)
+  async list({ request, response }: HttpContext) {
+    const [error, data] = await datasetChangesRequestValidator.tryValidate({
+      params: request.params(),
+      ...request.all(),
+    })
+
+    if (error) {
+      return response.status(400).json({
+        error: 'Malformed request',
+        validation: error.messages,
+      })
+    }
+
+    const { params, since } = data
     const dataset = await Dataset.findOrFail(params.dataset_id)
 
     const { lastChange, totalItems } = await cache.getOrSetForever({

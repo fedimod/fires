@@ -6,6 +6,9 @@ export const datasetChangesRequestValidator = vine.compile(
       dataset_id: vine.string().uuid(),
     }),
 
-    since: vine.string().uuid().optional(),
+    since: vine
+      .string()
+      .uuid({ version: [7] })
+      .optional(),
   })
 )

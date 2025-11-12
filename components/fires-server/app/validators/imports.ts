@@ -54,6 +54,7 @@ export const importValidator = vine.compile(
               )
               .distinct()
               .optional(),
+            comment: vine.string().optional(),
             entity_kind: vine.enum(DatasetChange.entities),
           })
           .merge(entityKeySchema)

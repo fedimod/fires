@@ -17,14 +17,6 @@ export default class DatasetChange extends UuidBaseModel {
 
   static changeTypes: ChangeType[] = ['advisory', 'recommendation'] as const
 
-  serializeExtras() {
-    return {
-      comment: this.$extras.comment,
-    }
-  }
-
-  declare comment: string
-
   @column()
   declare datasetId: string
 
@@ -48,6 +40,9 @@ export default class DatasetChange extends UuidBaseModel {
 
   @column()
   declare recommendedFilters: string[]
+
+  @column()
+  declare comment: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

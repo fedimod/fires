@@ -220,22 +220,19 @@ export class ImportFileService {
   ): DatasetChange {
     const policy = this.calculatePolicy(record)
 
-    change.merge(
-      {
-        type: defaultType,
-        entityKind: 'domain',
-        entityKey: record.value,
-        recommendedPolicy: policy,
-        comment: record.comment,
-      },
-      true // accept extras for the comment
-    )
+    change.merge({
+      type: defaultType,
+      entityKind: 'domain',
+      entityKey: record.value,
+      recommendedPolicy: policy,
+      comment: record.comment,
+    })
 
     const isUpdate = !change.$isNew && change.$isDirty
     const result = isUpdate ? new DatasetChange() : change
     if (isUpdate) {
       // Add in the extra properties:
-      result.merge(change.serialize(), true)
+      result.merge(change.serialize())
       result.$original = { ...change.$original }
     }
 

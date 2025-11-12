@@ -18,6 +18,13 @@
     {{ html.attrs({ disabled: noUpdate }) }}
   />
 
+  <input
+    type="hidden"
+    name="changes[{{ index }}][comment]"
+    value="{{ record.comment }}"
+    {{ html.attrs({ disabled: noUpdate }) }}
+  />
+
   <select
     name="changes[{{ index }}][type]"
     class="form-control"

@@ -69,6 +69,7 @@ export const datasetChangeSchema = vine
       .distinct()
       .optional(),
     entity_kind: vine.enum(DatasetChange.entities),
+    comment: vine.string().optional(),
   })
   .merge(entityKeySchema)
 

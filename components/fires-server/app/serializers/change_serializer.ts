@@ -88,7 +88,7 @@ export class ChangeSerializer {
 
     if (change.type === 'recommendation') {
       response['recommended_policy'] = change.recommendedPolicy
-      response['recommended_filters'] = change.recommendedFilters ?? []
+      response['recommended_filters'] = change.recommendedFilter ?? []
     }
 
     return response

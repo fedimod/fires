@@ -3,6 +3,7 @@ import router from '@adonisjs/core/services/router'
 const AboutController = () => import('#controllers/about_controller')
 const LabelsController = () => import('#controllers/labels_controller')
 const DatasetsController = () => import('#controllers/datasets_controller')
+const DatasetExportsController = () => import('#controllers/datasets/exports_controller')
 
 router.get('/', [AboutController, 'index']).as('about')
 
@@ -15,3 +16,8 @@ router.get('/labels', [LabelsController, 'index']).as('labels.index')
 router.resource('datasets', DatasetsController).only(['index', 'show']).params({
   datasets: 'slug',
 })
+
+router
+  .get('/datasets/:dataset_id/export', [DatasetExportsController, 'perform'])
+  .where('dataset_id', router.matchers.uuid())
+  .as('datasets.export')

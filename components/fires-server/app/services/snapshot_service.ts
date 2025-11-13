@@ -1,4 +1,5 @@
 import DatasetChange from '#models/dataset_change'
+import { UUIDv7 } from '#utils/uuid'
 
 export type SnapshotFilter = {
   limit: number
@@ -7,6 +8,7 @@ export type SnapshotFilter = {
 
 export type Snapshot = {
   dataset: string
+  latestChange: UUIDv7 | null
   totalChanges: number
   records: DatasetChange[]
   hasMore: boolean
@@ -46,6 +48,7 @@ export default class SnapshotService {
     if (options?.limit) {
       return {
         dataset: dataset_id,
+        latestChange: result.rows.at(0)?.id ?? null,
         totalChanges,
         records: result.rows.slice(0, options.limit),
         hasMore: result.rows.length > options.limit,
@@ -53,6 +56,7 @@ export default class SnapshotService {
     } else {
       return {
         dataset: dataset_id,
+        latestChange: result.rows.at(0)?.id ?? null,
         totalChanges,
         records: result.rows,
         hasMore: false,

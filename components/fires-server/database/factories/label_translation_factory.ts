@@ -1,7 +1,7 @@
 import factory from '@adonisjs/lucid/factories'
 import LabelTranslation from '#models/label_translation'
 import { v7 as uuidv7 } from 'uuid'
-import { LabelFactory } from './label_factory.js'
+import { LabelFactory } from '#database/factories/label_factory'
 
 export const LabelTranslationFactory = factory
   .define(LabelTranslation, async ({ faker }) => {

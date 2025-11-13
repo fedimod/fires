@@ -2,9 +2,10 @@ import { belongsTo, column } from '@adonisjs/lucid/orm'
 import { jsonArrayColumn, UuidBaseModel } from '#utils/lucid_extensions'
 import { DateTime } from 'luxon'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import Dataset from './dataset.js'
+import Dataset from '#models/dataset'
+import { UUIDv7 } from '#utils/uuid'
 
-export const GENISIS_ID = '00000000-0000-7000-A000-000000000000'
+export const GENISIS_ID: UUIDv7 = '00000000-0000-7000-A000-000000000000'
 
 export type EntityKind = (typeof DatasetChange.entities)[number]
 export type ChangeType = (typeof DatasetChange.types)[number]

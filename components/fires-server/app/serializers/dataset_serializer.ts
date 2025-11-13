@@ -1,7 +1,7 @@
-import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
-import markdown from '#utils/markdown'
-import { UrlService } from '#services/url_service'
 import Dataset from '#models/dataset'
+import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
+import { UrlService } from '#services/url_service'
+import markdown from '#utils/markdown'
 
 type SingularOptions = {
   context: boolean

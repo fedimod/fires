@@ -68,14 +68,9 @@
       support the <a href="{{ software.homepage }}">FIRES protocol</a>, you can request an export in the Mastodon CSV
       formats, this will download a zip file containing both the importable files and a retractions file.
     </p>
-    <p>
-      <a
-        href="{{ route('datasets.export', { dataset_id: dataset.id }) }}"
-        role="button"
-        class="secondary"
-      >
-        Request export
-      </a>
-    </p>
+    <form method="POST" action="{{ route('datasets.export', { dataset_id: dataset.id }) }}">
+      {{ csrfField() }}
+      <button class="secondary inline" type="submit">Request export</button>
+    </form>
   @endslot
 @end

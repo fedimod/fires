@@ -18,6 +18,6 @@ router.resource('datasets', DatasetsController).only(['index', 'show']).params({
 })
 
 router
-  .get('/datasets/:dataset_id/export', [DatasetExportsController, 'perform'])
+  .post('/datasets/:dataset_id/export', [DatasetExportsController, 'perform'])
   .where('dataset_id', router.matchers.uuid())
   .as('datasets.export')

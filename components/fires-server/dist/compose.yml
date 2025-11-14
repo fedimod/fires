@@ -36,7 +36,7 @@ services:
     labels:
       - 'com.centurylinklabs.watchtower.enable=true'
 
-  fire-server:
+  fires-server:
     container_name: fires-server
     image: ghcr.io/fedimod/fires-server:latest
     restart: unless-stopped

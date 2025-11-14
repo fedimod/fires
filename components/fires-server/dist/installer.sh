@@ -255,7 +255,7 @@ CADDYFILE
 
 
 #
-  # Create the PDS env config
+  # Create the fires-server env config
   #
   # Created here so that we can use it later in multiple places.
   APP_KEY=$(eval "openssl rand --hex 32")

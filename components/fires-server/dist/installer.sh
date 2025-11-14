@@ -331,6 +331,10 @@ SYSTEMD_UNIT_FILE
 
   # Enable firewall access if ufw is in use.
   if ufw status >/dev/null 2>&1; then
+    if ! ufw status | grep --quiet '^22[/ ]'; then
+      echo "* Enabling access on TCP port 22 using ufw"
+      ufw allow 22/tcp >/dev/null
+    fi
     if ! ufw status | grep --quiet '^80[/ ]'; then
       echo "* Enabling access on TCP port 80 using ufw"
       ufw allow 80/tcp >/dev/null

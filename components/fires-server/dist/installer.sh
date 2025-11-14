@@ -36,6 +36,7 @@ PUBLIC_IP=""
 DATADIR="${1:-/fires-server}"
 FIRES_HOSTNAME="${2:-}"
 FIRES_ADMIN_EMAIL="${3:-}"
+FIRES_ADMIN_PASSWORD="${4:-}"
 
 function usage {
   local error="${1}"
@@ -164,6 +165,10 @@ INSTALLER_MESSAGE
     usage "No admin email specified"
   fi
 
+  if [[ -z "${FIRES_ADMIN_PASSWORD}" ]]; then
+    FIRES_ADMIN_PASSWORD="$(eval "openssl rand --hex 16")"
+  fi
+
   #
   # Install system packages.
   #
@@ -264,6 +269,9 @@ APP_KEY="${APP_KEY}"
 DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@localhost:5432/${DATABASE_NAME}"
 DATABASE_POOL_MAX=10
 DATABASE_AUTOMIGRATE=true
+
+FIRES_ADMIN_USERNAME="${FIRES_ADMIN_EMAIL}"
+FIRES_ADMIN_PASSWORD="${FIRES_ADMIN_PASSWORD}"
 FIRES_CONFIG
 
   cat <<FIRES_CONFIG >"${DATADIR}/postgresql.env"
@@ -347,6 +355,8 @@ Name                         Type       Value
 ${FIRES_HOSTNAME}              A          ${PUBLIC_IP}
 
 Detected public IP of this server: ${PUBLIC_IP}
+
+Administrative User: ${FIRES_ADMIN_EMAIL} / ${FIRES_ADMIN_PASSWORD}
 
 ========================================================================
 INSTALLER_MESSAGE

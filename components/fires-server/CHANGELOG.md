@@ -1,5 +1,17 @@
 # @fedimod/fires-server
 
+## 0.6.0
+
+### Minor Changes
+
+- [#220](https://github.com/fedimod/fires/pull/220) [`a53f751`](https://github.com/fedimod/fires/commit/a53f75149d3b23a73dc1cfccd1d2bc5f16e584b2) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Implement exports of the Dataset snapshot in Mastodon compatible CSV files
+
+- [#221](https://github.com/fedimod/fires/pull/221) [`7352765`](https://github.com/fedimod/fires/commit/7352765e9198f50cd04ef6e035294b37f5705e6e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add installer script for fires-server
+
+### Patch Changes
+
+- [#214](https://github.com/fedimod/fires/pull/214) [`dc66176`](https://github.com/fedimod/fires/commit/dc66176ca042023457cd4b569283ff31a84eb986) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix docker-compose postgresql data directory for postgresql 18
+
 ## 0.5.0
 
 ### Minor Changes

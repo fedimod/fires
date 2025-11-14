@@ -1,0 +1,68 @@
+services:
+  postgresql:
+    container_name: fires-postgresql
+    image: postgres:18-alpine
+    command: postgres -c listen_addresses=localhost
+    restart: unless-stopped
+    network_mode: host
+    shm_size: 256mb
+    healthcheck:
+      test: pg_isready -h localhost -U $$POSTGRES_USER
+      interval: 2s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - type: bind
+        source: /datadir/postgres
+        target: /var/lib/postgresql/18/docker
+    env_file:
+      - /datadir/postgresql.env
+
+  caddy:
+    container_name: fires-caddy
+    image: caddy:2
+    network_mode: host
+    depends_on:
+      - fires-server
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /datadir/caddy/data
+        target: /data
+      - type: bind
+        source: /datadir/caddy/etc/caddy
+        target: /etc/caddy
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+
+  fire-server:
+    container_name: fires-server
+    image: ghcr.io/fedimod/fires-server:latest
+    restart: unless-stopped
+    depends_on:
+      postgresql:
+        condition: service_healthy
+        restart: true
+    env_file:
+      - /datadir/fires-server.env
+    network_mode: host
+    healthcheck:
+      # prettier-ignore
+      test: ['CMD-SHELL',"curl -s --noproxy localhost localhost:4444/health | grep -q 'OK' || exit 1"]
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower:latest
+    network_mode: host
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    restart: unless-stopped
+    environment:
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_SCHEDULE: '@midnight'
+      WATCHTOWER_LABEL_ENABLE: true

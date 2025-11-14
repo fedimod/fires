@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.6.1
+
+### Patch Changes
+
+- [#222](https://github.com/fedimod/fires/pull/222) [`a88a448`](https://github.com/fedimod/fires/commit/a88a4487f524a15ac55be0e09fa573cc68939546) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix asset building for client-side javascript
+
 ## 0.6.0
 
 ### Minor Changes

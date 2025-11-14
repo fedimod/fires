@@ -56,8 +56,10 @@
           aria-describedby="url-description"
         />
       </fieldset>
-      <small class="form-hint" id="url-description">Use this <abbr title="Uniform Resource Locator">URL</abbr>when sharing
-        this label with humans.</small>
+      <small class="form-hint" id="url-description">
+        Use this <abbr title="Uniform Resource Locator">URL</abbr>
+        when sharing this label with humans.
+      </small>
       <fieldset role="group" data-copyable>
         <label for="iri">IRI:</label>
         <input
@@ -68,8 +70,10 @@
           aria-describedby="iri-description"
         />
       </fieldset>
-      <small class="form-hint" id="iri-description">Use this <abbr title="Internationalized Resource Indicator">IRI</abbr>when
-        referring to this label in datasets or software.</small>
+      <small class="form-hint" id="iri-description">
+        Use this <abbr title="Internationalized Resource Indicator">IRI</abbr>
+        when referring to this label in datasets or software.
+      </small>
     </details>
 
     <div class="d-flex">
@@ -82,8 +86,9 @@
     </div>
     @if(totalChanges != 0)
       <p>
-        There have been <a href="{{ route('admin.datasets.changes.index', { dataset_id: dataset.id }) }}">{{ totalChanges }}
-          changes</a>{{ ' ' }}over time for this dataset.
+        There have been
+        <a href="{{ route('admin.datasets.changes.index', { dataset_id: dataset.id }) }}">{{ totalChanges }} changes</a>
+        over time for this dataset.
       </p>
     @end
     @if(snapshot.length == 0)

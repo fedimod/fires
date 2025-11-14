@@ -213,11 +213,12 @@ dl.labels dt {
   }
 }
 
-fieldset[role='group'] label {
+fieldset[role='group'][data-copyable] label {
   width: auto;
-  min-width: 3rem;
+  min-width: 4rem;
   padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
-  padding-left: 0;
+  text-align: right;
+  text-wrap: nowrap;
 }
 
 .button-group {

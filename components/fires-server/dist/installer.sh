@@ -225,6 +225,15 @@ DOCKERD_CONFIG
   fi
 
   #
+  # Create data directory.
+  #
+  if ! [[ -d "${DATADIR}" ]]; then
+    echo "* Creating data directory ${DATADIR}"
+    mkdir --parents "${_DATADIR}"
+  fi
+  chmod 700 "${DATADIR}"
+
+  #
   # Configure Caddy
   #
   if ! [[ -d "${DATADIR}/caddy/data" ]]; then
@@ -266,16 +275,16 @@ PUBLIC_URL=https://${FIRES_HOSTNAME}/
 APP_KEY="${APP_KEY}"
 # The database name in the connection string is optional, and defaults to
 # `fires_<NODE_ENV>` if not present.
-DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@localhost:5432/${DATABASE_NAME}"
+DATABASE_URL="postgresql://postgres:${DATABASE_PASSWORD}@localhost:5432/${DATABASE_NAME}"
 DATABASE_POOL_MAX=10
 DATABASE_AUTOMIGRATE=true
 
-FIRES_ADMIN_USERNAME="${FIRES_ADMIN_EMAIL}"
-FIRES_ADMIN_PASSWORD="${FIRES_ADMIN_PASSWORD}"
+FIRES_ADMIN_USERNAME="${FIRES_ADMIN_EMAIL:-}"
+FIRES_ADMIN_PASSWORD="${FIRES_ADMIN_PASSWORD:-}"
 FIRES_CONFIG
 
   cat <<FIRES_CONFIG >"${DATADIR}/postgresql.env"
-POSTGRES_USER="${DATABASE_USER}"
+POSTGRES_USER=postgres
 POSTGRES_PASSWORD="${DATABASE_PASSWORD}"
 POSTGRES_DB="${DATABASE_NAME}"
 FIRES_CONFIG

@@ -2,7 +2,7 @@ import env from '#start/env'
 import { Router } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 
-export class UrlService {
+export default class UrlService {
   static make(...args: Parameters<Router['makeUrl']>) {
     return new URL(router.makeUrl(...args), env.get('PUBLIC_URL')).href
   }

@@ -2,7 +2,7 @@ import edge from 'edge.js'
 import env from '#start/env'
 import locales from '#config/locales'
 import markdown from '#utils/markdown'
-import { UrlService } from '#services/url_service'
+import UrlService from '#services/url_service'
 import { DateTime } from 'luxon'
 import DatasetChange from '#models/dataset_change'
 

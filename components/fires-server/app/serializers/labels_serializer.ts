@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import Label from '#models/label'
 import markdown from '#utils/markdown'
 import { JSON_LD_CONTEXT, JsonLdDocument, ObjectType, XSDDateFormat } from '#utils/jsonld'
-import { UrlService } from '#services/url_service'
+import UrlService from '#services/url_service'
 
 export class LabelsSerializer {
   async collection(labels: Label[]): Promise<JsonLdDocument> {

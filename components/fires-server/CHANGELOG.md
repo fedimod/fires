@@ -1,5 +1,11 @@
 # @fedimod/fires-server
 
+## 0.6.2
+
+### Patch Changes
+
+- [#225](https://github.com/fedimod/fires/pull/225) [`02f0819`](https://github.com/fedimod/fires/commit/02f0819bb7632312350e17455aa2e2d0269dcba9) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Increase page size for dataset changes API
+
 ## 0.6.1
 
 ### Patch Changes

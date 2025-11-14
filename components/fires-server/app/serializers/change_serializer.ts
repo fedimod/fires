@@ -1,6 +1,6 @@
 import Dataset from '#models/dataset'
 import DatasetChange, { GENISIS_ID } from '#models/dataset_change'
-import { UrlService } from '#services/url_service'
+import UrlService from '#services/url_service'
 import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
 
 const typeMap = {

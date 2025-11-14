@@ -2,7 +2,7 @@ import { inject } from '@adonisjs/core'
 
 import Dataset from '#models/dataset'
 import { Snapshot } from '#services/snapshot_service'
-import { UrlService } from '#services/url_service'
+import UrlService from '#services/url_service'
 import { ChangeSerializer } from '#serializers/change_serializer'
 import { JSON_LD_CONTEXT, JsonLdDocument, XSDDateFormat } from '#utils/jsonld'
 

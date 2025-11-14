@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { UrlService } from '#services/url_service'
+import UrlService from '#services/url_service'
 import { inject } from '@adonisjs/core'
 import { SoftwareService } from '#services/software_service'
 

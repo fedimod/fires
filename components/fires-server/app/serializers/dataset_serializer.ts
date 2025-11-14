@@ -1,6 +1,6 @@
 import Dataset from '#models/dataset'
 import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
-import { UrlService } from '#services/url_service'
+import UrlService from '#services/url_service'
 import markdown from '#utils/markdown'
 
 type SingularOptions = {

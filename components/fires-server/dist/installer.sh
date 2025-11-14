@@ -290,7 +290,7 @@ POSTGRES_DB="${DATABASE_NAME}"
 FIRES_CONFIG
 
   #
-  # Download and install pds launcher.
+  # Download and install fires docker-compose file.
   #
   echo "* Downloading FIRES server docker-compose file"
   curl \
@@ -302,6 +302,11 @@ FIRES_CONFIG
 
   # Replace the /datadir paths with the ${DATADIR} path.
   sed --in-place "s|/datadir|${DATADIR}|g" "${DATADIR}/docker-compose.yaml"
+
+  #
+  # Fetch the latest image:
+  #
+  docker pull ghcr.io/fedimod/fires-server:latest
 
   #
   # Create the systemd service.

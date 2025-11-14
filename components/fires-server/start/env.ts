@@ -59,6 +59,8 @@ const env = await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   DEFAULT_LOCALE: Env.schema.string.optional(),
+  FIRES_ADMIN_USERNAME: Env.schema.string.optional(),
+  FIRES_ADMIN_PASSWORD: Env.schema.string.optional(),
 })
 
 export default env

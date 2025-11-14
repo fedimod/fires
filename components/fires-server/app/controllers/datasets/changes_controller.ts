@@ -41,6 +41,8 @@ export default class ChangesController {
       },
     })
 
+    const limit = 100
+    const fetch = limit + 1
     const changes = since
       ? await DatasetChange.query()
           .where('dataset_id', dataset.id)
@@ -48,10 +50,11 @@ export default class ChangesController {
             query.where('id', '>', since!)
           })
           .orderBy('id', 'asc')
-          .limit(10 + 1)
+          .limit(fetch)
       : []
 
-    const nextChange = since ? (changes.at(10) ?? null) : null
+    // The record at the limit is the last record of limit + 1, since arrays are zero-indexed
+    const nextChange = since ? (changes.at(limit) ?? null) : null
 
     return await this.changeSerializer.collection(dataset, {
       since: since,
@@ -59,7 +62,7 @@ export default class ChangesController {
       last: lastChange,
       next: nextChange,
       total: totalItems,
-      records: since ? (since === lastChange?.id ? [] : changes.slice(0, 10)) : undefined,
+      records: since ? (since === lastChange?.id ? [] : changes.slice(0, limit)) : undefined,
     })
   }
 

@@ -3,6 +3,7 @@ import { ExportDatasetService } from '#services/export_dataset_service'
 import { exportValidator } from '#validators/export'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
+import { unlink } from 'node:fs/promises'
 
 @inject()
 export default class ExportsController {
@@ -23,17 +24,32 @@ export default class ExportsController {
           type: 'error',
           message: "This dataset doesn't contain any data yet!",
         })
-        return response.redirect().back()
+      } else {
+        logger.error(exportResult.message, 'Error creating export')
+        session.flash('notification', {
+          type: 'error',
+          message: "We're having some troubles creating an export at this time.",
+        })
       }
 
-      logger.error(exportResult.message, 'Error creating export')
-
-      return response.status(500).json({
-        error: 'Error creating export',
-      })
+      return response.redirect().back()
     }
 
     response.safeHeader('Content-Disposition', `attachment; filename="${exportResult.filename}"`)
     response.download(exportResult.archivePath, true)
+
+    response.onFinish((err) => {
+      if (err) {
+        logger.error(err, 'Error sending response')
+      }
+
+      unlink(exportResult.archivePath)
+        .then(() => {
+          logger.debug({ file: exportResult.archivePath }, 'Unlinked dataset export file')
+        })
+        .catch((error) => {
+          logger.error({ error, file: exportResult.archivePath }, 'Error unlinking dataset export')
+        })
+    })
   }
 }

@@ -16,6 +16,8 @@
       </h2>
     </div>
 
+    @include('partials/flash-messages')
+
     <h4>
       Summary
     </h4>
@@ -24,7 +26,7 @@
         @if(dataset.summary)
           {{ dataset.summary }}
         @else
-          <em>Summary Missing</em>
+          <em>No summary provided</em>
         @end
       </p>
     </div>
@@ -61,5 +63,14 @@
       Use this <abbr title="Internationalized Resource Indicator">IRI</abbr>
       when referring to this label in datasets or software.
     </small>
+    <p>
+      To subscribe to this dataset, copy the IRI above into your server software. If your server software does not yet
+      support the <a href="{{ software.homepage }}">FIRES protocol</a>, you can request an export in the Mastodon CSV
+      formats, this will download a zip file containing both the importable files and a retractions file.
+    </p>
+    <form method="POST" action="{{ route('datasets.export', { dataset_id: dataset.id }) }}">
+      {{ csrfField() }}
+      <button class="secondary inline" type="submit">Request export</button>
+    </form>
   @endslot
 @end

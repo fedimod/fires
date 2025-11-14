@@ -10,6 +10,7 @@ export const GENISIS_ID: UUIDv7 = '00000000-0000-7000-A000-000000000000'
 export type EntityKind = (typeof DatasetChange.entities)[number]
 export type ChangeType = (typeof DatasetChange.types)[number]
 export type RecommendedPolicy = (typeof DatasetChange.policies)[number]
+export type RecommendedFilters = string[]
 
 export default class DatasetChange extends UuidBaseModel {
   static entities = ['domain', 'actor'] as const
@@ -40,7 +41,7 @@ export default class DatasetChange extends UuidBaseModel {
   declare recommendedPolicy?: RecommendedPolicy
 
   @column()
-  declare recommendedFilters: string[]
+  declare recommendedFilter: RecommendedFilters
 
   @column()
   declare comment: string

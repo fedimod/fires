@@ -270,11 +270,11 @@ LOG_LEVEL=info
 PORT=4444
 HOST=0.0.0.0
 PUBLIC_URL=https://${FIRES_HOSTNAME}/
-# You can generate an APP_KEY with: `node ace generate:key` or `openssl rand --hex 32`
+# You can generate an APP_KEY with: openssl rand --hex 32
 # It just needs to be a long random value, changing it will invalidate all access tokens:
 APP_KEY="${APP_KEY}"
 # The database name in the connection string is optional, and defaults to
-# `fires_<NODE_ENV>` if not present.
+# fires_<NODE_ENV> if not present.
 DATABASE_URL="postgresql://postgres:${DATABASE_PASSWORD}@localhost:5432/${DATABASE_NAME}"
 DATABASE_POOL_MAX=10
 DATABASE_AUTOMIGRATE=true

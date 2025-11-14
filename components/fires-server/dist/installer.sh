@@ -229,7 +229,7 @@ DOCKERD_CONFIG
   #
   if ! [[ -d "${DATADIR}" ]]; then
     echo "* Creating data directory ${DATADIR}"
-    mkdir --parents "${_DATADIR}"
+    mkdir --parents "${DATADIR}"
   fi
   chmod 700 "${DATADIR}"
 

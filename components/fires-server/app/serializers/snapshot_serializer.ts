@@ -18,11 +18,10 @@ export class SnapshotSerializer {
     const response: JsonLdDocument = {
       '@context': JSON_LD_CONTEXT,
       'id': collectionId,
-      'type': 'OrderedCollection',
+      'type': 'Collection',
       'summary': `Snapshot for ${dataset.name} dataset`,
       'dataset': datasetId,
       'totalItems': snapshot.records.length,
-      'orderedItems': await this.changeSerializer.items(snapshot.records),
     }
 
     if (latestRecord) {
@@ -33,6 +32,8 @@ export class SnapshotSerializer {
         { qs: { since: latestRecord.id } }
       )
     }
+
+    response['orderedItems'] = await this.changeSerializer.items(snapshot.records)
 
     return response
   }

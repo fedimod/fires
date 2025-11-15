@@ -108,12 +108,13 @@ Finally, we can seed some example data in our server:
 $ node ace db:seed
 ```
 
-Now you can access the FIRES reference server at: `http://localhost:4444/`. 
+Now you can access the FIRES reference server at: `http://localhost:4444/`.
 
 > [!CAUTION]
 > The `db:seed` will create a user with the credentials `admin` / `password` (the most secure credentials ever).
 
 For deploying to production, you shouldn't use the seeder but rather create a user interactively from the docker container shell:
+
 ```sh
 $ node ace fires:users:create
 ```

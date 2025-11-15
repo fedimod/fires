@@ -80,7 +80,7 @@ test.group('Controllers / labels / content negotiation', (group) => {
     const json = response.json()
 
     assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
-    assert.equal(json.type, 'Label')
+    assert.equal(json.type, 'fires:Label')
     assert.equal(json.id, `https://fires.test/labels/${label.id}`)
     assert.equal(json.url, `https://fires.test/labels/${label.slug}`)
     assert.equal(json.name, label.name)
@@ -120,12 +120,12 @@ test.group('Controllers / labels', (group) => {
     assert.equal(json['type'], 'Collection')
     assert.equal(json.totalItems, 1)
     assert.equal(json.updated, label.updatedAt.toFormat(XSDDateFormat))
-    assert.equal(json.items[0]['type'], 'Label')
+    assert.equal(json.items[0]['type'], 'fires:Label')
     assert.equal(json.items[0].name, label.name)
     assert.equal(json.items[0].summary, label.summary)
     assert.equal(json.items[0].published, label.createdAt.toFormat(XSDDateFormat))
     assert.equal(json.items[0].updated, label.updatedAt.toFormat(XSDDateFormat))
-    assert.notDeepInclude(json.items[0], ['owl:deprecated'])
+    assert.notDeepInclude(json.items[0], ['deprecated'])
   })
 
   test('fetching an individual label', async ({ assert, assertResponse, request }) => {
@@ -142,7 +142,7 @@ test.group('Controllers / labels', (group) => {
     const json = response.json()
 
     assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
-    assert.equal(json['type'], 'Label')
+    assert.equal(json['type'], 'fires:Label')
     assert.equal(json.name, label.name)
     assert.equal(json.summary, label.summary)
   })
@@ -161,7 +161,7 @@ test.group('Controllers / labels', (group) => {
     const json = response.json()
 
     assert.deepEqual(json['@context'], JSON_LD_CONTEXT)
-    assert.equal(json['type'], 'Label')
+    assert.equal(json['type'], 'fires:Label')
     assert.equal(json.name, label.name)
     assert.equal(json.summary, label.summary)
   })
@@ -197,6 +197,6 @@ test.group('Controllers / labels', (group) => {
 
     const json = response.json()
 
-    assert.equal(json['owl:deprecated'], true)
+    assert.equal(json['deprecated'], true)
   })
 })

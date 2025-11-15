@@ -3,9 +3,6 @@ export const XSDDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 export const JSON_LD_CONTEXT = [
   'https://www.w3.org/ns/activitystreams',
   'https://fires.fedimod.org/context/fires.jsonld',
-  {
-    owl: 'http://www.w3.org/2002/07/owl#',
-  },
 ]
 
 export type ObjectType = {

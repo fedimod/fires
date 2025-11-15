@@ -30,16 +30,14 @@ This model simplifies the processing of inbound and outbound activities by havin
 
 ## FediMod FIRES Implementation
 
-In FediMod Fires, we make use of this firewall-inspired approach to Federation Management, with each [Advisory](./changes/advisories.md) or [Recommendation](./changes/recommendations.md) containing the properties of `recommended_policy` and `recommended_filters`.
+In FediMod Fires, we make use of this firewall-inspired approach to Federation Management, with each [Advisory](./changes/advisories.md) or [Recommendation](./changes/recommendations.md) containing the properties of `recommendedPolicy` and `recommendedFilters`.
 
-The `recommended_policy` values are as follows:
+The `recommendedPolicy` values are as follows:
 
 - **“accept”** means that we’re explicitly allowing for federation or interaction.
 
-- **“filter”** means to look at the `recommended_filters` property, and to apply the [appropriate filtering](./filters.md). This is close to the behaviour of Mastodon’s “silence” and “noop” values for severity.
+- **“filter”** means to look at the `recommendedFilters` property, and to apply the [appropriate filtering](./filters.md). This is close to the behaviour of Mastodon’s “silence” and “noop” values for severity.
 
 - **“reject”** means to actively send back a [`Reject` activity](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-reject) to the sending server, informing them that you did not accept the incoming activity.
 
 - **“drop”** means to not accept any activity from this entity, and provide no acknowledgement to the sender that the activity was not accepted (i.e., return a 2xx status code but just discard the activity). This is synonymous to Mastodon’s “suspend” severity.
-
-- **“none”** means that there is no recommended action to take. This typically isn't used in favour of [Retractions](./changes/retractions.md) or [Advisories](./changes/advisories.md).

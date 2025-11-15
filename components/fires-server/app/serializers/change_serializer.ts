@@ -2,6 +2,8 @@ import Dataset from '#models/dataset'
 import DatasetChange, { GENISIS_ID } from '#models/dataset_change'
 import UrlService from '#services/url_service'
 import { JSON_LD_CONTEXT, ObjectType, XSDDateFormat } from '#utils/jsonld'
+import { inject } from '@adonisjs/core'
+import { LabelsSerializer } from './labels_serializer.js'
 
 const typeMap = {
   recommendation: 'Recommendation',
@@ -27,7 +29,10 @@ export const ChangeFields = [
   'recommended_filters',
 ]
 
+@inject()
 export class ChangeSerializer {
+  constructor(protected labelSerializer: LabelsSerializer) {}
+
   private pageUrl(collectionId: string, id: string | undefined): string | undefined {
     if (!id) return undefined
 
@@ -53,19 +58,19 @@ export class ChangeSerializer {
       'dataset': datasetId,
       'totalItems': total,
       'first': firstUrl,
-      'last': lastUrl,
+      'last': records?.length === 0 ? undefined : lastUrl,
       'next': page ? nextUrl : firstUrl,
-      'orderedItems': total === 0 ? [] : this.items(records),
+      'orderedItems': total === 0 ? [] : await this.items(records),
     }
   }
 
-  items(items?: DatasetChange[]) {
+  async items(items?: DatasetChange[]) {
     if (!items) return undefined
 
-    return items.map((change) => this.item(change))
+    return await Promise.all(items.map((change) => this.item(change)))
   }
 
-  item(change: DatasetChange): ObjectType {
+  async item(change: DatasetChange): Promise<ObjectType> {
     const id = UrlService.make('protocol.datasets.change', {
       dataset_id: change.datasetId,
       id: change.id,
@@ -77,18 +82,28 @@ export class ChangeSerializer {
       published: change.createdAt.toFormat(XSDDateFormat),
     }
 
-    if (change.type !== 'tombstone') {
-      response['entity_kind'] = change.entityKind
-      response['entity_key'] = change.entityKey
+    // TODO: Tombstones should actually override historical changes with a tombstone marker
+    if (change.type === 'tombstone') {
+      return response
+    }
 
+    response['entityKind'] = change.entityKind
+    response['entityKey'] = change.entityKey
+
+    if (change.type === 'retraction') {
+      // TODO: add comment to response
+      return response
+    }
+
+    if (change.type === 'advisory' || change.type === 'recommendation') {
       response['labels'] = change.labels.map((label) => {
         return UrlService.make('protocol.labels.show', { id: label })
       })
     }
 
     if (change.type === 'recommendation') {
-      response['recommended_policy'] = change.recommendedPolicy
-      response['recommended_filters'] = change.recommendedFilter ?? []
+      response['recommendedPolicy'] = change.recommendedPolicy
+      response['recommendedFilters'] = change.recommendedFilter ?? []
     }
 
     return response

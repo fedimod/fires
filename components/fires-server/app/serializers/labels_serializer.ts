@@ -22,27 +22,20 @@ export class LabelsSerializer {
       'summary': `Labels from ${UrlService.publicUrl}`,
       'updated': latest?.updatedAt.toFormat(XSDDateFormat),
       'totalItems': labels.length,
-      'items': labels.map((label) => this.item(label, collectionId)),
+      'items': labels.map((label) => this.item(label)),
     }
   }
 
   async singular(label: Label): Promise<JsonLdDocument> {
-    const collectionId = UrlService.make('labels.index')
-
     return {
       '@context': JSON_LD_CONTEXT,
-      ...this.item(label, collectionId),
+      ...this.item(label),
     }
   }
 
-  item(item: Label, collectionId: string): ObjectType {
-    const id = UrlService.make('protocol.labels.show', { id: item.id })
-    const url = UrlService.make('labels.show', { slug: item.slug })
+  item(item: Label): ObjectType {
     const baseObject: ObjectType = {
-      id: id,
-      url: url,
-      type: 'Label',
-      context: collectionId,
+      ...this.minimalItem(item),
       created: item.createdAt.toFormat(XSDDateFormat),
       published: (item.updatedAt ?? item.createdAt).toFormat(XSDDateFormat),
     }
@@ -52,7 +45,7 @@ export class LabelsSerializer {
     }
 
     if (item.deprecatedAt && item.deprecatedAt < DateTime.now()) {
-      baseObject['owl:deprecated'] = true
+      baseObject['deprecated'] = true
     }
 
     if (item.translations && item.translations.length > 0) {
@@ -88,5 +81,17 @@ export class LabelsSerializer {
     }
 
     return object
+  }
+
+  minimalItem(label: Label): ObjectType {
+    const collectionId = UrlService.make('labels.index')
+    const id = UrlService.make('protocol.labels.show', { id: label.id })
+    const url = UrlService.make('labels.show', { slug: label.slug })
+    return {
+      type: 'fires:Label',
+      id: id,
+      url: url,
+      context: collectionId,
+    }
   }
 }

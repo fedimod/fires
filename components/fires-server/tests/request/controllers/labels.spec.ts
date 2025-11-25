@@ -166,6 +166,34 @@ test.group('Controllers / labels', (group) => {
     assert.equal(json.summary, label.summary)
   })
 
+  test('fetching the collection of labels with json-ld profile', async ({
+    assert,
+    assertResponse,
+    request,
+  }) => {
+    const label = await LabelFactory.create()
+
+    const response = await request
+      .get(`/labels`)
+      .headers({ accept: 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"' })
+      .end()
+
+    assertResponse.status(response, 200)
+    assertResponse.contentType(response, 'application/ld+json; charset=utf-8')
+
+    const json = response.json()
+
+    assert.equal(json['type'], 'Collection')
+    assert.equal(json.totalItems, 1)
+    assert.equal(json.updated, label.updatedAt.toFormat(XSDDateFormat))
+    assert.equal(json.items[0]['type'], 'fires:Label')
+    assert.equal(json.items[0].name, label.name)
+    assert.equal(json.items[0].summary, label.summary)
+    assert.equal(json.items[0].published, label.createdAt.toFormat(XSDDateFormat))
+    assert.equal(json.items[0].updated, label.updatedAt.toFormat(XSDDateFormat))
+    assert.notDeepInclude(json.items[0], ['deprecated'])
+  })
+
   test('fetching an individual label as html', async ({ assert, assertResponse, request }) => {
     const label = await LabelFactory.create()
 

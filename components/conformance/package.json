@@ -1,5 +1,5 @@
 {
-  "name": "conformance",
+  "name": "@fedimod/fires-conformance",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,6 +8,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0",
   "packageManager": "pnpm@10.9.0"
 }

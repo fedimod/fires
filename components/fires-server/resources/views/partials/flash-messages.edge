@@ -4,6 +4,12 @@
   </div>
 @end
 
+@error('E_TOO_MANY_REQUESTS')
+  <div class="notification notification-error">
+    {{ $message }}
+  </div>
+@end
+
 @error('E_UNAUTHORIZED_ACCESS')
   <div class="notification notification-error">
     {{ $message }}

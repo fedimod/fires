@@ -10,55 +10,32 @@
 - [x] Basic Web UI for reading data
 - [x] Authentication & Authorization for APIs
 - [x] Web-based Admin UI
-- [ ] Datasets
+- [x] Datasets
 
 ## Running in Docker
 
-> [!NOTE]
-> The docker image used below is `ghcr.io/fedimod/fires-server:edge`, if you have followed the manual from the website, you'll need to replace that with `ghcr.io/fedimod/fires-server:v0.3`
-
-First you'll need an [environment file](https://github.com/fedimod/fires/blob/main/components/fires-server/.env.docker), to create this use:
-
-```
-# Copy the example .env for docker, you'll need to
-# edit this to set the right credentials for the database and the `APP_KEY`:
-$ cp .env.docker .env.docker.local
-```
-
-Then you can try out the FIRES server via [docker compose](https://github.com/fedimod/fires/blob/main/components/fires-server/docker-compose.yml), this will automatically use the `.env.docker.local` file:
-
-```sh
-$ docker compose up -d
-```
-
-This will spin up postgresql and the reference fires server.
-
-To stop everything, use:
-
-```sh
-$ docker compose down
-```
+See the [documentation website](https://fires.fedimod.org/manuals/reference-server/).
 
 ### Database Migrations
 
-If you're just deploying a single container of the FIRES reference server, the default `.env.docker.local` will automatically run the migrations on startup for you. This is controlled via the `DATABASE_AUTOMIGRATE` environment variable, which if truthy will cause the migrations to automatically be run.
+If you're just deploying a single container of the FIRES reference server, the default configuration from the automated installer will automatically run the migrations on startup for you. This is controlled via the `DATABASE_AUTOMIGRATE` environment variable, which if truthy will cause the migrations to automatically be run.
 
-**NOTE:** If you're running more than one instance of the FIRES reference server container, then using automatic migrations can cause deployment issues due to multiple concurrent attempts at running the migrations happening at once, in which case you likely want to use manual migrations.
+**NOTE:** If you're running more than one instance of the FIRES reference server container, then using automatic migrations can cause deployment issues due to multiple concurrent attempts at running the migrations, in which case you will likely want to use manual migrations.
 
 #### Manual Migrations
 
 To run the migrations manually, use the following:
 
 ```sh
-$ docker run --rm --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:run --force
+$ docker exec -it $(docker ps -f "name=fires-server" --format "{{.ID}}") node ace migration:run --force
 ```
 
 #### Resetting the database:
 
-If you need to wipe the database and recreate it, use:
+If you need to wipe the database and recreate it from scratch, use:
 
 ```sh
-$ docker run --rm --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace migration:fresh --force
+$ docker exec -it $(docker ps -f "name=fires-server" --format "{{.ID}}") node ace migration:fresh --force
 ```
 
 #### Seeding the database with example data
@@ -66,18 +43,18 @@ $ docker run --rm --net fires-server_internal_network --env-file=.env.docker.loc
 For testing purposes, it can be handy to add a bunch of seed data to the database, this can be done with:
 
 ```sh
-$ docker run --rm --net fires-server_internal_network --env-file=.env.docker.local ghcr.io/fedimod/fires-server:edge node ace db:seed
+$ docker exec -it $(docker ps -f "name=fires-server" --format "{{.ID}}") node ace db:seed
 ```
 
 ### Running administrative commands:
 
-In docker, you need to run these from a command line within the container, which can be accessed with:
+If you need to run multiple administrative commands, you can via a command line within the container, which can be accessed with:
 
 ```sh
 $ docker exec -it $(docker ps -f "name=fires-server" --format "{{.ID}}") /bin/sh
 ```
 
-#### Setting up the server:
+#### Setting up the server (optional)
 
 From within the command line, you can run the interactive setup with:
 
@@ -85,6 +62,8 @@ From within the command line, you can run the interactive setup with:
 # Run the interactive setup:
 $ node ace fires:setup
 ```
+
+All these settings can be configured via the Administrative UI on the web.
 
 #### Managing Administrative Users
 

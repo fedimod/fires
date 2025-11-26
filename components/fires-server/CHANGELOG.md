@@ -1,5 +1,15 @@
 # @fedimod/fires-server
 
+## 0.7.1
+
+### Patch Changes
+
+- [#246](https://github.com/fedimod/fires/pull/246) [`dfbcce9`](https://github.com/fedimod/fires/commit/dfbcce9f6d69001fbf67e4257c0cb0ff72ab44f0) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Set etag header on protocol responses
+
+- [#246](https://github.com/fedimod/fires/pull/246) [`3c0c11c`](https://github.com/fedimod/fires/commit/3c0c11cfbddf01e67a0d44516c5bb459f73c1bf1) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Remove Set-Cookie headers on protocol responses (json or json-ld)
+
+- [#246](https://github.com/fedimod/fires/pull/246) [`ec9a230`](https://github.com/fedimod/fires/commit/ec9a2303881ab846dbffc167256fbaf8b74223dd) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add Vary header for Accept when content negotiation is in use
+
 ## 0.7.0
 
 ### Minor Changes

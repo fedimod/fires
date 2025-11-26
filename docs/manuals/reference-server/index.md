@@ -26,9 +26,9 @@ Deploying without docker (e.g., from source) is **not recommended**, since this 
 | Architectures | amd64, arm64 |
 
 > [!INFO] Security Note:
-> It is a good security practice to restrict inbound ssh access (port 22/tcp) to your own computer's public IP address. You can check your current public IP address using [ifconfig.me](https://ifconfig.me/). **By default the installer will ensure port 22/tcp is kept open on the firewall.**
+> It is a good security practice to restrict inbound ssh access (port 22/tcp) to your own computer's public IP address. You can check your current public IP address using [ifconfig.me](https://ifconfig.me/).
 >
-> If you use a service like [Tailscale](https://tailscale.com), then you should update the `ufw` firewall to close port 22/tcp to the public internet. Port 22
+> If you use a service like [Tailscale](https://tailscale.com), then you should close port 22/tcp.
 
 ### Open your cloud firewall for HTTP and HTTPS
 

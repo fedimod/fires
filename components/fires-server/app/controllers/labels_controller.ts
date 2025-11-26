@@ -8,7 +8,7 @@ export default class LabelsController {
   constructor(protected labelsSerializer: LabelsSerializer) {}
 
   async index({ response, view }: HttpContext) {
-    return response.negotiate(
+    return response.vary('Accept').negotiate(
       {
         json: async (acceptedType) => {
           if (acceptedType?.startsWith('application/ld+json')) {
@@ -58,7 +58,7 @@ export default class LabelsController {
         ? await Label.findByOrFail('slug', params.slug)
         : await Label.findOrFail(params.id)
 
-    return response.negotiate(
+    return response.vary('Accept').negotiate(
       {
         json: async (acceptedType) => {
           if (typeof params.slug === 'string') {

@@ -10,7 +10,7 @@ export default class DatasetsController {
   async index({ view, response }: HttpContext) {
     const datasets = await Dataset.all()
 
-    return response.negotiate({
+    return response.vary('Accept').negotiate({
       json: async (acceptedType) => {
         if (acceptedType?.startsWith('application/ld+json')) {
           response.header('Content-Type', 'application/ld+json; charset=utf-8')
@@ -34,7 +34,7 @@ export default class DatasetsController {
         ? await Dataset.findByOrFail('slug', params.slug)
         : await Dataset.findOrFail(params.id)
 
-    return response.negotiate(
+    return response.vary('Accept').negotiate(
       {
         json: async (acceptedType) => {
           if (typeof params.slug === 'string') {

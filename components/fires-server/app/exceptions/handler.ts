@@ -29,7 +29,7 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
-    return ctx.response.negotiate(
+    return ctx.response.vary('Accept').negotiate(
       {
         json: async () => {
           if (error instanceof lucid.E_ROW_NOT_FOUND) {

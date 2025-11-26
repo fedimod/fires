@@ -1,6 +1,9 @@
 {
   "E_BAD_CSRF_TOKEN": "Invalid or expired CSRF token",
-  "E_INVALID_CREDENTIALS": "Invalid user credentials",
+  "E_INVALID_CREDENTIALS": "Invalid username or password",
   "E_UNAUTHORIZED_ACCESS": "You need to be logged in to see that page",
-  "E_VALIDATION_ERROR": "The form could not be saved. Please check the errors below."
+  "E_VALIDATION_ERROR": "The form could not be saved. Please check the errors below.",
+  "E_TOO_MANY_REQUESTS": "Too many requests.",
+  "E_TOO_MANY_REQUESTS_DURATION": "Try again after {duration, plural, one {1 minute} other {# minutes}}",
+  "LOGIN_RATE_LIMITED": "Too many login requests. Try again after {duration, plural, one {1 minute} other {# minutes}}"
 }

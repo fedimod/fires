@@ -1,4 +1,5 @@
 import { middleware } from '#start/kernel'
+import { throttle } from '#start/limiter'
 import router from '@adonisjs/core/services/router'
 
 const AdminSessionsController = () => import('#controllers/admin/sessions_controller')
@@ -50,6 +51,7 @@ router
     router.post('settings', [AdminSettingsController, 'update']).as('settings.update')
   })
   .use(middleware.adminAuth())
+  .use(throttle)
   .prefix('admin')
   .as('admin')
 
@@ -59,3 +61,4 @@ router
     router.post('/admin/login', [AdminSessionsController, 'performLogin']).as('admin.performLogin')
   })
   .use(middleware.guest())
+  .use(throttle)

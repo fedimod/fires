@@ -47,7 +47,7 @@ export default class DatasetsController {
           })
         },
       },
-      { defaultHandler: 'html' }
+      { defaultHandler: params.slug ? 'html' : 'json' }
     )
   }
 }

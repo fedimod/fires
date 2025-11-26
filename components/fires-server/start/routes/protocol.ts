@@ -1,3 +1,4 @@
+import { throttle } from '#start/limiter'
 import router from '@adonisjs/core/services/router'
 
 const NodeinfoController = () => import('#controllers/well-known/nodeinfo_controller')
@@ -28,3 +29,4 @@ router
   .where('dataset_id', router.matchers.uuid())
   .where('id', router.matchers.uuid())
   .as('protocol')
+  .use(throttle)

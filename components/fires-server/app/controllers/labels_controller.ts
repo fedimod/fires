@@ -78,7 +78,7 @@ export default class LabelsController {
           return view.render('labels/show', { label })
         },
       },
-      { defaultHandler: 'html' }
+      { defaultHandler: params.id ? 'json' : 'html' }
     )
   }
 }

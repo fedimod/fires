@@ -8,16 +8,18 @@ export default class LabelsController {
   constructor(protected labelsSerializer: LabelsSerializer) {}
 
   async index({ response, view }: HttpContext) {
-    return response.negotiate(
+    return response.vary('Accept').negotiate(
       {
         json: async (acceptedType) => {
           if (acceptedType?.startsWith('application/ld+json')) {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          } else {
+            response.header('Content-Type', 'application/json; charset=utf-8')
           }
 
           const labels = await Label.query().preload('translations')
 
-          response.json(await this.labelsSerializer.collection(labels))
+          response.json(await this.labelsSerializer.collection(labels), true)
         },
         html: async () => {
           const labels = await Label.query()
@@ -56,7 +58,7 @@ export default class LabelsController {
         ? await Label.findByOrFail('slug', params.slug)
         : await Label.findOrFail(params.id)
 
-    return response.negotiate(
+    return response.vary('Accept').negotiate(
       {
         json: async (acceptedType) => {
           if (typeof params.slug === 'string') {
@@ -65,11 +67,13 @@ export default class LabelsController {
 
           if (acceptedType?.startsWith('application/ld+json')) {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          } else {
+            response.header('Content-Type', 'application/json; charset=utf-8')
           }
 
           await label.load('translations')
 
-          response.json(await this.labelsSerializer.singular(label))
+          response.json(await this.labelsSerializer.singular(label), true)
         },
         html() {
           if (typeof params.id === 'string') {

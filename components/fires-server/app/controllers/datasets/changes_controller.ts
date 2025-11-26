@@ -17,6 +17,12 @@ export default class ChangesController {
       ...request.all(),
     })
 
+    if (request.header('Accept')?.startsWith('application/ld+json')) {
+      response.header('Content-Type', 'application/ld+json; charset=utf-8')
+    } else {
+      response.header('Content-Type', 'application/json; charset=utf-8')
+    }
+
     if (error) {
       return response.status(400).json({
         error: 'Malformed request',
@@ -56,23 +62,35 @@ export default class ChangesController {
     // The record at the limit is the last record of limit + 1, since arrays are zero-indexed
     const nextChange = since ? (changes.at(limit) ?? null) : null
 
-    return await this.changeSerializer.collection(dataset, {
-      since: since,
-      page: !!since,
-      last: lastChange,
-      next: nextChange,
-      total: totalItems,
-      records: since ? (since === lastChange?.id ? [] : changes.slice(0, limit)) : undefined,
-    })
+    response.json(
+      await this.changeSerializer.collection(dataset, {
+        since: since,
+        page: !!since,
+        last: lastChange,
+        next: nextChange,
+        total: totalItems,
+        records: since ? (since === lastChange?.id ? [] : changes.slice(0, limit)) : undefined,
+      }),
+      true
+    )
   }
 
-  async show({ params }: HttpContext) {
+  async show({ request, response, params }: HttpContext) {
     const dataset = await Dataset.findOrFail(params.dataset_id)
     const change = await DatasetChange.findByOrFail({ id: params.id, dataset_id: dataset.id })
 
-    return {
-      '@context': JSON_LD_CONTEXT,
-      ...(await this.changeSerializer.item(change)),
+    if (request.header('Accept')?.startsWith('application/ld+json')) {
+      response.header('Content-Type', 'application/ld+json; charset=utf-8')
+    } else {
+      response.header('Content-Type', 'application/json; charset=utf-8')
     }
+
+    response.json(
+      {
+        '@context': JSON_LD_CONTEXT,
+        ...(await this.changeSerializer.item(change)),
+      },
+      true
+    )
   }
 }

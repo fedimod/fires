@@ -10,9 +10,15 @@ export default class DatasetsController {
   async index({ view, response }: HttpContext) {
     const datasets = await Dataset.all()
 
-    return response.negotiate({
-      json: async () => {
-        return response.json(await this.datasetSerializer.collection(datasets))
+    return response.vary('Accept').negotiate({
+      json: async (acceptedType) => {
+        if (acceptedType?.startsWith('application/ld+json')) {
+          response.header('Content-Type', 'application/ld+json; charset=utf-8')
+        } else {
+          response.header('Content-Type', 'application/json; charset=utf-8')
+        }
+
+        return response.json(await this.datasetSerializer.collection(datasets), true)
       },
       html: async () => {
         return view.render('datasets/index', {
@@ -28,14 +34,20 @@ export default class DatasetsController {
         ? await Dataset.findByOrFail('slug', params.slug)
         : await Dataset.findOrFail(params.id)
 
-    return response.negotiate(
+    return response.vary('Accept').negotiate(
       {
-        json: async () => {
+        json: async (acceptedType) => {
           if (typeof params.slug === 'string') {
             return response.redirect().toRoute('protocol.datasets.show', { id: dataset.id })
           }
 
-          return response.json(await this.datasetSerializer.singular(dataset))
+          if (acceptedType?.startsWith('application/ld+json')) {
+            response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          } else {
+            response.header('Content-Type', 'application/json; charset=utf-8')
+          }
+
+          return response.json(await this.datasetSerializer.singular(dataset), true)
         },
         html() {
           if (typeof params.id === 'string') {

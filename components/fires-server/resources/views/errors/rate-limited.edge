@@ -1,0 +1,10 @@
+@layouts.error({title: 'Rate Limit Exceeded'})
+  @slot('main')
+    <p>
+      {{message}}
+      @if(duration)
+        {{ t('errors.E_TOO_MANY_REQUESTS_DURATION', { duration }) }}
+      @end
+    </p>
+  @endslot
+@end

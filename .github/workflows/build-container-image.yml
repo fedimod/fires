@@ -102,7 +102,7 @@ jobs:
           push: ${{ inputs.push_to_images != '' }}
           cache-from: ${{ inputs.cache && 'type=gha' || '' }}
           cache-to: ${{ inputs.cache && 'type=gha,mode=max' || '' }}
-          outputs: type=image,"name=${{ env.IMAGE_NAMES }}",push-by-digest=true,name-canonical=true,push=${{ inputs.push_to_images != '' }},annotation-index.org.opencontainers.image.description="FediMod FIRES Reference Server"
+          outputs: type=image,"name=${{ env.IMAGE_NAMES }}",push-by-digest=true,name-canonical=true,push=${{ inputs.push_to_images != '' }},"annotation-index.org.opencontainers.image.description=FediMod FIRES Reference Server"
 
       - name: Export digest
         if: ${{ inputs.push_to_images != '' }}

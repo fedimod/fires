@@ -2,7 +2,7 @@
 
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
-A comprehensive conformance test suite for validating FIRES protocol implementations. This tool helps ensure that FIRES servers correctly implement the protocol for exchanging moderation recommendations about instances that may be sharing harmful content.
+A comprehensive conformance test suite for validating FIRES protocol implementations. This tool helps ensure that FIRES servers correctly implement the protocol for exchanging moderation data.
 
 ## What is FIRES?
 
@@ -33,9 +33,6 @@ pnpm dlx @fedimod/fires-conformance --url https://your-fires-server.example
 # Using yarn
 yarn dlx @fedimod/fires-conformance --url https://your-fires-server.example
 
-# Global installation
-npm install -g @fedimod/fires-conformance
-fires-conformance --url https://your-fires-server.example
 ```
 
 ### Via Docker
@@ -164,7 +161,7 @@ The conformance suite validates:
 - Required metadata fields
 - Protocol identification
 
-### Datasets Endpoint (when implemented)
+### Datasets Endpoint
 - Dataset collection endpoints
 - Individual dataset retrieval
 - Resumable data transfer

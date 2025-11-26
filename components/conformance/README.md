@@ -16,24 +16,10 @@ This conformance suite validates that server implementations correctly follow th
 - Support for both local and remote server testing
 - Multiple output formats for CI/CD integration
 - Docker-based distribution for platform independence
-- Selective test execution by category
+- Selective test execution by suite
 - Built on Vitest for fast, reliable testing
 
 ## Installation
-
-### Via npm/pnpm/yarn
-
-```bash
-# Using npx (no installation required)
-npx @fedimod/fires-conformance --url https://your-fires-server.example
-
-# Using pnpm
-pnpm dlx @fedimod/fires-conformance --url https://your-fires-server.example
-
-# Using yarn
-yarn dlx @fedimod/fires-conformance --url https://your-fires-server.example
-
-```
 
 ### Via Docker
 
@@ -56,7 +42,7 @@ docker run --rm ghcr.io/fedimod/fires-conformance \
 Test a FIRES server implementation:
 
 ```bash
-fires-conformance --url https://fires.example.org
+docker run --rm ghcr.io/fedimod/fires-conformance --url https://fires.example.org
 ```
 
 ### Command Line Options
@@ -77,17 +63,12 @@ fires-conformance --url https://fires.example.org
 
 #### Test Selection
 
-- `--category <categories>` - Run only specific test categories (comma-separated)
-  - Example: `--category labels,nodeinfo`
-  - Available categories:
+- `--suites <suites>` - Run only specific test suites (comma-separated)
+  - Example: `--suites labels,nodeinfo`
+  - Available suites:
     - `labels` - Label endpoint tests
     - `datasets` - Dataset endpoint tests (when implemented)
     - `nodeinfo` - NodeInfo endpoint tests
-    - `json-ld` - JSON-LD format validation across all endpoints
-    - `http` - HTTP protocol compliance
-    - `security` - Security-related tests
-
-- `--exclude-category <categories>` - Exclude specific test categories (comma-separated)
 
 #### Other Options
 
@@ -102,7 +83,7 @@ fires-conformance --url https://fires.example.org
 
 ```bash
 # Generate JUnit report for CI systems
-fires-conformance \
+docker run --rm ghcr.io/fedimod/fires-conformance \
   --url https://staging.fires.example.org \
   --reporter junit \
   --output-file test-results.xml
@@ -112,13 +93,12 @@ fires-conformance \
 
 ```bash
 # Test only Labels endpoints
-fires-conformance --url https://fires.example.org --category labels
+docker run --rm ghcr.io/fedimod/fires-conformance \
+  --url https://fires.example.org --suites labels
 
-# Test everything except security tests
-fires-conformance --url https://fires.example.org --exclude-category security
-
-# Test JSON-LD and HTTP compliance
-fires-conformance --url https://fires.example.org --category json-ld,http
+# Test multiple suites
+docker run --rm ghcr.io/fedimod/fires-conformance \
+  --url https://fires.example.org --suites labels,nodeinfo
 ```
 
 #### Docker Examples
@@ -150,7 +130,6 @@ The conformance suite validates:
 ### Labels Endpoint
 - Collection endpoint (`/labels`) returns valid JSON-LD
 - Individual label endpoints (`/labels/:id`) return valid JSON-LD
-- Content negotiation (HTML vs JSON-LD based on Accept header)
 - Pagination behavior
 - Label structure and required fields
 - Linked data context validity
@@ -166,17 +145,6 @@ The conformance suite validates:
 - Individual dataset retrieval
 - Resumable data transfer
 - Change tracking
-
-### HTTP Compliance
-- Appropriate status codes
-- Content-Type headers
-- CORS headers (if applicable)
-- Rate limiting behavior
-
-### Security
-- HTTPS availability (for production servers)
-- No sensitive data leakage
-- Proper authentication rejection
 
 ## CI/CD Integration
 
@@ -201,7 +169,8 @@ jobs:
 
       - name: Run conformance tests
         run: |
-          npx @fedimod/fires-conformance \
+          docker run --rm --network host \
+            ghcr.io/fedimod/fires-conformance \
             --url http://localhost:3333 \
             --reporter junit \
             --output-file results.xml
@@ -233,18 +202,15 @@ pnpm test:watch
 
 ### Project Structure
 
-Tests are organized by category in separate directories for selective execution:
+Tests are organized by suite in separate directories for selective execution:
 
 ```
 components/conformance/
 ├── src/
 │   ├── tests/
-│   │   ├── labels/      # Label endpoint tests (--category labels)
-│   │   ├── datasets/    # Dataset endpoint tests (--category datasets)
-│   │   ├── nodeinfo/    # NodeInfo tests (--category nodeinfo)
-│   │   ├── json-ld/     # JSON-LD validation (--category json-ld)
-│   │   ├── http/        # HTTP compliance (--category http)
-│   │   └── security/    # Security tests (--category security)
+│   │   ├── labels/      # Label endpoint tests (--suites labels)
+│   │   ├── datasets/    # Dataset endpoint tests (--suites datasets)
+│   │   └── nodeinfo/    # NodeInfo tests (--suites nodeinfo)
 │   └── cli.ts           # CLI interface
 ├── package.json
 ├── vitest.config.ts
@@ -252,7 +218,7 @@ components/conformance/
 └── README.md
 ```
 
-The CLI maps `--category` options to specific test directories, allowing Vitest to run only the relevant test files.
+The CLI maps `--suites` options to specific test directories, allowing Vitest to run only the relevant test files.
 
 ## API Design Stability
 
@@ -264,11 +230,11 @@ If you need additional testing capabilities not covered by the current CLI optio
 
 Contributions are welcome! When adding new tests:
 
-1. Place tests in the appropriate category directory for selective execution
+1. Place tests in the appropriate suite directory for selective execution
 2. Follow existing test structure and naming conventions
 3. Document any new command-line options
 4. Update this README with examples
-5. Ensure tests work in both npm and Docker environments
+5. Ensure tests work in Docker environments
 
 ## License
 
@@ -276,11 +242,4 @@ This project is licensed under the AGPL-3.0 License.
 
 ## Acknowledgements
 
-[<img src="/docs/public/nlnet-logo.svg" alt="NLNet" height="80px" />](http://nlnet.nl)&nbsp;&nbsp;&nbsp;&nbsp;
-[<img src="/docs/public/NGI0Entrust_tag.svg" alt="NGI Zero" height="80px"/>](http://nlnet.nl/NGI0)
-
-This project was funded through the <a href="https://NLnet.nl/entrust">NGI0 Entrust</a> Fund, a fund established by <a href="https://nlnet.nl">NLnet</a> with financial support from the European Commission's <a href="https://ngi.eu">Next Generation Internet</a> programme, under the aegis of <a href="https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/communications-networks-content-and-technology_en">DG Communications Networks, Content and Technology</a> under grant agreement N<sup>o</sup> 101069594.
-<br><br><br>
-[<img src="/docs/public/nivenly-foundation-logo-with-text.png" alt="Nivenly Foundation" height="80px"/>](http://nivenly.org)
-
-The writing of the proposal outlining FIRES was funded by <a href="https://nivenly.org">Nivenly Foundation</a>.
+See [Acknowledgements](/README.md#acknowledgements) in the main FIRES repository.

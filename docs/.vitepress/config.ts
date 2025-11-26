@@ -58,7 +58,8 @@ export default defineConfig({
         activeMatch: "^/reference/protocol",
       },
       { text: "Conformance Tests", link: "/reference/testing/" },
-      {
+      { text: "Reference Server Manual", link: "/manuals/reference-server/" },
+      /*{
         text: "Manuals",
         activeMatch: "^/manuals",
         items: [
@@ -74,9 +75,9 @@ export default defineConfig({
             text: "Example Consumer",
             link: "/manuals/example-consumer/",
           },
-          */
+          * /
         ],
-      },
+      },*/
     ],
 
     sidebar: {
@@ -206,16 +207,15 @@ export default defineConfig({
 
       "/manuals/": [
         {
-          text: "Manuals",
-          link: "/manuals/",
-          items: [],
-        },
-        {
-          text: "Reference Server",
+          text: "Reference Server Manual",
           items: [
             {
-              text: "Introduction",
+              text: "Installation",
               link: "/manuals/reference-server/",
+            },
+            {
+              text: "Enviroment Variables",
+              link: "/manuals/reference-server/environment",
             },
           ],
         },

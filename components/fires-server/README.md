@@ -71,16 +71,10 @@ $ docker run --rm --net fires-server_internal_network --env-file=.env.docker.loc
 
 ### Running administrative commands:
 
-In docker, you need to run these from a command line, so first get the Container ID using:
+In docker, you need to run these from a command line within the container, which can be accessed with:
 
 ```sh
-$ docker ps -f "name=fires-server" --format "{{.ID}}"
-```
-
-Then start a command line using:
-
-```sh
-$ docker exec -it <Container ID> /bin/sh
+$ docker exec -it $(docker ps -f "name=fires-server" --format "{{.ID}}") /bin/sh
 ```
 
 #### Setting up the server:

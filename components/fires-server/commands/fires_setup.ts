@@ -45,21 +45,22 @@ export default class FiresSetup extends BaseCommand {
       return this.terminate()
     }
 
-    let description: string = ''
+    let name: string = ''
+    let summary: string = ''
     let contactEmail: string = ''
     let contactAccount: string = ''
-    let providerUrl: string = ''
     let documentationUrl: string = ''
     let appealsUrl: string = ''
-    let redirectUrl: string | undefined
-    let redirect: boolean = false
 
     let correct = false
     while (!correct) {
-      description = await this.prompt.ask(
-        'Please give your new FIRES server a short description:\n',
-        { default: description }
-      )
+      name = await this.prompt.ask('Please name your new FIRES server:\n', {
+        default: name,
+      })
+
+      summary = await this.prompt.ask('Please give your new FIRES server a summary:\n', {
+        default: summary,
+      })
 
       contactAccount = await this.prompt.ask('What is the contact fediverse account?', {
         hint: '@user@server.example',
@@ -83,15 +84,6 @@ export default class FiresSetup extends BaseCommand {
           return error === null ? true : error.messages[0].message
         },
         default: contactEmail,
-      })
-
-      providerUrl = await this.prompt.ask('Where is your website as a FIRES server provider?', {
-        hint: 'https://...',
-        validate: async (value) => {
-          const [error] = await this.urlValidator.tryValidate(value)
-          return error === null ? true : error.messages[0].message
-        },
-        default: providerUrl,
       })
 
       documentationUrl = await this.prompt.ask('Do you have a website with documentation?', {
@@ -119,33 +111,14 @@ export default class FiresSetup extends BaseCommand {
         }
       )
 
-      redirect = await this.prompt.confirm(
-        'Would you like to redirect visitors to a different URL for this server?',
-        {
-          default: redirect,
-        }
-      )
-
-      if (redirect) {
-        redirectUrl = await this.prompt.ask('Which URL?', {
-          hint: 'https://...',
-          validate: async (value) => {
-            const [error] = await this.urlValidator.tryValidate(value)
-            return error === null ? true : error.messages[0].message
-          },
-          default: redirectUrl,
-        })
-      }
-
       this.logger.info(`
-        Description: ${description}
+        Server Name: ${name}
+        Server Summary: ${summary}
         Contact Email: ${contactEmail}
         Contact Account: ${contactAccount}
 
-        Provider URL: ${providerUrl}
         Documentation URL: ${documentationUrl}
         Appeals URL: ${appealsUrl}
-        ${redirect ? `Redirect URL: ${redirectUrl}` : ''}
       `)
 
       correct = await this.prompt.confirm('Is this correct?', { default: true })
@@ -153,8 +126,12 @@ export default class FiresSetup extends BaseCommand {
 
     await Setting.updateOrCreateMany('key', [
       {
-        key: 'description',
-        value: description,
+        key: 'name',
+        value: name,
+      },
+      {
+        key: 'summary',
+        value: summary,
       },
       {
         key: 'contact_email',
@@ -165,10 +142,6 @@ export default class FiresSetup extends BaseCommand {
         value: contactAccount,
       },
       {
-        key: 'provider_url',
-        value: providerUrl,
-      },
-      {
         key: 'documentation_url',
         value: documentationUrl,
       },
@@ -177,14 +150,5 @@ export default class FiresSetup extends BaseCommand {
         value: appealsUrl,
       },
     ])
-
-    if (redirect && redirectUrl) {
-      await Setting.updateOrCreate(
-        { key: 'redirect_url' },
-        {
-          value: redirectUrl,
-        }
-      )
-    }
   }
 }

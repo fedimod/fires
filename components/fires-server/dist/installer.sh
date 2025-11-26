@@ -135,7 +135,6 @@ function main {
     NAME                TYPE   VALUE
     ----                ----   -----
     example.com         A      ${PUBLIC_IP:-Server public IP}
-    *.example.com       A      ${PUBLIC_IP:-Server public IP}
 
   **IMPORTANT**
   It's recommended to wait 3-5 minutes after creating a new DNS record
@@ -336,10 +335,6 @@ SYSTEMD_UNIT_FILE
 
   # Enable firewall access if ufw is in use.
   if ufw status >/dev/null 2>&1; then
-    if ! ufw status | grep --quiet '^22[/ ]'; then
-      echo "* Enabling access on TCP port 22 using ufw"
-      ufw allow 22/tcp >/dev/null
-    fi
     if ! ufw status | grep --quiet '^80[/ ]'; then
       echo "* Enabling access on TCP port 80 using ufw"
       ufw allow 80/tcp >/dev/null
@@ -364,17 +359,18 @@ Required Firewall Ports
 Service                Direction  Port   Protocol  Source
 -------                ---------  ----   --------  ----------------------
 HTTP TLS verification  Inbound    80     TCP       Any
-HTTP Control Panel     Inbound    443    TCP       Any
+HTTPS Server           Inbound    443    TCP       Any
 
 Required DNS entries
 ------------------------------------------------------------------------
-Name                         Type       Value
--------                      ---------  ---------------
-${FIRES_HOSTNAME}              A          ${PUBLIC_IP}
+Name                                Type   Value
+-------                             -----  ------------------------------
+$(printf "%-35s %-5s  %-30s\n" "${FIRES_HOSTNAME}" "A" "${PUBLIC_IP}")
 
 Detected public IP of this server: ${PUBLIC_IP}
 
 Administrative User: ${FIRES_ADMIN_EMAIL} / ${FIRES_ADMIN_PASSWORD}
+(These credentials will not be displayed again)
 
 ========================================================================
 INSTALLER_MESSAGE

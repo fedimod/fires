@@ -24,9 +24,12 @@ importers:
 
   components/conformance:
     dependencies:
-      optique:
-        specifier: ^0.1.0
-        version: 0.1.0
+      '@optique/core':
+        specifier: ^0.7.0
+        version: 0.7.0
+      '@optique/run':
+        specifier: ^0.7.0
+        version: 0.7.0
       ts-node-maintained:
         specifier: ^10.9.6
         version: 10.9.6(@swc/core@1.10.18)(@types/node@22.18.13)(typescript@5.7.3)
@@ -1143,6 +1146,14 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@optique/core@0.7.0':
+    resolution: {integrity: sha512-vrf+7HC/4puTDC8ssZ/1rDWB5dtPymRdM7xSp3MkmXEfu72QyBXPWTcXvRu0UFpCFAyZvJfZP1H0IhTM0ZU1lQ==}
+    engines: {bun: '>=1.2.0', deno: '>=2.3.0', node: '>=20.0.0'}
+
+  '@optique/run@0.7.0':
+    resolution: {integrity: sha512-0dx7W/PQh4zFSUxihRyniYP8skhfLbDUKaBdgi5ZOBx+E//hSRwRxAu0jtjNR8k2reYH56+8UGm7E/ClPe6Q3A==}
+    engines: {bun: '>=1.2.0', deno: '>=2.3.0', node: '>=20.0.0'}
 
   '@paralleldrive/cuid2@2.2.2':
     resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
@@ -3551,9 +3562,6 @@ packages:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
 
-  optique@0.1.0:
-    resolution: {integrity: sha512-1tnLA5lrcqr5vOUupcorEzLsU2OwhTnArtb2WmjPA+QO4IZjJYX0ESyZw5Nskq0K3wzlo478mclMFb5z4pNA1g==}
-
   outdent@0.5.0:
     resolution: {integrity: sha512-/jHxFIzoMXdqPzTaCpFzAAWhpkSjZPF4Vsn6jAfNpmbH/ymsmd7Qc6VE9BGn0L6YMj6uwpQLxCECpus4ukKS9Q==}
 
@@ -5854,6 +5862,12 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.0
+
+  '@optique/core@0.7.0': {}
+
+  '@optique/run@0.7.0':
+    dependencies:
+      '@optique/core': 0.7.0
 
   '@paralleldrive/cuid2@2.2.2':
     dependencies:
@@ -8195,8 +8209,6 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.5
-
-  optique@0.1.0: {}
 
   outdent@0.5.0: {}
 

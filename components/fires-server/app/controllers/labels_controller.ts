@@ -13,6 +13,8 @@ export default class LabelsController {
         json: async (acceptedType) => {
           if (acceptedType?.startsWith('application/ld+json')) {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          } else {
+            response.header('Content-Type', 'application/json; charset=utf-8')
           }
 
           const labels = await Label.query().preload('translations')
@@ -65,6 +67,8 @@ export default class LabelsController {
 
           if (acceptedType?.startsWith('application/ld+json')) {
             response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          } else {
+            response.header('Content-Type', 'application/json; charset=utf-8')
           }
 
           await label.load('translations')

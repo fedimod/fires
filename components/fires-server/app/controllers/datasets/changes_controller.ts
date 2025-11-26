@@ -17,6 +17,12 @@ export default class ChangesController {
       ...request.all(),
     })
 
+    if (request.header('Accept')?.startsWith('application/ld+json')) {
+      response.header('Content-Type', 'application/ld+json; charset=utf-8')
+    } else {
+      response.header('Content-Type', 'application/json; charset=utf-8')
+    }
+
     if (error) {
       return response.status(400).json({
         error: 'Malformed request',
@@ -69,9 +75,15 @@ export default class ChangesController {
     )
   }
 
-  async show({ response, params }: HttpContext) {
+  async show({ request, response, params }: HttpContext) {
     const dataset = await Dataset.findOrFail(params.dataset_id)
     const change = await DatasetChange.findByOrFail({ id: params.id, dataset_id: dataset.id })
+
+    if (request.header('Accept')?.startsWith('application/ld+json')) {
+      response.header('Content-Type', 'application/ld+json; charset=utf-8')
+    } else {
+      response.header('Content-Type', 'application/json; charset=utf-8')
+    }
 
     response.json(
       {

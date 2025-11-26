@@ -16,6 +16,12 @@ export default class SnapshotsController {
   async snapshot({ request, response }: HttpContext) {
     const { params } = await request.validateUsing(snapshotRequestValidator)
 
+    if (request.header('Accept')?.startsWith('application/ld+json')) {
+      response.header('Content-Type', 'application/ld+json; charset=utf-8')
+    } else {
+      response.header('Content-Type', 'application/json; charset=utf-8')
+    }
+
     response.json(
       await cache.getOrSetForever({
         key: `dataset::snapshot::${params.dataset_id}`,

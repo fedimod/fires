@@ -11,7 +11,13 @@ export default class DatasetsController {
     const datasets = await Dataset.all()
 
     return response.negotiate({
-      json: async () => {
+      json: async (acceptedType) => {
+        if (acceptedType?.startsWith('application/ld+json')) {
+          response.header('Content-Type', 'application/ld+json; charset=utf-8')
+        } else {
+          response.header('Content-Type', 'application/json; charset=utf-8')
+        }
+
         return response.json(await this.datasetSerializer.collection(datasets), true)
       },
       html: async () => {
@@ -30,9 +36,15 @@ export default class DatasetsController {
 
     return response.negotiate(
       {
-        json: async () => {
+        json: async (acceptedType) => {
           if (typeof params.slug === 'string') {
             return response.redirect().toRoute('protocol.datasets.show', { id: dataset.id })
+          }
+
+          if (acceptedType?.startsWith('application/ld+json')) {
+            response.header('Content-Type', 'application/ld+json; charset=utf-8')
+          } else {
+            response.header('Content-Type', 'application/json; charset=utf-8')
           }
 
           return response.json(await this.datasetSerializer.singular(dataset), true)

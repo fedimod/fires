@@ -13,16 +13,19 @@ export default class SnapshotsController {
     protected snapshotService: SnapshotService
   ) {}
 
-  async snapshot({ request }: HttpContext) {
+  async snapshot({ request, response }: HttpContext) {
     const { params } = await request.validateUsing(snapshotRequestValidator)
 
-    return await cache.getOrSetForever({
-      key: `dataset::snapshot::${params.dataset_id}`,
-      factory: async () => {
-        const dataset = await Dataset.findOrFail(params.dataset_id)
-        const snapshot = await this.snapshotService.getSnapshot(params.dataset_id)
-        return this.snapshotSerializer.collection(snapshot, dataset)
-      },
-    })
+    response.json(
+      await cache.getOrSetForever({
+        key: `dataset::snapshot::${params.dataset_id}`,
+        factory: async () => {
+          const dataset = await Dataset.findOrFail(params.dataset_id)
+          const snapshot = await this.snapshotService.getSnapshot(params.dataset_id)
+          return this.snapshotSerializer.collection(snapshot, dataset)
+        },
+      }),
+      true
+    )
   }
 }

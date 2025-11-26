@@ -17,7 +17,7 @@ export default class LabelsController {
 
           const labels = await Label.query().preload('translations')
 
-          response.json(await this.labelsSerializer.collection(labels))
+          response.json(await this.labelsSerializer.collection(labels), true)
         },
         html: async () => {
           const labels = await Label.query()
@@ -69,7 +69,7 @@ export default class LabelsController {
 
           await label.load('translations')
 
-          response.json(await this.labelsSerializer.singular(label))
+          response.json(await this.labelsSerializer.singular(label), true)
         },
         html() {
           if (typeof params.id === 'string') {

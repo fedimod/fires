@@ -12,7 +12,7 @@ export default class DatasetsController {
 
     return response.negotiate({
       json: async () => {
-        return response.json(await this.datasetSerializer.collection(datasets))
+        return response.json(await this.datasetSerializer.collection(datasets), true)
       },
       html: async () => {
         return view.render('datasets/index', {
@@ -35,7 +35,7 @@ export default class DatasetsController {
             return response.redirect().toRoute('protocol.datasets.show', { id: dataset.id })
           }
 
-          return response.json(await this.datasetSerializer.singular(dataset))
+          return response.json(await this.datasetSerializer.singular(dataset), true)
         },
         html() {
           if (typeof params.id === 'string') {

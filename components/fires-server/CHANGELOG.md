@@ -1,5 +1,41 @@
 # @fedimod/fires-server
 
+## 0.7.0
+
+### Minor Changes
+
+- [#236](https://github.com/fedimod/fires/pull/236) [`768ae0d`](https://github.com/fedimod/fires/commit/768ae0d77f29ee5ec71a596b3e9b44b29892233c) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Revise JSON-LD Responses
+
+  This changes the JSON-LD responses for the labels and changes. For labels, the `type` changes to `fires:Label` to allow upgrade to the `Label` type being defined by the [ActivityPub Trust & Safety Taskforce](https://github.com/swicg/activitypub-trust-and-safety/issues/84), additionally `owl:deprecated` is now just `deprecated` and included in the FIRES JSON-LD context.
+
+  Normalized `entity_kind`, `entity_key`, `recommended_policy` and `recommended_filters` to camalCase, per JSON-LD Best Practices.
+
+  The changes within a dataset now have some more rules around their output:
+  - `Retraction` will only include the `entityKind` and `entityKey` properties, besides the core properties of `id`, `type` and `published`, and in the future a `comment`. They won't include `labels`, `recommendedPolicy` or `recommendedFilters`, since those no longer apply as of the retraction.
+  - `Tombstone` will only include the `id`, `type` and `published` properties (currently unused in the reference server).
+  - `Advisory` will have the properties `id`, `type`, `published`, `entityKind`, `entityKey`, `labels`.
+  - `Recommendation` will have all the properties of `Advisory`, and additionally `recommendedPolicy` and `recommendedFilters`
+
+  Also fixed is the IRI of the `fires` property in the JSON-LD context. Previously it was `https://fires.fedimod.org/ns#` and now it is `https://fires.fedimod.org/context/fires.jsonld#`
+
+### Patch Changes
+
+- [#243](https://github.com/fedimod/fires/pull/243) [`bf33e64`](https://github.com/fedimod/fires/commit/bf33e647d38b1128a76d9c11231bc323940ed14c) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add deployment documentation for the reference server
+
+  This also fixes a few minor issues in the automated installer script.
+
+- [#239](https://github.com/fedimod/fires/pull/239) [`78d026a`](https://github.com/fedimod/fires/commit/78d026a01b709764c16eb611fb884fe856d906c2) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add rate limiting for all endpoints
+
+  The rate-limits are per IP address. For dataset exports, they are per dataset per IP and fairly low, since this endpoint is quite expensive. For login, the rate limits are by IP and User.
+
+- [#233](https://github.com/fedimod/fires/pull/233) [`f5d2a8c`](https://github.com/fedimod/fires/commit/f5d2a8c8453aaa7a1d702e171cac9039b47fdca6) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix issue with watchtower not actually automatically updating
+
+- [#238](https://github.com/fedimod/fires/pull/238) [`5cc5597`](https://github.com/fedimod/fires/commit/5cc5597609afa08fe40ab7e0da36c2a0ddee3766) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix content negotiation when using profiles with JSON-LD
+
+- [#243](https://github.com/fedimod/fires/pull/243) [`99ca129`](https://github.com/fedimod/fires/commit/99ca1290748b3be10fa2d4974c9f1e00cc888e48) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Rework fires:setup command to align with the settings page.
+
+- [#241](https://github.com/fedimod/fires/pull/241) [`030978f`](https://github.com/fedimod/fires/commit/030978f21d5b91eb0cb0e3fd149def3e4e51ccb2) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix docker-compose postgresql data directory
+
 ## 0.6.2
 
 ### Patch Changes

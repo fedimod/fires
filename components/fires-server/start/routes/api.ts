@@ -1,4 +1,5 @@
 import { middleware } from '#start/kernel'
+import { throttle } from '#start/limiter'
 import router from '@adonisjs/core/services/router'
 
 const LabelsApiController = () => import('#controllers/api/labels_controller')
@@ -12,5 +13,6 @@ router
       .as('labels')
   })
   .use([middleware.tokenAuth(), middleware.requireTokenAuth()])
+  .use(throttle)
   .prefix('api')
   .as('api')

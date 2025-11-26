@@ -15,7 +15,7 @@ services:
     volumes:
       - type: bind
         source: /datadir/postgres
-        target: /var/lib/postgresql/18/docker
+        target: /var/lib/postgresql
     env_file:
       - /datadir/postgresql.env
 

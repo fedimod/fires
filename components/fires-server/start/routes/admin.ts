@@ -9,6 +9,7 @@ const AdminDatasetsController = () => import('#controllers/admin/datasets_contro
 const AdminDatasetChangesController = () => import('#controllers/admin/dataset_changes_controller')
 const AdminImportsController = () => import('#controllers/admin/imports_controller')
 const AdminSettingsController = () => import('#controllers/admin/settings_controller')
+const AdminAccountController = () => import('#controllers/admin/account_controller')
 
 router.get('/admin', ({ response }) => response.redirect().toRoute('admin.overview'))
 router
@@ -49,6 +50,9 @@ router
 
     router.get('settings', [AdminSettingsController, 'show']).as('settings')
     router.post('settings', [AdminSettingsController, 'update']).as('settings.update')
+
+    router.get('account', [AdminAccountController, 'show']).as('account.manage')
+    router.post('account', [AdminAccountController, 'update']).as('account.update')
   })
   .use(middleware.adminAuth())
   .use(throttle)

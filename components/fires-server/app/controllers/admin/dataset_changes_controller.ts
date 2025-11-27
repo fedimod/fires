@@ -1,3 +1,8 @@
+import type { HttpContext, Request } from '@adonisjs/core/http'
+import cache from '@adonisjs/cache/services/main'
+import { inject } from '@adonisjs/core'
+import { Infer } from '@vinejs/vine/types'
+
 import Dataset from '#models/dataset'
 import DatasetChange from '#models/dataset_change'
 import Label from '#models/label'
@@ -5,11 +10,9 @@ import { arraysEqual } from '#utils/comparison'
 import {
   createDatasetChangeValidator,
   listDatasetChangesValidator,
+  reviseDatasetChangeValidator,
   newDatasetChangeValidator,
 } from '#validators/dataset_change'
-import cache from '@adonisjs/cache/services/main'
-import { inject } from '@adonisjs/core'
-import type { HttpContext } from '@adonisjs/core/http'
 
 @inject()
 export default class DatasetChangesController {
@@ -42,15 +45,15 @@ export default class DatasetChangesController {
    * Display form to create a new record
    */
   async create({ view, request }: HttpContext) {
-    const { params, change_id: changeId } = await request.validateUsing(newDatasetChangeValidator)
+    const { params, ...data } = await request.validateUsing(createDatasetChangeValidator)
     const dataset = await Dataset.findOrFail(params.dataset_id)
     const labels = await Label.query().orderBy('deprecatedAt', 'desc').orderBy('id', 'desc')
 
-    const baseChange = changeId ? await DatasetChange.find(changeId) : null
+    const baseChange = data.change_id ? await DatasetChange.find(data.change_id) : null
 
     return view.render('admin/datasets/changes/create', {
       dataset: dataset.serialize(),
-      baseChange: changeId ? baseChange?.serialize() : null,
+      baseChange: baseChange?.serialize(),
       labels: labels.map((label) => label.serialize()),
     })
   }
@@ -59,13 +62,13 @@ export default class DatasetChangesController {
    * Handle form submission for the create action
    */
   async store({ request, response, view }: HttpContext) {
-    const { params, ...data } = await request.validateUsing(createDatasetChangeValidator)
+    const { params, isChange, original, entity, ...data } = await this.getProperties(request)
     const dataset = await Dataset.findOrFail(params.dataset_id)
 
     const latestForEntity = await DatasetChange.latestForEntity(
       params.dataset_id,
-      data.entity_kind,
-      data.entity_key
+      entity.kind,
+      entity.key
     )
 
     // Check that we're actually making a change:
@@ -75,16 +78,24 @@ export default class DatasetChangesController {
         latestForEntity.recommendedPolicy === data.recommended_policy &&
         arraysEqual(latestForEntity.labels, data.labels ?? [])
       ) {
-        const merged = latestForEntity.merge(data).serialize()
+        const merged = latestForEntity
+          .merge(data)
+          .merge({ entityKey: entity.key, entityKind: entity.kind })
+          .serialize()
+
         const labels = await Label.query().orderBy('deprecatedAt', 'desc').orderBy('id', 'desc')
 
         return view.render('admin/datasets/changes/create', {
           dataset: dataset.serialize(),
-          baseChange: merged,
+          original,
+          updated: merged,
+          baseChange: isChange ? original : null,
           labels: labels.map((label) => label.serialize()),
           notification: {
-            type: 'error',
-            message: 'No changes detected to record',
+            type: 'warning',
+            message: isChange
+              ? `No changes detected in this revision to ${merged.type}`
+              : `The dataset already contains this ${merged.type}`,
           },
         })
       }
@@ -92,6 +103,8 @@ export default class DatasetChangesController {
 
     await DatasetChange.create({
       ...data,
+      entityKey: entity.key,
+      entityKind: entity.kind,
       labels: data.labels ?? [],
       datasetId: params.dataset_id,
     })
@@ -101,5 +114,34 @@ export default class DatasetChangesController {
     })
 
     return response.redirect().toRoute('admin.datasets.show', { id: params.dataset_id })
+  }
+
+  private async getProperties(
+    request: Request
+  ): Promise<
+    Infer<typeof newDatasetChangeValidator> & { isChange: boolean; original?: DatasetChange }
+  > {
+    if (request.input('change_id', null) !== null) {
+      const { change_id: changeId, ...data } = await request.validateUsing(
+        reviseDatasetChangeValidator
+      )
+      const baseChange = await DatasetChange.findOrFail(changeId)
+
+      return {
+        ...data,
+        isChange: true,
+        original: baseChange,
+        entity: {
+          key: baseChange.entityKey,
+          kind: baseChange.entityKind,
+        },
+      }
+    } else {
+      const data = await request.validateUsing(newDatasetChangeValidator)
+      return {
+        ...data,
+        isChange: false,
+      }
+    }
   }
 }

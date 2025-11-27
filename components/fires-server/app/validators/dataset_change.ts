@@ -24,7 +24,12 @@ const domainValidator = vine.createRule(
   }
 )
 
-export const entityKeyDomain = vine.string().maxLength(256).use(domainValidator())
+export const entityKeyDomain = vine
+  .string()
+  .trim()
+  .minLength(1)
+  .maxLength(256)
+  .use(domainValidator())
 
 export const entityKeyActor = vine
   .string()
@@ -34,61 +39,82 @@ export const entityKeyActor = vine
     disallow_auth: true,
     allow_fragments: true,
   })
+  .trim()
   .minLength(11)
 
-const entityKeySchema = vine
-  .group([
-    vine.group.if((_data, field) => field.parent.entity_kind === 'domain', {
-      entity_key: entityKeyDomain,
-    }),
-    vine.group.if((_data, field) => field.parent.entity_kind === 'actor', {
-      entity_key: entityKeyActor,
-    }),
-  ])
-  .otherwise((_data, field) => {
-    field.report('Invalid entity key', 'invalid_entity_key', field)
-  })
+const entitySchema = vine.group([
+  vine.group.if((_data, field) => field.parent.entity.kind === 'domain', {
+    kind: vine.literal('domain'),
+    key: entityKeyDomain,
+  }),
+  vine.group.if((_data, field) => field.parent.entity.kind === 'actor', {
+    kind: vine.literal('actor'),
+    key: entityKeyActor,
+  }),
+])
 
-export const datasetChangeSchema = vine
-  .object({
-    type: vine.enum((field) => {
-      if (field.parent.change_id) {
-        return ['recommendation', 'advisory', 'retraction']
-      } else {
-        return ['recommendation', 'advisory']
-      }
-    }),
-    recommended_policy: vine.enum(DatasetChange.policies),
-    labels: vine
-      .array(
-        vine.string().exists({
-          table: Label.table,
-          column: 'id',
-        })
-      )
-      .distinct()
-      .optional(),
-    entity_kind: vine.enum(DatasetChange.entities),
-    comment: vine.string().optional(),
-  })
-  .merge(entityKeySchema)
+const properties = vine.object({
+  type: vine.enum((field) => {
+    if (field.parent.change_id) {
+      return ['recommendation', 'advisory', 'retraction']
+    } else {
+      return ['recommendation', 'advisory']
+    }
+  }),
 
-export const createDatasetChangeValidator = vine.compile(
-  vine
-    .object({
-      params: vine.object({
-        dataset_id: vine.string().uuid().exists({
-          table: Dataset.table,
-          column: 'id',
-        }),
+  recommended_policy: vine.enum(DatasetChange.policies),
+
+  labels: vine
+    .array(
+      vine.string().exists({
+        table: Label.table,
+        column: 'id',
+      })
+    )
+    .distinct()
+    .optional(),
+
+  comment: vine.string().trim().minLength(1).optional(),
+})
+
+export const reviseDatasetChangeValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      dataset_id: vine.string().uuid().exists({
+        table: Dataset.table,
+        column: 'id',
       }),
+    }),
 
-      ...datasetChangeSchema.getProperties(),
-    })
-    .merge(entityKeySchema)
+    change_id: vine.string().uuid().exists({
+      table: DatasetChange.table,
+      column: 'id',
+    }),
+
+    ...properties.getProperties(),
+  })
 )
 
 export const newDatasetChangeValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      dataset_id: vine.string().uuid().exists({
+        table: Dataset.table,
+        column: 'id',
+      }),
+    }),
+
+    ...properties.getProperties(),
+
+    entity: vine
+      .object({
+        kind: vine.enum(DatasetChange.entities),
+      })
+      .merge(entitySchema),
+  })
+)
+
+export const createDatasetChangeValidator = vine.compile(
   vine.object({
     params: vine.object({
       dataset_id: vine.string().uuid().exists({

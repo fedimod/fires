@@ -5,7 +5,11 @@
         <a href="{{ route('admin.datasets.show', { id: dataset.id }) }}" class="breadcrumb-link">&laquo; Dataset: {{ dataset.name }}</a>
       </div>
       <h2>
-        Create a change
+        @if(baseChange)
+        Revise {{ t(`messages.changes.types.${baseChange.type}`) }}
+        @else
+        Create a recommendation or advisory
+        @end
       </h2>
     </div>
 

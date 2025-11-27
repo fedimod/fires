@@ -9,9 +9,9 @@
   @if(baseChange)
     <input type="hidden" name="change_id" value="{{ baseChange.id }}" />
   @end
-  
+
   <label for="type">Type</label>
-  @assign(existingType = old(`type`) ?? baseChange?.type)
+  @assign(existingType = old(`type`) ?? updated?.type ?? baseChange?.type)
   <select name="type" class="form-control {{ isInputInvalid('type', flashMessages) }}" required>
     @each(type in change_types)
       <option
@@ -37,14 +37,18 @@
   @!component('components/input-feedback', { field: 'type' })
 
   <label for="entity_key">Entity</label>
-  @assign(existingKind = old(`entity_kind`) ?? baseChange?.entityKind)
-  @assign(existingKey = old(`entity_key`) ?? baseChange?.entityKey)
+  @if(baseChange)
+  <small class="form-hint">You can't change the entity details when making a revision.</small>
+  @end
+  @assign(existingKind = old(`entity.kind`) ?? updated?.entityKind ?? baseChange?.entityKind)
+  @assign(existingKey = old(`entity.key`) ?? updated?.entityKey ?? baseChange?.entityKey)
   <div class="entity-input">
     <select
-      name="entity_kind"
+      name="entity[kind]"
       id="entity_kind"
       required
-      class="form-control {{ isInputInvalid('entity_kind', flashMessages) }}"
+      {{ html.attrs({ disabled: !!baseChange }) }}
+      class="form-control {{ isInputInvalid('entity.kind', flashMessages) }}"
     >
       <option value="" disabled {{ html.attrs({ selected: !existingKind }) }}>
         {{ t(`messages.changes.entity_kinds.select_option`) }}
@@ -63,17 +67,18 @@
     <input
       type="text"
       required
-      class="form-control {{ isInputInvalid('entity_key', flashMessages) }}"
+      class="form-control {{ isInputInvalid('entity.key', flashMessages) }}"
       id="entity_key"
-      name="entity_key"
+      name="entity[key]"
+       {{ html.attrs({ disabled: !!baseChange }) }}
       value="{{ existingKey ?? '' }}"
     />
   </div>
-  @!component('components/input-feedback', { field: 'entity_kind' })
-  @!component('components/input-feedback', { field: 'entity_key' })
+  @!component('components/input-feedback', { field: 'entity.kind' })
+  @!component('components/input-feedback', { field: 'entity.key' })
 
   <label for="recommended_policy">Recommended Policy</label>
-  @assign(existingPolicy = old(`recommended_policy`) ?? baseChange?.recommendedPolicy)
+  @assign(existingPolicy = old(`recommended_policy`) ?? updated?.recommendedPolicy ?? baseChange?.recommendedPolicy)
   <select
     name="recommended_policy"
     required
@@ -99,7 +104,7 @@
 
   <label for="labels">Labels</label>
   <fieldset name="labels" class="label-chooser">
-    @assign(existingLabels = (old(`labels`) ?? baseChange?.labels ?? []))
+    @assign(existingLabels = (old(`labels`) ?? updated?.labels ?? baseChange?.labels ?? []))
     @each(label in labels)
       <label for="labels-{{ label.id }}">
         <input
@@ -124,7 +129,7 @@
   --}}
 
   <div class="button-group">
-    <button type="submit">{{ baseChange ? 'Create update' : 'Create new' }}</button>
+    <button type="submit">{{ baseChange ? 'Revise' : 'Create' }}</button>
     <a
       href="{{ route('admin.datasets.show', { id: dataset.id }) }}"
       role="button"

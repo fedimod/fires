@@ -3,24 +3,30 @@ import vine from '@vinejs/vine'
 
 export const labelSchema = vine.object({
   locale: vine.string().locale().optional(),
-  name: vine.string().unique({
-    table: Label.table,
-    column: 'name',
-    caseInsensitive: true,
-    filter(db, _value, field) {
-      if (field.parent?.params?.id) {
-        db.andWhereNot('id', field.parent.params.id)
-      }
-    },
-  }),
-  summary: vine.string().optional(),
-  description: vine.string().optional(),
+  name: vine
+    .string()
+    .trim()
+    .minLength(1)
+    .unique({
+      table: Label.table,
+      column: 'name',
+      caseInsensitive: true,
+      filter(db, _value, field) {
+        if (field.parent?.params?.id) {
+          db.andWhereNot('id', field.parent.params.id)
+        }
+      },
+    }),
+  summary: vine.string().trim().optional(),
+  description: vine.string().trim().optional(),
 
   translations: vine
     .array(
       vine.object({
         name: vine
           .string()
+          .trim()
+          .minLength(1)
           .optional()
           .requiredWhen((field) => {
             // hack, I'm pretty sure I shouldn't use `field.data`
@@ -28,6 +34,7 @@ export const labelSchema = vine.object({
           }),
         summary: vine
           .string()
+          .trim()
           .optional()
           .requiredWhen((field) => {
             // hack, I'm pretty sure I shouldn't use `field.data`
@@ -35,6 +42,7 @@ export const labelSchema = vine.object({
           }),
         description: vine
           .string()
+          .trim()
           .optional()
           .requiredWhen((field) => {
             // hack, I'm pretty sure I shouldn't use `field.data`

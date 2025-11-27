@@ -448,3 +448,10 @@ details summary::after {
     }
   }
 }
+
+input[type="text"][disabled],
+select[disabled] {
+  opacity: 1;
+  pointer-events: none;
+  cursor: pointer;
+}

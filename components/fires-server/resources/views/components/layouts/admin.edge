@@ -47,12 +47,7 @@
       <main>
         {{{ await $slots.main() }}}
       </main>
-      <footer>
-        <p>
-          Powered by <a href="{{ software.homepage }}" target="_blank" rel='noopener'>{{ software.name }}</a>&nbsp;v{{ software.version }}<br />
-          <a href="{{ software.source.url }}" target="_blank" rel='noopener'>View source code</a>
-        </p>
-      </footer>
+      @!component('components/footer')
     </div>
   </body>
 </html>

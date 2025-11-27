@@ -18,16 +18,8 @@
         name="name"
         value="{{ (old('name') || settings.name) ?? '' }}"
       />
-      @inputError('name')
-        <div class="invalid-feedback">
-          @each(message in $messages)
-            <p>
-              {{ message }}
-            </p>
-          @end
-        </div>
-      @end
-      
+      @!component('components/input-feedback', { field: 'name' })
+
       <label for="summary">Summary</label>
       <textarea
         rows="3"
@@ -35,34 +27,20 @@
         id="summary"
         name="summary"
       >{{ (old('summary') || settings.summary) ?? "" }}</textarea>
-      @inputError('summary')
-        <div class="invalid-feedback">
-          @each(message in $messages)
-            <p>
-              {{ message }}
-            </p>
-          @end
-        </div>
-      @end
-      
+      @!component('components/input-feedback', { field: 'summary' })
+
       <label for="description">Description</label>
-      <small class="form-hint">You can use markdown in the description</small>
+      <small class="form-hint">You can use markdown in the description. This will be displayed on the website</small>
       <textarea
         rows="12"
         class="form-control {{ isInputInvalid('description', flashMessages) }}"
         id="description"
         name="description"
       >{{ (old('description') || settings.description) ?? "" }}</textarea>
-      @inputError('description')
-        <div class="invalid-feedback">
-          @each(message in $messages)
-            <p>
-              {{ message }}
-            </p>
-          @end
-        </div>
-      @end
-      
+      @!component('components/input-feedback', { field: 'description' })
+
+      <hr />
+
       <label for="contact_email">Contact Email</label>
       <input
         type="email"
@@ -72,16 +50,10 @@
         name="contact_email"
         value="{{ (old('contact_email') || settings.contact_email) ?? '' }}"
       />
-      @inputError('contact_email')
-        <div class="invalid-feedback">
-          @each(message in $messages)
-            <p>
-              {{ message }}
-            </p>
-          @end
-        </div>
-      @end
-      
+      @!component('components/input-feedback', { field: 'contact_email' })
+
+      <hr />
+
       <label for="appeals_url">Appeals URL (optional)</label>
       <small class="form-hint">This should be a URL to the page at which people can submit appeals for moderation data published by this FIRES server.</small>
       <input
@@ -91,16 +63,8 @@
         name="appeals_url"
         value="{{ (old('appeals_url') || settings.appeals_url) ?? '' }}"
       />
-      @inputError('appeals_url')
-        <div class="invalid-feedback">
-          @each(message in $messages)
-            <p>
-              {{ message }}
-            </p>
-          @end
-        </div>
-      @end
-      
+      @!component('components/input-feedback', { field: 'appeals_url' })
+
       <label for="documentation_url">Documentation URL (optional)</label>
       <small class="form-hint">This should be a URL to the documentation for this FIRES server.</small>
       <input
@@ -110,17 +74,9 @@
         name="documentation_url"
         value="{{ (old('documentation_url') || settings.documentation_url) ?? '' }}"
       />
-      @inputError('documentation_url')
-        <div class="invalid-feedback">
-          @each(message in $messages)
-            <p>
-              {{ message }}
-            </p>
-          @end
-        </div>
-      @end
-      
-      <div class="button-group">
+      @!component('components/input-feedback', { field: 'documentation_url' })
+
+      <div class="button-group mt-2">
         <button type="submit">Update Settings</button>
       </div>
     </form>

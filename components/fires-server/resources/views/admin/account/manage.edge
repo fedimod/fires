@@ -22,18 +22,12 @@
         required
         autocomplete="username"
       />
-      @inputError('username')
-        @!component('components/invalid-input-feedback', { messages: $messages })
-      @end
-      
+      @!component('components/input-feedback', { field: 'username' })
+
       <label for="password">Password</label>
       <small class="form-hint">Please use a strong password to keep your server safe. (not required)</small>
-      @inputError('password')
-        @!component('components/invalid-input-feedback', { messages: $messages })
-      @end
-      @inputError('password_confirmation')
-        @!component('components/invalid-input-feedback', { messages: $messages })
-      @end
+      @!component('components/input-feedback', { field: 'password' })
+      @!component('components/input-feedback', { field: 'password_confirmation' })
       <input
         class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
         type="password"

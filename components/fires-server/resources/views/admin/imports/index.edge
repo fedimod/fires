@@ -29,16 +29,7 @@
         {{ csrfField() }}
 
         <label for="dataset">Dataset</label>
-        @inputError('dataset')
-          <div class="invalid-feedback">
-            @each(message in $messages)
-              <p>
-                {{ message }}
-              </p>
-            @end
-          </div>
-        @end
-        <select name="dataset" class="form-control" required>
+        <select name="dataset" class="form-control {{ isInputInvalid('dataset', flashMessages) }}" required>
           @each(dataset in datasets)
             <option
               {{ html.attrs({
@@ -50,19 +41,15 @@
             </option>
           @end
         </select>
+        @!component('components/input-feedback', { field: `dataset` })
 
         <label for="defaultType">Default Change Type</label>
         <small class="form-hint">This defines how new records should be created in the dataset</small>
-        @inputError('defaultType')
-          <div class="invalid-feedback">
-            @each(message in $messages)
-              <p>
-                {{ message }}
-              </p>
-            @end
-          </div>
-        @end
-        <select name="defaultType" class="form-control" required>
+        <select
+          name="defaultType"
+          class="form-control {{ isInputInvalid('defaultType', flashMessages) }}"
+          required
+        >
           @each(type in change_types)
             <option
               {{ html.attrs({
@@ -74,19 +61,18 @@
             </option>
           @end
         </select>
+        @!component('components/input-feedback', { field: `defaultType` })
 
         <label for="file">File to import</label>
-        @inputError('file')
-          <div class="invalid-feedback">
-            @each(message in $messages)
-              <p>
-                {{ message }}
-              </p>
-            @end
-          </div>
-        @end
-        <input type="file" name="file" id="file" accept=".csv, text/csv" />
-        <small class="form-hint">Should be a .csv file, header lines are automatically detected and ignored.</small>
+        @!component('components/input-feedback', { field: 'file' })
+        <input
+          type="file"
+          name="file"
+          id="file"
+          accept=".csv, text/csv"
+          class="form-control {{ isInputInvalid('file', flashMessages) }}"
+        />
+        <small class="form-hint">Should be a csv file, header lines are automatically detected.</small>
 
         <button type="submit">Start import</button>
       </form>

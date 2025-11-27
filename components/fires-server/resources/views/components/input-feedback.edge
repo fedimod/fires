@@ -1,0 +1,9 @@
+@inputError(field)
+  <div class="invalid-feedback">
+    @each(message in $messages)
+      <p>
+        {{ message }}
+      </p>
+    @end
+  </div>
+@end

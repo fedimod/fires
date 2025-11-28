@@ -12,37 +12,22 @@
     })
     <button type="button" data-translation-id="translation-{{ index }}" class="remove-translation">Remove</button>
   </div>
-  @inputError(`translations.${index}.locale`)
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
+  @!component('components/input-feedback', { field: `translations.${index}.locale` })
+
   <label for="{{ `translations-${index}-name` }}">Name</label>
   <input
     type="text"
     {{ html.attrs({
         id: `translations-${index}-name`,
         name: `translations[${index}][name]`,
-        value: (old(`translations[${index}][name]`) ?? translation.name) ?? '',
+        value: (old(`translations[${index}][name]`)?.trim() ?? translation.name) ?? '',
         class: html.classNames(['form-control', {
           'is-invalid': isInputInvalid(`translations.${index}.name`, flashMessages)
         }])
       }) }}
   />
-  @inputError(`translations.${index}.name`)
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  @!component('components/input-feedback', { field: `translations.${index}.name` })
+
   <label for="{{ `translations-${index}-summary` }}">Summary</label>
   <textarea
     rows="3"
@@ -54,16 +39,8 @@
         }])
       }) }}
   >{{ (old(`translations-${index}-summary`) ?? translation.summary) ?? "" }}</textarea>
-  @inputError(`translations.${index}.summary`)
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  @!component('components/input-feedback', { field: `translations.${index}.summary` })
+
   <label for="{{ `translations-${index}-description` }}">Description</label>
   <small class="form-hint">You can use markdown in the description</small>
   <textarea
@@ -76,13 +53,5 @@
         }])
       }) }}
   >{{ (old(`translations[${index}][description]`) ?? translation.description) ?? "" }}</textarea>
-  @inputError(`translations.${index}.description`)
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
+  @!component('components/input-feedback', { field: `translations.${index}.description` })
 </div>

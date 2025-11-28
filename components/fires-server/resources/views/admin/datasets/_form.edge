@@ -10,47 +10,33 @@
   <input
     type="text"
     required
-    class="form-control"
+    class="form-control {{ isInputInvalid('name', flashMessages) }}"
     id="name"
     name="name"
     autocomplete="off"
-    value="{{ (old('name') || dataset.name) ?? '' }}"
+    value="{{ (old('name')?.trim() || dataset.name) ?? '' }}"
   />
-  @inputError('name')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  @!component('components/input-feedback', { field: 'name' })
+
   <label for="summary">Summary</label>
-  <textarea rows="3" class="form-control" id="summary" name="summary">{{ (old('summary') || dataset.summary) ?? "" }}</textarea>
-  @inputError('summary')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  <textarea
+    rows="3"
+    id="summary"
+    name="summary"
+    class="form-control {{ isInputInvalid('summary', flashMessages) }}"
+  >{{ (old('summary') || dataset.summary) ?? "" }}</textarea>
+  @!component('components/input-feedback', { field: 'summary' })
+
   <label for="description">Description</label>
   <small class="form-hint">You can use markdown in the description</small>
-  <textarea rows="12" class="form-control" id="description" name="description">{{ (old('description') || dataset.description) ?? "" }}</textarea>
-  @inputError('description')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  <textarea
+    rows="12"
+    id="description"
+    name="description"
+    class="form-control {{ isInputInvalid('description', flashMessages) }}"
+  >{{ (old('description') || dataset.description) ?? "" }}</textarea>
+  @!component('components/input-feedback', { field: 'description' })
+
   <div class="button-group">
     <button type="submit">Save Dataset</button>
     <a

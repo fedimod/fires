@@ -17,7 +17,7 @@
         <h1>
           {{ provider.name }}
         </h1>
-        <p class="lead">
+        <p>
           {{ provider.summary }}
         </p>
         <nav>
@@ -38,7 +38,7 @@
           </ul>
           <ul>
             <li>
-              <a href="{{ route('admin.login') }}">Admin</a>
+              <a href="{{ route('admin.login') }}" role="button" class="outline secondary">Manage</a>
             </li>
           </ul>
         </nav>
@@ -46,12 +46,7 @@
       <main>
         {{{ await $slots.main() }}}
       </main>
-      <footer>
-        <p>
-          Powered by <a href="{{ software.homepage }}" target="_blank" rel='noopener'>{{ software.name }}</a>&nbsp;v{{ software.version }}<br />
-          <a href="{{ software.source.url }}" target="_blank" rel='noopener'>View source code</a>
-        </p>
-      </footer>
+      @!component('components/footer')
     </div>
   </body>
 </html>

@@ -10,13 +10,31 @@
   --pico-form-element-spacing-horizontal: 0.75rem;
   --pico-notification-spacing-vertical: 0.8rem;
   --pico-notification-spacing-horizontal: 1.5rem;
+}
 
-  --fires-label-badge-color: var(--pico-color-zinc-750);
-  --fires-label-badge-text: var(--pico-color-zinc-200);
-  --fires-deprecated-badge-color: var(--pico-color-zinc-100);
-  --fires-deprecated-badge-text-color: var(--pico-color-zinc-600);
-  --fires-row-separator-color: var(--pico-color-zinc-150);
-  --external-link-icon: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' %3E%3Cpath d='M0 0h24v24H0V0z' fill='none' /%3E%3Cpath d='M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5H9z' /%3E%3C/svg%3E");
+@media only screen and (prefers-color-scheme: light) {
+  :root:not([data-theme]),
+  :host(:not([data-theme])) {
+    --pico-form-element-active-border-color: var(--pico-color-zinc-300);
+    --pico-form-element-focus-color: var(--pico-color-zinc-200);
+    --pico-primary-focus: var(--pico-color-slate-200);
+  }
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]),
+  :host(:not([data-theme])) {
+    --pico-form-element-active-border-color: var(--pico-color-zinc-700);
+    --pico-form-element-focus-color: var(--pico-color-zinc-600);
+    --pico-primary-focus: var(--pico-color-slate-600);
+
+    --fires-label-badge-color: var(--pico-color-zinc-750);
+    --fires-label-badge-text: var(--pico-color-zinc-200);
+    --fires-deprecated-badge-color: var(--pico-color-zinc-100);
+    --fires-deprecated-badge-text-color: var(--pico-color-zinc-600);
+    --fires-row-separator-color: var(--pico-color-zinc-150);
+    --external-link-icon: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' %3E%3Cpath d='M0 0h24v24H0V0z' fill='none' /%3E%3Cpath d='M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5H9z' /%3E%3C/svg%3E");
+  }
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -154,6 +172,10 @@ button.inline {
   margin-top: var(--pico-spacing);
 }
 
+.mt-2 {
+  margin-top: calc(var(--pico-spacing) * 1.5);
+}
+
 .mt-4 {
   margin-top: calc(var(--pico-spacing) * 2.5);
 }
@@ -236,9 +258,14 @@ fieldset[role='group'][data-copyable] label {
 
 a[role='button'] {
   margin-bottom: var(--pico-spacing);
+
+  &.outline {
+    --pico-primary-focus: var(--pico-color-red-400);
+  }
 }
 
 button[type='submit'] {
+  --pico-primary-focus: var(--pico-color-green-400);
   --pico-background-color: var(--pico-color-green-500);
   --pico-border-color: var(--pico-color-green-500);
   --pico-color: white;
@@ -257,16 +284,38 @@ button[type='submit'] {
 }
 
 .badge {
-  font-size: 0.5rem;
   font-weight: 500;
   margin: 0 var(--pico-spacing) 0;
   padding: 0.3rem 0.6rem;
   border-radius: var(--pico-border-radius);
-  display: inline-block;
+  display: block;
+  text-align: center;
+  font-size: 0.5rem;
 
   &.badge-deprecated {
+    display: inline-block;
     background: var(--fires-deprecated-badge-color);
     color: var(--fires-deprecated-badge-text-color);
+  }
+
+  &.badge-tombstone {
+    background: var(--pico-color-zinc-750);
+    color: var(--pico-color-zinc-350);
+  }
+
+  &.badge-retraction {
+    background: var(--pico-color-slate-650);
+    color: var(--pico-color-light);
+  }
+
+  &.badge-advisory {
+    background: var(--pico-color-azure-550);
+    color: var(--pico-color-light);
+  }
+
+  &.badge-recommendation {
+    background: var(--pico-color-green-550);
+    color: var(--pico-color-light);
   }
 }
 
@@ -288,9 +337,14 @@ button[type='submit'] {
   color: white;
 }
 
-.notification.notification-warning {
+.notification.notification-alpha {
   background-color: var(--pico-color-blue-500);
   color: white;
+}
+
+.notification.notification-warning {
+  background-color: var(--pico-color-orange-500);
+  color: var(--pico-color-light);
 }
 
 .notification.notification-deprecated {
@@ -443,4 +497,11 @@ details summary::after {
       pointer-events: none;
     }
   }
+}
+
+input[type='text'][disabled],
+select[disabled] {
+  opacity: 1;
+  pointer-events: none;
+  cursor: pointer;
 }

@@ -1,0 +1,56 @@
+@layouts.admin()
+  @slot('main')
+    <h2>
+      Manage Account
+    </h2>
+    <p class="lead">
+      You can change the username and/or password for your account.
+    </p>
+
+    @include('partials/flash-messages')
+
+    <form method="POST" action="{{ route('admin.account.update') }}">
+      {{ csrfField() }}
+
+      <label for="username">Username</label>
+      <small class="form-hint">Must be at least 1 character, no spaces or special characters (other than those in email addresses).</small>
+      <input
+        type="text"
+        name="username"
+        value="{{ old('username') ?? auth.user.username }}"
+        class="form-control {{ isInputInvalid('username', flashMessages) }}"
+        required
+        autocomplete="username"
+      />
+      @!component('components/input-feedback', { field: 'username' })
+
+      <label for="password">Password</label>
+      <small class="form-hint">Please use a strong password to keep your server safe. (not required)</small>
+      @!component('components/input-feedback', { field: 'password' })
+      @!component('components/input-feedback', { field: 'password_confirmation' })
+      <input
+        class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
+        type="password"
+        name="password"
+        value=""
+        autocomplete="new-password"
+        minlength="8"
+      />
+
+      <label for="password_confirmation">Password Confirmation</label>
+      <small class="form-hint">Only required if you're changing your password</small>
+      <input
+        type="password"
+        name="password_confirmation"
+        value=""
+        autocomplete="off"
+        minlength="8"
+        class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
+      />
+
+      <div class="button-group mt-2">
+        <button type="submit">Update Account</button>
+      </div>
+    </form>
+  @endslot
+@end

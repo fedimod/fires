@@ -30,18 +30,10 @@
       }]) }}"
     id="name"
     name="name"
-    value="{{ (old('name') ?? label.name) ?? '' }}"
+    value="{{ (old('name')?.trim() ?? label.name) ?? '' }}"
   />
-  @inputError('name')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  @!component('components/input-feedback', { field: 'name' })
+
   <label for="summary">Summary</label>
   <textarea
     rows="3"
@@ -51,16 +43,8 @@
     id="summary"
     name="summary"
   >{{ (old('summary') ?? label.summary) ?? "" }}</textarea>
-  @inputError('summary')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  @!component('components/input-feedback', { field: 'summary' })
+
   <label for="description">Description</label>
   <small class="form-hint">You can use markdown in the description</small>
   <textarea
@@ -71,16 +55,8 @@
     id="description"
     name="description"
   >{{ (old('description') ?? label.description) ?? "" }}</textarea>
-  @inputError('description')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  @!component('components/input-feedback', { field: 'description' })
+
   @let(deprecated = old('deprecated') ?? label.deprecatedAt !== null)
   @if(label.id)
     <p>
@@ -91,7 +67,7 @@
       <input
         type="checkbox"
         class="{{ html.classNames(['form-control', {
-            'is-invalid': isInputInvalid('name', flashMessages)
+            'is-invalid': isInputInvalid('deprecated', flashMessages)
           }]) }}"
         id="deprecated"
         name="deprecated"
@@ -101,15 +77,7 @@
       />
       Mark this label as deprecated.
     </label>
-    @inputError('deprecated')
-      <div class="invalid-feedback">
-        @each(message in $messages)
-          <p>
-            {{ message }}
-          </p>
-        @end
-      </div>
-    @end
+    @!component('components/input-feedback', { field: 'deprecated' })
   @end
   
   <div class="button-group mt-4">
@@ -130,15 +98,7 @@
     You can optionally add translations for the label. Please always ensure any provided translation is in sync with the default value.<br />
     Translations without any values will be removed.
   </p>
-  @inputError('translations')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
+  @!component('components/input-feedback', { field: 'translations' })
   <div id="translations">
     @let(translations = old('translations') ?? label.translations ?? [] )
     @assign(classNames = html.classNames([ 'notification', 'notification-info', { 'd-hidden': !!translations.length } ]) )

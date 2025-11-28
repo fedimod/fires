@@ -1,0 +1,7 @@
+{
+  "shared": {
+    "messages": {
+      "password_confirmation.confirmed": "The password confirmation was not the same as your new password"
+    }
+  }
+}

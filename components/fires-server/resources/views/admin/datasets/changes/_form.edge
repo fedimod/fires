@@ -11,8 +11,8 @@
   @end
   
   <label for="type">Type</label>
-  @assign(existingType = old(`type`) ?? baseChange?.type)
-  <select name="type" class="form-control" required>
+  @assign(existingType = old(`type`) ?? updated?.type ?? baseChange?.type)
+  <select name="type" class="form-control {{ isInputInvalid('type', flashMessages) }}" required>
     @each(type in change_types)
       <option
         {{ html.attrs({
@@ -34,12 +34,22 @@
       </option>
     @end
   </select>
+  @!component('components/input-feedback', { field: 'type' })
 
   <label for="entity_key">Entity</label>
-  @assign(existingKind = old(`entity_kind`) ?? baseChange?.entityKind)
-  @assign(existingKey = old(`entity_key`) ?? baseChange?.entityKey)
+  @if(baseChange)
+    <small class="form-hint">You can't change the entity details when making a revision.</small>
+  @end
+  @assign(existingKind = old(`entity.kind`) ?? updated?.entityKind ?? baseChange?.entityKind)
+  @assign(existingKey = old(`entity.key`) ?? updated?.entityKey ?? baseChange?.entityKey)
   <div class="entity-input">
-    <select name="entity_kind" id="entity_kind" class="form-control" required>
+    <select
+      name="entity[kind]"
+      id="entity_kind"
+      required
+      class="form-control {{ isInputInvalid('entity.kind', flashMessages) }}"
+      {{ html.attrs({ disabled: !!baseChange }) }}
+    >
       <option value="" disabled {{ html.attrs({ selected: !existingKind }) }}>
         {{ t(`messages.changes.entity_kinds.select_option`) }}
       </option>
@@ -57,25 +67,23 @@
     <input
       type="text"
       required
-      class="form-control"
+      class="form-control {{ isInputInvalid('entity.key', flashMessages) }}"
       id="entity_key"
-      name="entity_key"
+      name="entity[key]"
       value="{{ existingKey ?? '' }}"
+      {{ html.attrs({ disabled: !!baseChange }) }}
     />
   </div>
-  @inputError('entity_key')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end
-  
+  @!component('components/input-feedback', { field: 'entity.kind' })
+  @!component('components/input-feedback', { field: 'entity.key' })
+
   <label for="recommended_policy">Recommended Policy</label>
-  @assign(existingPolicy = old(`recommended_policy`) ?? baseChange?.recommendedPolicy)
-  <select name="recommended_policy" class="form-control" required>
+  @assign(existingPolicy = old(`recommended_policy`) ?? updated?.recommendedPolicy ?? baseChange?.recommendedPolicy)
+  <select
+    name="recommended_policy"
+    required
+    class="form-control {{ isInputInvalid('recommended_policy', flashMessages) }}"
+  >
     <option value="" disabled {{ html.attrs({ selected: !old(`recommended_policy`) }) }}>
       {{ t(`messages.changes.recommended_policy.select_option`) }}
     </option>
@@ -90,12 +98,13 @@
       </option>
     @end
   </select>
+  @!component('components/input-feedback', { field: 'recommended_policy' })
 
   {{-- TODO: recommended actions --}}
 
   <label for="labels">Labels</label>
   <fieldset name="labels" class="label-chooser">
-    @assign(existingLabels = (old(`labels`) ?? baseChange?.labels ?? []))
+    @assign(existingLabels = (old(`labels`) ?? updated?.labels ?? baseChange?.labels ?? []))
     @each(label in labels)
       <label for="labels-{{ label.id }}">
         <input
@@ -110,22 +119,17 @@
       </label>
     @end
   </fieldset>
+  @!component('components/input-feedback', { field: 'labels' })
 
   {{-- <label for="comment">Comment</label>
   <small class="form-hint">You can use markdown in the description</small>
-  <textarea rows="12" class="form-control" id="comment" name="comment">{{ old('comment') ?? "" }}</textarea>
-  @inputError('comment')
-    <div class="invalid-feedback">
-      @each(message in $messages)
-        <p>
-          {{ message }}
-        </p>
-      @end
-    </div>
-  @end --}}
+  <textarea rows="12" name="comment"
+    class="form-control {{ isInputInvalid('comment', flashMessages) }}">{{ old('comment') ?? "" }}</textarea>
+  @!component('components/input-feedback', { field: 'comment' })
+  --}}
 
   <div class="button-group">
-    <button type="submit">{{ baseChange ? 'Create update' : 'Create new' }}</button>
+    <button type="submit">{{ baseChange ? 'Revise' : 'Create' }}</button>
     <a
       href="{{ route('admin.datasets.show', { id: dataset.id }) }}"
       role="button"

@@ -14,6 +14,9 @@
         <h1>
           {{ provider.name }}: Administration
         </h1>
+        <p>
+          <a href="{{ route('about') }}" class="secondary">&laquo; View public site</a>
+        </p>
         <nav>
           <ul>
             <li>
@@ -32,24 +35,19 @@
               <a href="{{ route('admin.settings') }}">Settings</a>
             </li>
           </ul>
-          <form method="POST" action="{{ route('admin.logout') }}">
-            {{ csrfField() }}
-            <div class="button-group">
+          <div class="d-flex gap-2">
+            <span>Logged in as <a href="{{ route('admin.account.manage') }}">{{ auth.user.username }}</a></span>
+            <form method="POST" action="{{ route('admin.logout') }}">
+              {{ csrfField() }}
               <button type="submit" class="w-auto outline secondary">Logout</button>
-              <a href="{{ route('about') }}" role="button" class="secondary">Home</a>
-            </div>
-          </form>
+            </form>
+          </div>
         </nav>
       </header>
       <main>
         {{{ await $slots.main() }}}
       </main>
-      <footer>
-        <p>
-          Powered by <a href="{{ software.homepage }}" target="_blank" rel='noopener'>{{ software.name }}</a>&nbsp;v{{ software.version }}<br />
-          <a href="{{ software.source.url }}" target="_blank" rel='noopener'>View source code</a>
-        </p>
-      </footer>
+      @!component('components/footer')
     </div>
   </body>
 </html>

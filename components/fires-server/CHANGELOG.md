@@ -1,5 +1,15 @@
 # @fedimod/fires-server
 
+## 0.7.2
+
+### Patch Changes
+
+- [#251](https://github.com/fedimod/fires/pull/251) [`68c3d97`](https://github.com/fedimod/fires/commit/68c3d977833d9ef0cbc97294518775903477e136) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Refactor input validation to use shared component
+
+- [#251](https://github.com/fedimod/fires/pull/251) [`ad82cfa`](https://github.com/fedimod/fires/commit/ad82cfa1ec15c4ffbb50dc14bc569b6f84d4dddc) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix validation logic for dataset changes
+
+- [#251](https://github.com/fedimod/fires/pull/251) [`04b31a9`](https://github.com/fedimod/fires/commit/04b31a9478f6f00a2d5cc3c99c2302de7e1b276e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Added ability to change your own username or password to Admin UI
+
 ## 0.7.1
 
 ### Patch Changes

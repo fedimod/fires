@@ -3,7 +3,8 @@
 );
 @use '@picocss/pico/scss/pico.colors' as *;
 
-:root, :host {
+:root,
+:host {
   --pico-font-size: 120%;
   --pico-form-element-spacing-vertical: 0.4rem;
   --pico-form-element-spacing-horizontal: 0.75rem;
@@ -12,7 +13,8 @@
 }
 
 @media only screen and (prefers-color-scheme: light) {
-  :root:not([data-theme]), :host(:not([data-theme])) {
+  :root:not([data-theme]),
+  :host(:not([data-theme])) {
     --pico-form-element-active-border-color: var(--pico-color-zinc-300);
     --pico-form-element-focus-color: var(--pico-color-zinc-200);
     --pico-primary-focus: var(--pico-color-slate-200);
@@ -20,7 +22,8 @@
 }
 
 @media only screen and (prefers-color-scheme: dark) {
-  :root:not([data-theme]), :host(:not([data-theme])) {
+  :root:not([data-theme]),
+  :host(:not([data-theme])) {
     --pico-form-element-active-border-color: var(--pico-color-zinc-700);
     --pico-form-element-focus-color: var(--pico-color-zinc-600);
     --pico-primary-focus: var(--pico-color-slate-600);
@@ -344,7 +347,6 @@ button[type='submit'] {
   color: var(--pico-color-light);
 }
 
-
 .notification.notification-deprecated {
   background-color: var(--fires-deprecated-badge-color);
   color: var(--fires-deprecated-badge-text-color);
@@ -497,7 +499,7 @@ details summary::after {
   }
 }
 
-input[type="text"][disabled],
+input[type='text'][disabled],
 select[disabled] {
   opacity: 1;
   pointer-events: none;

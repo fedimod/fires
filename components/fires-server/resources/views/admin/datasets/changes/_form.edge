@@ -9,7 +9,7 @@
   @if(baseChange)
     <input type="hidden" name="change_id" value="{{ baseChange.id }}" />
   @end
-
+  
   <label for="type">Type</label>
   @assign(existingType = old(`type`) ?? updated?.type ?? baseChange?.type)
   <select name="type" class="form-control {{ isInputInvalid('type', flashMessages) }}" required>
@@ -38,7 +38,7 @@
 
   <label for="entity_key">Entity</label>
   @if(baseChange)
-  <small class="form-hint">You can't change the entity details when making a revision.</small>
+    <small class="form-hint">You can't change the entity details when making a revision.</small>
   @end
   @assign(existingKind = old(`entity.kind`) ?? updated?.entityKind ?? baseChange?.entityKind)
   @assign(existingKey = old(`entity.key`) ?? updated?.entityKey ?? baseChange?.entityKey)
@@ -47,8 +47,8 @@
       name="entity[kind]"
       id="entity_kind"
       required
-      {{ html.attrs({ disabled: !!baseChange }) }}
       class="form-control {{ isInputInvalid('entity.kind', flashMessages) }}"
+      {{ html.attrs({ disabled: !!baseChange }) }}
     >
       <option value="" disabled {{ html.attrs({ selected: !existingKind }) }}>
         {{ t(`messages.changes.entity_kinds.select_option`) }}
@@ -70,8 +70,8 @@
       class="form-control {{ isInputInvalid('entity.key', flashMessages) }}"
       id="entity_key"
       name="entity[key]"
-       {{ html.attrs({ disabled: !!baseChange }) }}
       value="{{ existingKey ?? '' }}"
+      {{ html.attrs({ disabled: !!baseChange }) }}
     />
   </div>
   @!component('components/input-feedback', { field: 'entity.kind' })

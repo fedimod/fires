@@ -13,7 +13,8 @@
     "types": {
       "advisory": "Advisory",
       "recommendation": "Recommendation",
-      "retraction": "Retraction"
+      "retraction": "Retraction",
+      "tombstone": "Tombstone"
     },
     "entity_kinds": {
       "select_option": "Select an option",

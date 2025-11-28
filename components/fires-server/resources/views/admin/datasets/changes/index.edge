@@ -40,7 +40,9 @@
           @each(record in changes)
             <tr>
               <td>
-                {{ t(`messages.changes.types.${record.type}`) }}
+                <span class="{{ `badge badge-${record.type}` }}">
+                  {{ t(`messages.changes.types.${record.type}`) }}
+                </span>
               </td>
               <td>
                 {{ t(`messages.changes.entity_kinds.${record.entityKind}`) }}
@@ -49,7 +51,9 @@
                 {{ record.entityKey }}
               </td>
               <td class="text-center">
-                {{ t(`messages.changes.recommended_policy.${record.recommendedPolicy}`) }}
+                @if(record.type != 'retraction' && record.type !== 'tombstone')
+                  {{ t(`messages.changes.recommended_policy.${record.recommendedPolicy}`) }}
+                @end
               </td>
               <td>
                 @each(labelId in record.labels)
@@ -64,7 +68,7 @@
         </tbody>
       </table>
     @endif
-    
+
     <div class="button-group">
       @if(nextUrl)
         <a href="{{ nextUrl }}" class="secondary" role="button">Next Page</a>

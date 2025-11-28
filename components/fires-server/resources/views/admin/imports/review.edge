@@ -9,7 +9,7 @@
       </p>
     </hgroup>
 
-    <div class="notification notification-warning" role="alert">
+    <div class="notification notification-alpha" role="alert">
       This tool is currently in alpha, and may produce incorrect results.
     </div>
 
@@ -44,7 +44,7 @@
           </h4>
         </div>
       @end
-      
+
       @if(changed.length)
         <details>
           <summary>
@@ -68,7 +68,7 @@
           </h4>
         </div>
       @end
-      
+
       @if(missing.length)
         <details>
           <summary>
@@ -101,7 +101,7 @@
           </div>
         </details>
       @endif
-      
+
       @if(unchanged.length)
         <details>
           <summary>
@@ -127,7 +127,7 @@
           </h4>
         </div>
       @end
-      
+
       <button type="submit">Import</button>
     </form>
   @endslot

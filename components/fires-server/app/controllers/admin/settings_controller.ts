@@ -16,7 +16,9 @@ export default class SettingsController {
   /**
    * Show individual record
    */
-  async show({ view }: HttpContext) {
+  async show({ view, bouncer }: HttpContext) {
+    await bouncer.with('SettingsPolicy').authorize('manage')
+
     const settings = await Setting.retrieveSettings(this.KEYS)
 
     return view.render('admin/settings', {
@@ -27,7 +29,9 @@ export default class SettingsController {
   /**
    * Handle form submission for the edit action
    */
-  async update({ request, response, session }: HttpContext) {
+  async update({ request, response, session, bouncer }: HttpContext) {
+    await bouncer.with('SettingsPolicy').authorize('manage')
+
     const form = await request.validateUsing(settingsValidator)
     const updatedSettings = this.KEYS.map((key) => {
       // Allow arbitrary access into the form object:

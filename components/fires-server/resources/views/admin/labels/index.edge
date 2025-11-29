@@ -4,7 +4,9 @@
       <h2>
         Labels
       </h2>
-      <a href="{{ route('admin.labels.create') }}" role="button" class="button-small">Create a Label</a>
+      @can('LabelsPolicy.manage')
+        <a href="{{ route('admin.labels.create') }}" role="button" class="button-small">Create a Label</a>
+      @end
     </div>
 
     <hr />

@@ -3,13 +3,26 @@ import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import db from '@adonisjs/lucid/services/db'
+import { jsonArrayColumn } from '#utils/lucid_extensions'
 
 const AuthFinder = withAuthFinder(() => hash.use('argon2'), {
   uids: ['username'],
   passwordColumnName: 'password',
 })
 
+export const permissions = [
+  'settings:manage',
+  'labels:manage',
+  'datasets:manage',
+  'datasets:change',
+  'datasets:import',
+] as const
+
+export type Permissions = (typeof permissions)[number]
+
 export default class User extends compose(BaseModel, AuthFinder) {
+  static permissions = permissions
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -18,6 +31,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column({ serializeAs: null })
   declare password: string
+
+  @column()
+  declare isAdmin: boolean
+
+  @jsonArrayColumn()
+  declare permissions: Permissions[]
 
   static async userCount(): Promise<number> {
     const { count } = await db.from(User.table).count('id', 'count').first()

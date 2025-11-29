@@ -12,4 +12,9 @@
 |
 */
 
-export const policies = {}
+export const policies = {
+  SettingsPolicy: () => import('#policies/settings_policy'),
+  UsersPolicy: () => import('#policies/users_policy'),
+  LabelsPolicy: () => import('#policies/labels_policy'),
+  DatasetsPolicy: () => import('#policies/datasets_policy'),
+}

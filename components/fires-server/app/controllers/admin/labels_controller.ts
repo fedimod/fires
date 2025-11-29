@@ -40,7 +40,8 @@ export default class LabelsController {
   /**
    * Display form to create a new record
    */
-  async create({ view }: HttpContext) {
+  async create({ bouncer, view }: HttpContext) {
+    await bouncer.with('LabelsPolicy').authorize('manage')
     const label = new Label()
 
     return view.render('admin/labels/create', {
@@ -52,7 +53,9 @@ export default class LabelsController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response, session }: HttpContext) {
+  async store({ request, response, bouncer, session }: HttpContext) {
+    await bouncer.with('LabelsPolicy').authorize('manage')
+
     const { translations, ...labelData } = await request.validateUsing(createLabelValidator)
     const label = await Label.create({ ...labelData, locale: labelData.locale ?? defaultLocale })
 
@@ -135,7 +138,9 @@ export default class LabelsController {
   /**
    * Edit individual record
    */
-  async edit({ params, view }: HttpContext) {
+  async edit({ params, bouncer, view }: HttpContext) {
+    await bouncer.with('LabelsPolicy').authorize('manage')
+
     const label = await Label.findOrFail(params.id)
     await label.load('translations')
 
@@ -148,7 +153,9 @@ export default class LabelsController {
   /**
    * Handle form submission for the edit action
    */
-  async update({ request, response, session }: HttpContext) {
+  async update({ request, response, bouncer, session }: HttpContext) {
+    await bouncer.with('LabelsPolicy').authorize('manage')
+
     const { params, deprecated, translations, ...update } =
       await request.validateUsing(updateLabelValidator)
     const label = await Label.findOrFail(params.id)

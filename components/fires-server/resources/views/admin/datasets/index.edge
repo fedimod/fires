@@ -4,7 +4,9 @@
       <h2>
         Datasets
       </h2>
-      <a href="{{ route('admin.datasets.create') }}" role="button" class="button-small">Create a Dataset</a>
+      @can('DatasetsPolicy.manage')
+        <a href="{{ route('admin.datasets.create') }}" role="button" class="button-small">Create a Dataset</a>
+      @end
     </div>
     <hr />
 
@@ -26,11 +28,13 @@
         </div>
         <div class="button-group">
           <a href="{{ route('admin.datasets.show', {id: dataset.id}) }}" role="button" class="secondary">View</a>
-          <a
-            href="{{ route('admin.datasets.edit', {id: dataset.id}) }}"
-            role="button"
-            class="secondary outline"
-          >Edit</a>
+          @can('DatasetsPolicy.manage')
+            <a
+              href="{{ route('admin.datasets.edit', {id: dataset.id}) }}"
+              role="button"
+              class="secondary outline"
+            >Edit</a>
+          @end
         </div>
       </div>
     @else

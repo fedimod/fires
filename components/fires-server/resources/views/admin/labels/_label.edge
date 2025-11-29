@@ -25,10 +25,12 @@
   </div>
   <div class="button-group">
     <a href="{{ route('admin.labels.show', { id: label.id }) }}" role="button" class="secondary">View</a>
-    <a
-      href="{{ route('admin.labels.edit', { id: label.id }) }}"
-      role="button"
-      class="secondary outline"
-    >Edit</a>
+    @can('LabelsPolicy.manage')
+      <a
+        href="{{ route('admin.labels.edit', { id: label.id }) }}"
+        role="button"
+        class="secondary outline"
+      >Edit</a>
+    @end
   </div>
 </div>

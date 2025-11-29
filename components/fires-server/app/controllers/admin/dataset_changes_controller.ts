@@ -44,7 +44,9 @@ export default class DatasetChangesController {
   /**
    * Display form to create a new record
    */
-  async create({ view, request }: HttpContext) {
+  async create({ view, bouncer, request }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('change')
+
     const { params, ...data } = await request.validateUsing(createDatasetChangeValidator)
     const dataset = await Dataset.findOrFail(params.dataset_id)
     const labels = await Label.query().orderBy('deprecatedAt', 'desc').orderBy('id', 'desc')
@@ -61,7 +63,9 @@ export default class DatasetChangesController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response, view }: HttpContext) {
+  async store({ request, response, bouncer, view }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('change')
+
     const { params, isChange, original, entity, ...data } = await this.getProperties(request)
     const dataset = await Dataset.findOrFail(params.dataset_id)
 

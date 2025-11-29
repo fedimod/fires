@@ -1,0 +1,19 @@
+{
+  "accounts": {
+    "create": "Create account",
+    "delete": "Delete account",
+    "form": {
+      "administrator": "Allow this account to administer the entire server"
+    },
+    "permissions": {
+      "administrator": "Administrator",
+      "datasets:change": "Add changes to datasets",
+      "datasets:import": "Import datasets",
+      "datasets:manage": "Manage datasets",
+      "labels:manage": "Manage labels",
+      "none": "None",
+      "settings:manage": "Manage settings"
+    },
+    "update": "Update account"
+  }
+}

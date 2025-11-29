@@ -49,4 +49,14 @@ export default class User extends compose(BaseModel, AuthFinder) {
     const { count } = await db.from(User.table).count('id', 'count').first()
     return Number.parseInt(count, 10)
   }
+
+  static async hasOtherAdmins(id: number): Promise<boolean> {
+    const otherAdmin = await db
+      .from(User.table)
+      .where({ is_admin: true })
+      .whereNot('id', id)
+      .first()
+
+    return otherAdmin !== null
+  }
 }

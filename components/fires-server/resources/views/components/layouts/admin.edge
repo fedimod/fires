@@ -33,6 +33,11 @@
                 <a href="{{ route('admin.imports.index') }}">Import</a>
               </li>
             @end
+            @can('UsersPolicy.manage')
+              <li>
+                <a href="{{ route('admin.accounts.index') }}">Accounts</a>
+              </li>
+            @end
             @can('SettingsPolicy.manage')
               <li>
                 <a href="{{ route('admin.settings') }}">Settings</a>

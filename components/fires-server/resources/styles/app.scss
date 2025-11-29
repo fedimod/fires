@@ -24,9 +24,10 @@
 @media only screen and (prefers-color-scheme: dark) {
   :root:not([data-theme]),
   :host(:not([data-theme])) {
+    --pico-primary-focus: var(--pico-color-slate-600);
+    --pico-table-border-color: var(--pico-color-zinc-150);
     --pico-form-element-active-border-color: var(--pico-color-zinc-700);
     --pico-form-element-focus-color: var(--pico-color-zinc-600);
-    --pico-primary-focus: var(--pico-color-slate-600);
 
     --fires-label-badge-color: var(--pico-color-zinc-750);
     --fires-label-badge-text: var(--pico-color-zinc-200);
@@ -40,9 +41,11 @@
 @media only screen and (prefers-color-scheme: dark) {
   :root:not([data-theme='light']),
   :host:not([data-theme='light']) {
+    --pico-table-border-color: var(--pico-color-zinc-750);
+
+    --pico-background-color: var(--pico-color-zinc-850);
     --fires-deprecated-badge-text-color: var(--pico-color-zinc-200);
     --fires-deprecated-badge-color: var(--pico-color-zinc-700);
-    --pico-background-color: var(--pico-color-zinc-850);
     --fires-row-separator-color: var(--pico-color-zinc-750);
   }
 }
@@ -82,6 +85,12 @@ main :is(a[href*="://"], a[target="_blank"]):not(:is(.no-icon, svg a, :has(img, 
     flex-shrink: 0;
     mask-image: var(--external-link-icon);
     -webkit-mask-image: var(--external-link-icon);
+  }
+}
+
+table {
+  thead th {
+    --pico-border-width: 0;
   }
 }
 
@@ -174,6 +183,10 @@ button.inline {
 
 .mt-2 {
   margin-top: calc(var(--pico-spacing) * 1.5);
+}
+
+.mb-2 {
+  margin-bottom: calc(var(--pico-spacing) * 1.5);
 }
 
 .mt-4 {

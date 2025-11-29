@@ -1,0 +1,70 @@
+@layouts.admin()
+  @slot('main')
+    <div class="d-flex header">
+      <h2>
+        Accounts
+      </h2>
+      @can('UsersPolicy.manage')
+        <a href="{{ route('admin.accounts.create') }}" role="button" class="button-small">
+          {{ t('admin.accounts.create') }}
+        </a>
+      @end
+    </div>
+
+    @include('partials/flash-messages')
+
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Username
+          </th>
+          <th>
+            Created
+          </th>
+          <th>
+            Updated
+          </th>
+          <th>
+            Permissions
+          </th>
+          <th width="5rem">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(account in accounts)
+          <tr>
+            <td style="min-width: 30ch;">
+              {{ account.username }}
+            </td>
+            <td>
+              {{ formatDate(account.createdAt) }}
+            </td>
+            <td>
+              {{ formatDate(account.updatedAt) }}
+            </td>
+            <td>
+              @if(account.isAdmin)
+                {{ t('admin.accounts.permissions.administrator') }}
+              @elseif(account.permissions.length)
+                {{ formatPermissions(account.permissions, i18n.locale) }}
+              @else
+                {{ t('admin.accounts.permissions.none') }}
+              @end
+            </td>
+            <td width="5rem">
+              <div class="button-group">
+                <a
+                  href="{{ route('admin.accounts.edit', { id: account.id }) }}"
+                  role="button"
+                  class="secondary outline"
+                >Edit</a>
+              </div>
+            </td>
+          </tr>
+        @end
+      </tbody>
+    </table>
+  @endslot
+@end

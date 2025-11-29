@@ -1,7 +1,8 @@
 {
   "shared": {
     "messages": {
-      "password_confirmation.confirmed": "The password confirmation was not the same as your new password"
+      "password_confirmation.confirmed": "The password confirmation was not the same as your new password",
+      "permissions.required": "At least one permission is required when the user is not an administrator"
     }
   }
 }

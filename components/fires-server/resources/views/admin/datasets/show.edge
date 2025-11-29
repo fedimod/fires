@@ -22,7 +22,11 @@
         @if(dataset.summary)
           {{ dataset.summary }}
         @else
-          <em>No summary provided, you should edit this dataset and add one.</em>
+          @can('DatasetsPolicy.manage')
+            <em>No summary provided, you should edit this dataset and add one.</em>
+          @else
+            <em>No summary provided.</em>
+          @end
         @end
       </p>
     </div>

@@ -283,6 +283,49 @@ button[type='submit']:not(.danger, .outline, .secondary) {
   text-align: center;
 }
 
+.form-hint {
+  display: block;
+  width: 100%;
+  margin: var(--pico-form-element-spacing-vertical) 0;
+  color: var(--pico-muted-color);
+}
+
+input:is([type='file']) {
+  margin-bottom: 0;
+
+  + .form-hint {
+    margin-bottom: var(--pico-spacing);
+  }
+}
+
+[role='group']:has(+ .form-hint) {
+  margin-bottom: 0;
+
+  & + .form-hint {
+    margin-bottom: var(--pico-spacing);
+  }
+}
+
+.form-control.is-invalid {
+  border-color: var(--pico-color-red-450);
+}
+
+.invalid-feedback {
+  margin-bottom: var(--pico-typography-spacing-vertical);
+  padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
+  border-radius: var(--pico-border-radius);
+  background-color: var(--pico-color-red-450);
+  color: white;
+
+  > * {
+    color: white;
+  }
+
+  > :only-child {
+    margin-bottom: 0;
+  }
+}
+
 .badge {
   font-weight: 500;
   margin: 0 var(--pico-spacing) 0;
@@ -355,49 +398,6 @@ button[type='submit']:not(.danger, .outline, .secondary) {
 .notification.notification-info {
   background-color: var(--pico-color-zinc-800);
   color: var(--pico-color-zinc-250);
-}
-
-.form-hint {
-  display: block;
-  width: 100%;
-  margin: var(--pico-form-element-spacing-vertical) 0;
-  color: var(--pico-muted-color);
-}
-
-input:is([type='file']) {
-  margin-bottom: 0;
-
-  + .form-hint {
-    margin-bottom: var(--pico-spacing);
-  }
-}
-
-[role='group']:has(+ .form-hint) {
-  margin-bottom: 0;
-
-  & + .form-hint {
-    margin-bottom: var(--pico-spacing);
-  }
-}
-
-.form-control.is-invalid {
-  border-color: var(--pico-color-red-450);
-}
-
-.invalid-feedback {
-  margin-bottom: var(--pico-typography-spacing-vertical);
-  padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
-  border-radius: var(--pico-border-radius);
-  background-color: var(--pico-color-red-450);
-  color: white;
-
-  > * {
-    color: white;
-  }
-
-  > :only-child {
-    margin-bottom: 0;
-  }
 }
 
 .separator {

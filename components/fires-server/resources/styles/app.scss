@@ -264,7 +264,7 @@ a[role='button'] {
   }
 }
 
-button[type='submit'] {
+button[type='submit']:not(.danger, .outline, .secondary) {
   --pico-primary-focus: var(--pico-color-green-400);
   --pico-background-color: var(--pico-color-green-500);
   --pico-border-color: var(--pico-color-green-500);

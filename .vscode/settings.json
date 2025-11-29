@@ -1,0 +1,26 @@
+{
+  "i18n-ally.sourceLanguage": "en-US",
+  "i18n-ally.displayLanguage": "en-US",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.namespace": true,
+  "i18n-ally.sortKeys": true,
+  "i18n-ally.pathMatcher": "{locale}/{namespaces}.json",
+  "i18n-ally.editor.preferEditor": true,
+  "i18n-ally.refactor.templates": [
+    {
+      "templates": [
+        "{{ t('{key}'{args}) }}"
+      ],
+      "include": [
+        "components/fires-server/**/*.edge",
+      ],
+    },
+    {
+      "template": "i18n.t('{key}'{args})",
+      "include": ["components/fires-server/**/*.ts",]
+    }
+  ],
+  "i18n-ally.localesPaths": [
+    "components/fires-server/resources/locales"
+  ]
+}

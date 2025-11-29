@@ -450,12 +450,16 @@ details summary::after {
   }
 }
 
-.label-chooser {
+fieldset.columns {
   display: grid;
   grid-auto-columns: 1fr;
   grid-template-areas: 'a a a a';
 
   margin-block-end: 2rem;
+
+  &.three-columns {
+    grid-template-areas: 'a a a';
+  }
 }
 
 .label-badge {

@@ -103,7 +103,7 @@
   {{-- TODO: recommended actions --}}
 
   <label for="labels">Labels</label>
-  <fieldset name="labels" class="label-chooser">
+  <fieldset name="labels" class="columns">
     @assign(existingLabels = (old(`labels`) ?? updated?.labels ?? baseChange?.labels ?? []))
     @each(label in labels)
       <label for="labels-{{ label.id }}">

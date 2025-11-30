@@ -1,5 +1,5 @@
 import Setting from '#models/setting'
-import { settingsValidator } from '#validators/settings'
+import { settingsValidator } from '#validators/admin/settings'
 import cache from '@adonisjs/cache/services/main'
 import type { HttpContext } from '@adonisjs/core/http'
 

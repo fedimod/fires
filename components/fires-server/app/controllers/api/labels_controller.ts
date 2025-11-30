@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 import Label from '#models/label'
-import { createLabelValidator, updateLabelValidator } from '#validators/label'
+import { createLabelValidator, updateLabelValidator } from '#validators/admin/label'
 import { DateTime } from 'luxon'
 import { defaultLocale } from '#utils/locale'
 import LabelTranslation from '#models/label_translation'

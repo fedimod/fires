@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import encryption from '@adonisjs/core/services/encryption'
 import limiter from '@adonisjs/limiter/services/main'
 import User from '#models/user'
-import { loginValidator } from '#validators/session'
+import { loginValidator } from '#validators/admin/session'
 
 export default class SessionController {
   async login({ request, response, view }: HttpContext) {

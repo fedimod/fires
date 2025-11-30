@@ -4,7 +4,7 @@ import SnapshotService from '#services/snapshot_service'
 import { createReadStream } from 'node:fs'
 import { parse } from 'csv-parse'
 import DatasetChange, { ChangeType, RecommendedPolicy } from '#models/dataset_change'
-import { entityKeyDomain } from '#validators/dataset_change'
+import { entityKeyDomain } from '#validators/admin/dataset_change'
 import vine from '@vinejs/vine'
 
 type Format = 'unknown' | 'mastodon' | 'fediblockhole' | 'values'

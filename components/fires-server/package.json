@@ -90,7 +90,7 @@
     "@types/archiver": "^7.0.0",
     "@vinejs/vine": "^4.1.0",
     "archiver": "^7.0.1",
-    "argon2": "^0.43.1",
+    "argon2": "^0.44.0",
     "bcp47-language-tags": "^1.1.0",
     "csv-parse": "^6.1.0",
     "csv-stringify": "^6.6.0",

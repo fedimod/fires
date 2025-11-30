@@ -13,6 +13,7 @@
     "start": "node bin/server.js",
     "build": "node ace build",
     "clean": "rimraf ./build",
+    "console": "node ace repl",
     "dev": "node ace serve --hmr",
     "test": "c8 node ace test",
     "lint": "eslint .",

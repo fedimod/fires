@@ -108,6 +108,9 @@ importers:
       proxy-addr:
         specifier: ^2.0.7
         version: 2.0.7
+      punycode:
+        specifier: ^2.3.1
+        version: 2.3.1
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -154,6 +157,9 @@ importers:
       '@types/proxy-addr':
         specifier: ^2.0.3
         version: 2.0.3
+      '@types/punycode':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@types/sinon':
         specifier: ^17.0.4
         version: 17.0.4
@@ -1667,6 +1673,9 @@ packages:
 
   '@types/proxy-addr@2.0.3':
     resolution: {integrity: sha512-TgAHHO4tNG3HgLTUhB+hM4iwW6JUNeQHCLnF1DjaDA9c69PN+IasoFu2MYDhubFc+ZIw5c5t9DMtjvrD6R3Egg==}
+
+  '@types/punycode@2.1.4':
+    resolution: {integrity: sha512-trzh6NzBnq8yw5e35f8xe8VTYjqM3NE7bohBtvDVf/dtUer3zYTLK1Ka3DG3p7bdtoaOHZucma6FfVKlQ134pQ==}
 
   '@types/qs@6.14.0':
     resolution: {integrity: sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==}
@@ -6240,6 +6249,8 @@ snapshots:
   '@types/proxy-addr@2.0.3':
     dependencies:
       '@types/node': 22.18.13
+
+  '@types/punycode@2.1.4': {}
 
   '@types/qs@6.14.0': {}
 

@@ -139,7 +139,7 @@
                 {{ t(`messages.changes.entity_kinds.${record.entityKind}`) }}
               </td>
               <td>
-                {{ record.entityKey }}
+                @!component('components/entity', { kind: record.entityKind, value: record.entityKey })
               </td>
               <td style="text-align: center">
                 @if(record.type != 'retraction' && record.type !== 'tombstone')

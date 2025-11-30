@@ -1,0 +1,13 @@
+@let(isEncodedValue = isEncoded(kind, value))
+<span>
+  {{ value }}
+  @if(isEncodedValue)
+    <span
+      data-tooltip="{{ t('admin.entity.encodedHint', { decodedKey: decodeEnitity(kind, value) }) }}"
+      data-placement="bottom"
+      class="badge badge-inline badge-info"
+    >
+      ?
+    </span>
+  @end
+</span>

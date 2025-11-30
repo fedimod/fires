@@ -6,6 +6,7 @@ import { parse } from 'csv-parse'
 import DatasetChange, { ChangeType, RecommendedPolicy } from '#models/dataset_change'
 import { entityKeyDomain } from '#validators/admin/dataset_change'
 import vine from '@vinejs/vine'
+import { normalizeDomain } from '#utils/punycode'
 
 type Format = 'unknown' | 'mastodon' | 'fediblockhole' | 'values'
 type Severity = 'suspend' | 'silence' | 'noop'
@@ -223,7 +224,7 @@ export class ImportFileService {
     change.merge({
       type: defaultType,
       entityKind: 'domain',
-      entityKey: record.value,
+      entityKey: normalizeDomain(record.value),
       recommendedPolicy: policy,
       comment: record.comment,
     })

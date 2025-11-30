@@ -2,7 +2,7 @@ import Dataset from '#models/dataset'
 import DatasetChange from '#models/dataset_change'
 import Label from '#models/label'
 import vine from '@vinejs/vine'
-import { entityKeyActor, entityKeyDomain } from '#validators/dataset_change'
+import { entityKeyActor, entityKeyDomain } from '#validators/admin/dataset_change'
 
 export const importFileValidator = vine.compile(
   vine.object({

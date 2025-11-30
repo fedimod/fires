@@ -1,6 +1,6 @@
 import Dataset from '#models/dataset'
 import { ImportFileService } from '#services/import_file_service'
-import { importFileValidator, importValidator } from '#validators/imports'
+import { importFileValidator, importValidator } from '#validators/admin/imports'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 

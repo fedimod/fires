@@ -12,7 +12,7 @@ import {
   listDatasetChangesValidator,
   reviseDatasetChangeValidator,
   newDatasetChangeValidator,
-} from '#validators/dataset_change'
+} from '#validators/admin/dataset_change'
 
 @inject()
 export default class DatasetChangesController {

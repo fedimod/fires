@@ -11,6 +11,15 @@ const domainValidator = vine.createRule(
     if (typeof value !== 'string') return
 
     const parts = value.split('.')
+    if (parts.length < 2) {
+      field.report(
+        'The {{field}} field is not a valid domain name',
+        field.getFieldPath() + '.domain',
+        field
+      )
+      return
+    }
+
     const valid = parts.every((part) => {
       return part.length > 1 && part.length < 63 && domainPartRegex.test(part)
     })

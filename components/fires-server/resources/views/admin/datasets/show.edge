@@ -89,6 +89,13 @@
       @can('DatasetsPolicy.change')
         <div class="button-group">
           <a href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }) }}" role="button">Add a change</a>
+          @can('DatasetsPolicy.import')
+            <a
+              href="{{ route('admin.imports.index', {}, { qs: { dataset: dataset.id } }) }}"
+              role="button"
+              class="secondary outline"
+            >Import Data</a>
+          @end
         </div>
       @end
     </div>
@@ -139,7 +146,7 @@
                 {{ t(`messages.changes.entity_kinds.${record.entityKind}`) }}
               </td>
               <td>
-                {{ record.entityKey }}
+                @!component('components/entity', { kind: record.entityKind, value: record.entityKey })
               </td>
               <td style="text-align: center">
                 @if(record.type != 'retraction' && record.type !== 'tombstone')

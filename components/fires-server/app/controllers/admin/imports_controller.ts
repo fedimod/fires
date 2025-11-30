@@ -1,6 +1,10 @@
 import Dataset from '#models/dataset'
 import { ImportFileService } from '#services/import_file_service'
-import { importFileValidator, importValidator } from '#validators/admin/imports'
+import {
+  importFileValidator,
+  importValidator,
+  performImportValidator,
+} from '#validators/admin/imports'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -9,13 +13,17 @@ export default class ImportsController {
   constructor(protected importFileService: ImportFileService) {}
 
   // Allows uploading a CSV file for a specific dataset to import:
-  async index({ bouncer, view }: HttpContext) {
+  async index({ request, bouncer, view }: HttpContext) {
     await bouncer.with('DatasetsPolicy').authorize('import')
 
+    const params = await request.validateUsing(importValidator)
     const datasets = await Dataset.query().select('id', 'name')
 
     return view.render('admin/imports/index', {
       datasets: datasets.map((dataset) => dataset.serialize()),
+      params: {
+        dataset_id: params.dataset,
+      },
     })
   }
 
@@ -66,7 +74,7 @@ export default class ImportsController {
     // We can't use request.validateUsing here, as the request is a form
     // submission from a form submission, which means request.back() doesn't
     // exist:
-    const [error, data] = await importValidator.tryValidate(request.all())
+    const [error, data] = await performImportValidator.tryValidate(request.all())
     if (error) {
       logger.error(error, 'Failed validation for performing import')
       session.flash('notification', {

@@ -168,6 +168,10 @@ p.lead {
   display: none;
 }
 
+.flex-grow {
+  flex-grow: 1;
+}
+
 button.inline {
   display: inline;
   width: auto;
@@ -265,7 +269,6 @@ fieldset[role='group'][data-copyable] label {
 .button-group > button,
 .button-group > a[role='button'] {
   width: auto;
-  flex: 1;
   margin-bottom: 0;
 }
 
@@ -347,6 +350,19 @@ input:is([type='file']) {
   display: block;
   text-align: center;
   font-size: 0.5rem;
+
+  &[data-tooltip] {
+    border-bottom: none;
+  }
+
+  &.badge-inline {
+    display: inline-block;
+  }
+
+  &.badge-info {
+    background: var(--pico-color-indigo-600);
+    color: var(--pico-color-light);
+  }
 
   &.badge-deprecated {
     display: inline-block;
@@ -454,12 +470,18 @@ details summary::after {
 }
 
 .entity-input {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
   gap: 0.5rem;
+  margin-bottom: var(--pico-spacing);
 
   select {
-    width: min(30%, 30ch);
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  input {
+    margin-bottom: 0;
   }
 }
 

@@ -34,7 +34,7 @@
             <option
               {{ html.attrs({
                 value: dataset.id,
-                selected: old('dataset') == dataset.id
+                selected: (old('dataset') ?? params.dataset_id) == dataset.id
             }) }}
             >
               {{ dataset.name }}

@@ -43,36 +43,43 @@
   @assign(existingKind = old(`entity.kind`) ?? updated?.entityKind ?? baseChange?.entityKind)
   @assign(existingKey = old(`entity.key`) ?? updated?.entityKey ?? baseChange?.entityKey)
   <div class="entity-input">
-    <select
-      name="entity[kind]"
-      id="entity_kind"
-      required
-      class="form-control {{ isInputInvalid('entity.kind', flashMessages) }}"
-      {{ html.attrs({ disabled: !!baseChange }) }}
-    >
-      <option value="" disabled {{ html.attrs({ selected: !existingKind }) }}>
-        {{ t(`messages.changes.entity_kinds.select_option`) }}
-      </option>
-      @each(kind in entity_kinds)
-        <option
-          {{ html.attrs({
-              value: kind,
-              selected: existingKind ? existingKind == kind : false
-          }) }}
-        >
-          {{ t(`messages.changes.entity_kinds.${kind}`) }}
+    <div class="flex-grow">
+      <select
+        name="entity[kind]"
+        id="entity_kind"
+        required
+        class="form-control {{ isInputInvalid('entity.kind', flashMessages) }}"
+        {{ html.attrs({ disabled: !!baseChange }) }}
+      >
+        <option value="" disabled {{ html.attrs({ selected: !existingKind }) }}>
+          {{ t(`messages.changes.entity_kinds.select_option`) }}
         </option>
+        @each(kind in entity_kinds)
+          <option
+            {{ html.attrs({
+                value: kind,
+                selected: existingKind ? existingKind == kind : false
+            }) }}
+          >
+            {{ t(`messages.changes.entity_kinds.${kind}`) }}
+          </option>
+        @end
+      </select>
+    </div>
+    <div class="flex-grow">
+      <input
+        type="text"
+        required
+        class="form-control {{ isInputInvalid('entity.key', flashMessages) }}"
+        id="entity_key"
+        name="entity[key]"
+        value="{{ existingKey ?? '' }}"
+        {{ html.attrs({ disabled: !!baseChange }) }}
+      />
+      @if(!baseChange)
+        <small id="entity_key-hint" class="form-hint"></small>
       @end
-    </select>
-    <input
-      type="text"
-      required
-      class="form-control {{ isInputInvalid('entity.key', flashMessages) }}"
-      id="entity_key"
-      name="entity[key]"
-      value="{{ existingKey ?? '' }}"
-      {{ html.attrs({ disabled: !!baseChange }) }}
-    />
+    </div>
   </div>
   @!component('components/input-feedback', { field: 'entity.kind' })
   @!component('components/input-feedback', { field: 'entity.key' })

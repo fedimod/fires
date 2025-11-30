@@ -1,6 +1,7 @@
 import Dataset from '#models/dataset'
 import DatasetChange from '#models/dataset_change'
 import Label from '#models/label'
+import { normalizeDomain, normalizeUrl } from '#utils/punycode'
 import vine from '@vinejs/vine'
 import { FieldContext } from '@vinejs/vine/types'
 
@@ -10,6 +11,15 @@ const domainValidator = vine.createRule(
     if (typeof value !== 'string') return
 
     const parts = value.split('.')
+    if (parts.length < 2) {
+      field.report(
+        'The {{field}} field is not a valid domain name',
+        field.getFieldPath() + '.domain',
+        field
+      )
+      return
+    }
+
     const valid = parts.every((part) => {
       return part.length > 1 && part.length < 63 && domainPartRegex.test(part)
     })
@@ -29,6 +39,10 @@ export const entityKeyDomain = vine
   .trim()
   .minLength(1)
   .maxLength(256)
+  .parse((value) => {
+    if (typeof value !== 'string') return value
+    return normalizeDomain(value)
+  })
   .use(domainValidator())
 
 export const entityKeyActor = vine
@@ -41,6 +55,7 @@ export const entityKeyActor = vine
   })
   .trim()
   .minLength(11)
+  .transform(normalizeUrl)
 
 const entitySchema = vine.group([
   vine.group.if((_data, field) => field.parent.entity.kind === 'domain', {

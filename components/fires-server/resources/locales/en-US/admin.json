@@ -15,5 +15,8 @@
       "settings:manage": "Manage settings"
     },
     "update": "Update account"
+  },
+  "entity": {
+    "encodedHint": "This entity contains special characters: { decodedKey }"
   }
 }

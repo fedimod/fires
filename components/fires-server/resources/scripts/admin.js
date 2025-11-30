@@ -72,21 +72,29 @@ document.addEventListener('click', (event) => {
 // ------------------------------------------------------------
 const entityKindSelector = document.getElementById('entity_kind')
 const entityKeyInput = document.getElementById('entity_key')
+const entityKeyHint = document.getElementById('entity_key-hint')
 const entityKeyValidators = {
   domain: {
     minLength: 3,
     maxLength: 256,
-    pattern: '([\\-\\w]{1,63}\\.)+([\\-\\w]{1,63})',
+    pattern: '([^\\.]{1,63}\\.)+([^\\.]{1,63})',
     placeholder: 'domain.example',
+    hint: 'Must be a valid domain name, special characters will be encoded automatically',
   },
   actor: {
     type: 'url',
     placeholder: 'https://social.example/actor/123',
+    pattern: 'https://(.+)',
     minLength: 11,
+    hint: 'Must be a valid URL using the https protocol',
   },
 }
 
-if (entityKeyInput && entityKindSelector) {
+if (
+  entityKeyInput instanceof HTMLInputElement &&
+  entityKindSelector instanceof HTMLSelectElement &&
+  entityKeyHint instanceof HTMLElement
+) {
   function updateInput(selected) {
     const validator = entityKeyValidators[selected]
     if (validator) {
@@ -110,12 +118,21 @@ if (entityKeyInput && entityKindSelector) {
       } else {
         entityKeyInput.removeAttribute('pattern')
       }
+
+      if (validator.hint) {
+        entityKeyHint.classList.remove('d-hidden')
+        entityKeyHint.textContent = validator.hint
+      } else {
+        entityKeyHint.classList.add('d-hidden')
+        entityKeyHint.textContent = ''
+      }
     } else {
       entityKeyInput.setAttribute('type', 'text')
       entityKeyInput.removeAttribute('minLength')
       entityKeyInput.removeAttribute('maxLength')
       entityKeyInput.removeAttribute('pattern')
       entityKeyInput.removeAttribute('placeholder')
+      entityKeyHint.classList.add('d-hidden')
     }
   }
 

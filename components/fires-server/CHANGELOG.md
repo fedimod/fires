@@ -1,5 +1,35 @@
 # @fedimod/fires-server
 
+## 0.8.0
+
+### Minor Changes
+
+- [#253](https://github.com/fedimod/fires/pull/253) [`e7df301`](https://github.com/fedimod/fires/commit/e7df301c897a82fdbdd766a9d153d8c745b2be31) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Implement the ability to manage administrative accounts on the fires server
+
+- [#253](https://github.com/fedimod/fires/pull/253) [`d9de605`](https://github.com/fedimod/fires/commit/d9de605740a55bb269d9a7b1016bf0b53e206907) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add authorization for accessing various administrative features
+
+### Patch Changes
+
+- [#251](https://github.com/fedimod/fires/pull/251) [`68c3d97`](https://github.com/fedimod/fires/commit/68c3d977833d9ef0cbc97294518775903477e136) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Refactor input validation to use shared component
+
+- [#255](https://github.com/fedimod/fires/pull/255) [`b72bdf2`](https://github.com/fedimod/fires/commit/b72bdf2937451c9485f01fc1491e52909c3e4938) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix encoding of special characters in entities
+
+  This ensures that the entity key is always encoded correctly:
+  - domains are punycode encoded
+  - URLs for actors have the hostname punycode encoded and the rest of the URL correctly encoded (e.g., special characters are escaped)
+
+  The administrative UI also now shows that the entity key has been encoded in some way, and provides information showing the decoded value.
+
+- [#255](https://github.com/fedimod/fires/pull/255) [`a900ac7`](https://github.com/fedimod/fires/commit/a900ac7278c32a093eab323c6f51fe71d6fc83f7) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix incorrect validation on domain entities where domains without multiple parts were accepted
+
+- [#251](https://github.com/fedimod/fires/pull/251) [`ad82cfa`](https://github.com/fedimod/fires/commit/ad82cfa1ec15c4ffbb50dc14bc569b6f84d4dddc) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Fix validation logic for dataset changes
+
+- [#255](https://github.com/fedimod/fires/pull/255) [`fd7162b`](https://github.com/fedimod/fires/commit/fd7162b93a42e598f0bddbe1491fe6d51c12de0e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Add button to dataset pages to import data to the dataset
+
+- [#254](https://github.com/fedimod/fires/pull/254) [`5493c02`](https://github.com/fedimod/fires/commit/5493c02ce2d368b2ff25668767de9fb91180c155) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Refactor validators to separate administrative ones from public validators
+
+- [#251](https://github.com/fedimod/fires/pull/251) [`04b31a9`](https://github.com/fedimod/fires/commit/04b31a9478f6f00a2d5cc3c99c2302de7e1b276e) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Added ability to change your own username or password to Admin UI
+
 ## 0.7.1
 
 ### Patch Changes

@@ -4,6 +4,19 @@ import Label from '#models/label'
 import vine from '@vinejs/vine'
 import { entityKeyActor, entityKeyDomain } from '#validators/admin/dataset_change'
 
+export const importValidator = vine.compile(
+  vine.object({
+    dataset: vine
+      .string()
+      .uuid()
+      .exists({
+        table: Dataset.table,
+        column: 'id',
+      })
+      .optional(),
+  })
+)
+
 export const importFileValidator = vine.compile(
   vine.object({
     dataset: vine.string().uuid().exists({
@@ -33,7 +46,7 @@ const entityKeySchema = vine
     field.report('Invalid entity key', field.getFieldPath() + '.invalid_entity_key', field)
   })
 
-export const importValidator = vine.compile(
+export const performImportValidator = vine.compile(
   vine.object({
     dataset_id: vine.string().uuid().exists({
       table: Dataset.table,

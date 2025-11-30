@@ -89,6 +89,11 @@
       @can('DatasetsPolicy.change')
         <div class="button-group">
           <a href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }) }}" role="button">Add a change</a>
+          <a
+            href="{{ route('admin.imports.index', {}, { qs: { dataset: dataset.id } }) }}"
+            role="button"
+            class="secondary outline"
+          >Import Data</a>
         </div>
       @end
     </div>

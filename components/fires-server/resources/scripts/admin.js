@@ -145,3 +145,19 @@ if (importReviewForm && missingCount) {
     }
   })
 }
+
+const userIsAdmin = document.getElementById('is-user-admin')
+const userPermissions = document.getElementById('user-permissions')
+if (userIsAdmin instanceof HTMLInputElement && userPermissions instanceof HTMLDivElement) {
+  if (userIsAdmin.checked) {
+    userPermissions.classList.add('d-hidden')
+  }
+
+  userIsAdmin.addEventListener('change', (ev) => {
+    if (userIsAdmin.checked) {
+      userPermissions.classList.add('d-hidden')
+    } else {
+      userPermissions.classList.remove('d-hidden')
+    }
+  })
+}

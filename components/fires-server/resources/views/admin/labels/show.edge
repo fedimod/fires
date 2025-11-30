@@ -8,7 +8,9 @@
       <h2>
         Labels: {{ label.name }}
       </h2>
-      <a href="{{ route('admin.labels.edit', { id: label.id }) }}" role="button">Edit</a>
+      @can('LabelsPolicy.manage')
+        <a href="{{ route('admin.labels.edit', { id: label.id }) }}" role="button">Edit</a>
+      @end
     </div>
 
     @if(label.deprecatedAt)
@@ -61,7 +63,7 @@
             {{ label.summary }}
           @end
         @else
-          <em>Summary Missing</em>
+          <em>No summary provided.</em>
         @end
       </p>
     </div>

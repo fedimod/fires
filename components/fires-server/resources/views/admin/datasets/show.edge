@@ -6,10 +6,12 @@
       <h2>
         Dataset: {{dataset.name}}
       </h2>
-      <div class="button-group">
-        <a href="{{ route('admin.datasets.edit', { id: dataset.id }) }}" role="button">Edit</a>
-        <a href="{{ route('admin.datasets.confirm_destroy', { id: dataset.id }) }}" role="button">Delete</a>
-      </div>
+      @can('DatasetsPolicy.manage')
+        <div class="button-group">
+          <a href="{{ route('admin.datasets.edit', { id: dataset.id }) }}" role="button">Edit</a>
+          <a href="{{ route('admin.datasets.confirm_destroy', { id: dataset.id }) }}" role="button">Delete</a>
+        </div>
+      @end
     </div>
 
     <h4>
@@ -20,7 +22,11 @@
         @if(dataset.summary)
           {{ dataset.summary }}
         @else
-          <em>No summary provided, you should edit this dataset and add one.</em>
+          @can('DatasetsPolicy.manage')
+            <em>No summary provided, you should edit this dataset and add one.</em>
+          @else
+            <em>No summary provided.</em>
+          @end
         @end
       </p>
     </div>
@@ -80,9 +86,11 @@
       <h4>
         Policies
       </h4>
-      <div class="button-group">
-        <a href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }) }}" role="button">Add a change</a>
-      </div>
+      @can('DatasetsPolicy.change')
+        <div class="button-group">
+          <a href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }) }}" role="button">Add a change</a>
+        </div>
+      @end
     </div>
     @if(totalChanges != 0)
       <p>
@@ -113,8 +121,10 @@
             <th style="width: 15%;">
               Labels
             </th>
-            <th>
-            </th>
+            @can('DatasetsPolicy.change')
+              <th>
+              </th>
+            @end
           </tr>
         </thead>
         <tbody>
@@ -141,13 +151,15 @@
                   <span class="label-badge">{{ labels.get(labelId).name }}</span>
                 @end
               </td>
-              <td>
-                <a
-                  href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }, { qs: { change_id: record.id } }) }}"
-                  role="button"
-                  class="secondary"
-                >Revise</a>
-              </td>
+              @can('DatasetsPolicy.change')
+                <td>
+                  <a
+                    href="{{ route('admin.datasets.changes.create', { dataset_id: dataset.id }, { qs: { change_id: record.id } }) }}"
+                    role="button"
+                    class="secondary"
+                  >Revise</a>
+                </td>
+              @end
             </tr>
           @end
         </tbody>

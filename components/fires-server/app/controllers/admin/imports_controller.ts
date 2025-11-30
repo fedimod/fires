@@ -9,7 +9,9 @@ export default class ImportsController {
   constructor(protected importFileService: ImportFileService) {}
 
   // Allows uploading a CSV file for a specific dataset to import:
-  async index({ view }: HttpContext) {
+  async index({ bouncer, view }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('import')
+
     const datasets = await Dataset.query().select('id', 'name')
 
     return view.render('admin/imports/index', {
@@ -20,7 +22,9 @@ export default class ImportsController {
   // Receives the csv file and prepares it for an import,
   // renders a page allowing confirmation / adjustment of
   // the data to be imported
-  async prepare({ request, response, session, view }: HttpContext) {
+  async prepare({ request, response, bouncer, session, view }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('import')
+
     const data = await request.validateUsing(importFileValidator)
     const dataset = await Dataset.findOrFail(data.dataset)
 
@@ -56,7 +60,9 @@ export default class ImportsController {
 
   // Handles the prepared import and creates the records
   // in the dataset:
-  async perform({ response, request, session, logger }: HttpContext) {
+  async perform({ response, request, bouncer, session, logger }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('import')
+
     // We can't use request.validateUsing here, as the request is a form
     // submission from a form submission, which means request.back() doesn't
     // exist:

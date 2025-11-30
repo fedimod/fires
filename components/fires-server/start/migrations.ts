@@ -45,7 +45,7 @@ if (app.getEnvironment() === 'web') {
 
     if (userCount === 0) {
       logger.info('Creating initial administrative user...')
-      await User.create({ username, password })
+      await User.create({ username, password, isAdmin: true })
       logger.info('Creating initial administrative user... done')
     }
   }

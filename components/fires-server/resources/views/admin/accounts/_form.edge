@@ -1,0 +1,102 @@
+@let(formAction = account ? route('admin.accounts.update', { id: account.id }, { qs: { _method: 'PUT' }}) :
+route('admin.accounts.store'))
+
+@include('partials/flash-messages')
+
+<form method="POST" action="{{ formAction }}">
+  {{ csrfField() }}
+
+  <label for="username">
+    @if(user)
+      Change Username
+    @else
+      Username
+    @end
+  </label>
+  @!component('components/input-feedback', { field: 'username' })
+  <small class="form-hint">Must be at least 1 character, no spaces or special characters (other than those in email addresses).</small>
+  <input
+    type="text"
+    name="username"
+    value="{{ old('username') ?? account ? account.username : '' }}"
+    class="form-control {{ isInputInvalid('username', flashMessages) }}"
+    required
+    autocomplete="username"
+  />
+
+  <label for="password" class="mt-2">
+    @if(user)
+      Change Password (optional)
+    @else
+      Password
+    @end
+  </label>
+  @!component('components/input-feedback', { field: 'password' })
+  @!component('components/input-feedback', { field: 'password_confirmation' })
+  <small class="form-hint">Please use a strong password to keep your server safe.</small>
+  <input
+    class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
+    type="password"
+    name="password"
+    value=""
+    autocomplete="new-password"
+    minlength="8"
+  />
+
+  <label for="password_confirmation">Password Confirmation</label>
+  <small class="form-hint">Only required if you're changing the account's password</small>
+  <input
+    type="password"
+    name="password_confirmation"
+    value=""
+    autocomplete="off"
+    minlength="8"
+    class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
+  />
+
+  <label for="permissions" class="mt-2">Permissions</label>
+  @!component('components/input-feedback', { field: 'permissions' })
+
+  <label for="is-user-admin">
+    <input
+      type="checkbox"
+      id="is-user-admin"
+      name="isAdmin"
+      class="form-control"
+      {{ html.attrs({
+        checked: flashMessages.has('errorsBag.permissions') ? false : account?.isAdmin,
+        disabled: !auth.user.isAdmin
+      }) }}
+    />&nbsp;{{ t('admin.accounts.form.administrator')}}
+  </label>
+
+  <div id="user-permissions" class="ml-3 mt-1">
+    <label for="permissions">Custom permissions</label>
+    <fieldset name="permissions" class="ml-3 columns three-columns">
+      @assign(existingPermissions = (old(`permissions`) ?? account?.isAdmin ? [] : account?.permissions ?? []))
+      @each(permission in permissions)
+        <label for="permissions-{{ namify(permission) }}">
+          <input
+            type="checkbox"
+            id="permissions-{{ namify(permission) }}"
+            name="permissions[]"
+            value="{{ permission }}"
+            {{ html.attrs({
+              checked: existingPermissions.includes(permission)
+            }) }}
+          />&nbsp;{{ t(`admin.accounts.permissions.${permission}`) }}
+        </label>
+      @end
+    </fieldset>
+  </div>
+
+  <div class="button-group mt-2">
+    <button type="submit">
+      @if(user)
+        {{ t('admin.accounts.update') }}
+      @else
+        {{ t('admin.accounts.create') }}
+      @end
+    </button>
+  </div>
+</form>

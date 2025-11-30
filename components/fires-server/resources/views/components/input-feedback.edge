@@ -6,4 +6,12 @@
       </p>
     @end
   </div>
+@else
+  @error(field)
+    <div class="invalid-feedback">
+      <p>
+        {{ $message }}
+      </p>
+    </div>
+  @end
 @end

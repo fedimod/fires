@@ -9,6 +9,7 @@ const AdminDatasetsController = () => import('#controllers/admin/datasets_contro
 const AdminDatasetChangesController = () => import('#controllers/admin/dataset_changes_controller')
 const AdminImportsController = () => import('#controllers/admin/imports_controller')
 const AdminSettingsController = () => import('#controllers/admin/settings_controller')
+const AdminAccountsController = () => import('#controllers/admin/accounts_controller')
 const AdminAccountController = () => import('#controllers/admin/account_controller')
 
 router.get('/admin', ({ response }) => response.redirect().toRoute('admin.overview'))
@@ -47,6 +48,8 @@ router
       })
       .as('imports')
       .prefix('import')
+
+    router.resource('accounts', AdminAccountsController).except(['show']).as('accounts')
 
     router.get('settings', [AdminSettingsController, 'show']).as('settings')
     router.post('settings', [AdminSettingsController, 'update']).as('settings.update')

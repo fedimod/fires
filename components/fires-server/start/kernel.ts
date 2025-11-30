@@ -43,6 +43,7 @@ router.use([
   () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('#middleware/localization_middleware'),
   () => import('#middleware/view_data_middleware'),
+  () => import('#middleware/initialize_bouncer_middleware'),
 ])
 
 /**

@@ -4,7 +4,7 @@ import User from '#models/user'
 
 export default class FiresUsersCreate extends BaseCommand {
   static commandName = 'fires:users:create'
-  static description = 'Create a user for the admin panel'
+  static description = 'Create an administrative user'
 
   static options: CommandOptions = {
     startApp: true,
@@ -25,7 +25,7 @@ export default class FiresUsersCreate extends BaseCommand {
 
     const status = this.logger.action('Creating User')
     try {
-      await User.create({ username, password })
+      await User.create({ username, password, isAdmin: true })
       status.displayDuration().succeeded()
     } catch (error) {
       status.failed(error)

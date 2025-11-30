@@ -13,21 +13,19 @@ export default class AccountController {
         user_id: user.id,
       },
     })
-    if (data.username === user.username && data.password === undefined) {
+
+    user.merge({ username: data.username })
+    if (data.password) {
+      user.merge({ password: data.password })
+    }
+
+    if (!user.isDirty()) {
       session.flash('notification', {
         type: 'info',
         message: 'No changes made to username or password.',
       })
 
       return response.redirect().back()
-    }
-
-    if (data.username !== user.username) {
-      user.merge({ username: data.username })
-    }
-
-    if (data.password) {
-      user.merge({ password: data.password })
     }
 
     await user.save()

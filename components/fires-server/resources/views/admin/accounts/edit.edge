@@ -1,0 +1,21 @@
+@layouts.admin()
+  @slot('main')
+    <div class="d-flex header mb-2">
+      <h2>
+        Accounts: Edit
+      </h2>
+      @if(account.id !== auth.user.id)
+        <form
+          method="POST"
+          action="{{ route('admin.accounts.destroy', { id: account.id }, { qs: { _method: 'DELETE' }}) }}"
+        >
+          {{ csrfField() }}
+          <button type="submit" class="danger">
+            {{ t('admin.accounts.delete') }}
+          </button>
+        </form>
+      @end
+    </div>
+    @include("admin/accounts/_form")
+  @endslot
+@end

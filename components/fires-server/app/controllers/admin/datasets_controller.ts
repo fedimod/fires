@@ -25,7 +25,9 @@ export default class DatasetsController {
   /**
    * Display form to create a new record
    */
-  async create({ view }: HttpContext) {
+  async create({ bouncer, view }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('manage')
+
     const dataset = new Dataset()
     return view.render('admin/datasets/create', {
       dataset: dataset.serialize(),
@@ -35,7 +37,9 @@ export default class DatasetsController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response, session }: HttpContext) {
+  async store({ request, response, bouncer, session }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('manage')
+
     const create = await request.validateUsing(createDatasetValidator)
     const dataset = await Dataset.create({ ...create, locale: create.locale ?? defaultLocale })
 
@@ -71,7 +75,9 @@ export default class DatasetsController {
   /**
    * Edit individual record
    */
-  async edit({ params, view }: HttpContext) {
+  async edit({ params, bouncer, view }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('manage')
+
     const dataset = await Dataset.findOrFail(params.id)
 
     return view.render('admin/datasets/edit', {
@@ -82,7 +88,9 @@ export default class DatasetsController {
   /**
    * Handle form submission for the edit action
    */
-  async update({ request, response, session }: HttpContext) {
+  async update({ request, response, bouncer, session }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('manage')
+
     const { params, ...update } = await request.validateUsing(updateDatasetValidator)
     const dataset = await Dataset.findOrFail(params.id)
 
@@ -102,7 +110,9 @@ export default class DatasetsController {
   /**
    * Delete record
    */
-  async destroy({ params, request, response, session, view }: HttpContext) {
+  async destroy({ request, response, params, bouncer, session, view }: HttpContext) {
+    await bouncer.with('DatasetsPolicy').authorize('manage')
+
     const dataset = await Dataset.findOrFail(params.id)
 
     if (request.method() !== 'DELETE') {

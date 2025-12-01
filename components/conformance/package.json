@@ -1,0 +1,22 @@
+{
+  "name": "@fedimod/fires-conformance",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node src/cli.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "AGPL-3.0",
+  "packageManager": "pnpm@10.9.0",
+  "dependencies": {
+    "@optique/core": "^0.7.0",
+    "@optique/run": "^0.7.0",
+    "bcp-47": "^2.1.0",
+    "jsonld": "^9.0.0",
+    "ts-node-maintained": "^10.9.6",
+    "typescript": "~5.7.3",
+    "vitest": "^4.0.14"
+  }
+}

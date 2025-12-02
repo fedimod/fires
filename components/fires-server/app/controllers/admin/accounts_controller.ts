@@ -7,6 +7,11 @@ import {
 } from '#validators/admin/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
+const Permissions = User.permissions.map((permission) => ({
+  name: permission.replaceAll(':', '-'),
+  value: permission,
+}))
+
 export default class AccountsController {
   /**
    * Display a list of resource
@@ -27,7 +32,7 @@ export default class AccountsController {
     await bouncer.with('UsersPolicy').authorize('manage')
 
     return view.render('admin/accounts/create', {
-      permissions: User.permissions,
+      availablePermissions: Permissions,
     })
   }
 
@@ -57,12 +62,13 @@ export default class AccountsController {
    */
   async edit({ request, bouncer, view }: HttpContext) {
     await bouncer.with('UsersPolicy').authorize('manage')
+
     const { params } = await request.validateUsing(editUserValidator)
     const user = await User.findOrFail(params.id)
 
     return view.render('admin/accounts/edit', {
       account: user.serialize(),
-      permissions: User.permissions,
+      availablePermissions: Permissions,
     })
   }
 
@@ -88,14 +94,6 @@ export default class AccountsController {
 
         return response.redirect().back()
       }
-    }
-
-    if ((!data.isAdmin && !data.permissions) || data.permissions?.length === 0) {
-      session.flashErrors({
-        permissions: 'The user needs to be either an admin or have specific permissions assigned',
-      })
-
-      return response.redirect().back()
     }
 
     const user = await User.findOrFail(params.id)

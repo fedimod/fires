@@ -1,7 +1,34 @@
 import User from '#models/user'
 import vine from '@vinejs/vine'
+import { FieldContext } from '@vinejs/vine/types'
 
-const userId = vine.number().positive().withoutDecimals()
+const adminOrPermissionsRequired = vine.createRule(
+  async (value: unknown, _options: undefined, field: FieldContext) => {
+    if (!field.isValid) {
+      return
+    }
+
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+      return
+    }
+
+    if (!Object.hasOwn(value, 'isAdmin') && !Object.hasOwn(value, 'permissions')) {
+      field.report(
+        'The account needs to be either an admin or have specific permissions assigned',
+        'required',
+        field
+      )
+      return
+    }
+
+    return value
+  }
+)
+
+const userId = vine.number().positive().withoutDecimals().exists({
+  table: User.table,
+  column: 'id',
+})
 
 export const usernameValidator = vine
   .string()
@@ -21,17 +48,17 @@ export const usernameValidator = vine
 export const passwordValidator = vine.string().minLength(8).confirmed()
 
 export const createUserValidator = vine.compile(
-  vine.object({
-    username: usernameValidator,
-    password: passwordValidator,
+  vine
+    .object({
+      username: usernameValidator,
+      password: passwordValidator,
 
-    isAdmin: vine.accepted().optional(),
-    permissions: vine
-      .array(vine.enum(User.permissions))
-      .optional()
-      .requiredWhen('isAdmin', '!=', true),
-  })
+      isAdmin: vine.accepted().optional(),
+      permissions: vine.array(vine.enum(User.permissions)).optional(),
+    })
+    .use(adminOrPermissionsRequired())
 )
+
 export const editUserValidator = vine.compile(
   vine.object({
     params: vine.object({
@@ -39,19 +66,23 @@ export const editUserValidator = vine.compile(
     }),
   })
 )
+
 export const updateUserValidator = vine.compile(
-  vine.object({
-    params: vine.object({
-      id: userId,
-    }),
+  vine
+    .object({
+      params: vine.object({
+        id: userId,
+      }),
 
-    username: usernameValidator.optional(),
-    password: passwordValidator.optional(),
+      username: usernameValidator.optional(),
+      password: passwordValidator.optional(),
 
-    isAdmin: vine.accepted().optional(),
-    permissions: vine.array(vine.enum(User.permissions)).optional(),
-  })
+      isAdmin: vine.accepted().optional(),
+      permissions: vine.array(vine.enum(User.permissions)).optional(),
+    })
+    .use(adminOrPermissionsRequired())
 )
+
 export const deleteUserValidator = vine.compile(
   vine.object({
     params: vine.object({

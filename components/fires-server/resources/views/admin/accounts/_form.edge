@@ -3,11 +3,11 @@ route('admin.accounts.store'))
 
 @include('partials/flash-messages')
 
-<form method="POST" action="{{ formAction }}">
+<form method="POST" action="{{ formAction }}" id="accounts-form">
   {{ csrfField() }}
 
   <label for="username">
-    @if(user)
+    @if(account)
       Change Username
     @else
       Username
@@ -18,14 +18,14 @@ route('admin.accounts.store'))
   <input
     type="text"
     name="username"
-    value="{{ old('username') ?? account ? account.username : '' }}"
+    value="{{ old('username') ?? account?.username ?? '' }}"
     class="form-control {{ isInputInvalid('username', flashMessages) }}"
     required
     autocomplete="username"
   />
 
   <label for="password" class="mt-2">
-    @if(user)
+    @if(account)
       Change Password (optional)
     @else
       Password
@@ -38,25 +38,39 @@ route('admin.accounts.store'))
     class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
     type="password"
     name="password"
+    id="account-password"
     value=""
     autocomplete="new-password"
     minlength="8"
+    {{ html.attrs({ required: !account }) }}
   />
 
-  <label for="password_confirmation">Password Confirmation</label>
-  <small class="form-hint">Only required if you're changing the account's password</small>
-  <input
-    type="password"
-    name="password_confirmation"
-    value=""
-    autocomplete="off"
-    minlength="8"
-    class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
-  />
+  <div id="password-confirmation">
+    <label for="password_confirmation">Password Confirmation</label>
+    <small class="form-hint">Only required if you're changing the account's password</small>
+    <input
+      type="password"
+      name="password_confirmation"
+      value=""
+      autocomplete="off"
+      minlength="8"
+      class="form-control {{ isInputInvalid('password', flashMessages) }} {{ isInputInvalid('password_confirmation', flashMessages) }}"
+    />
+  </div>
 
   <label for="permissions" class="mt-2">Permissions</label>
-  @!component('components/input-feedback', { field: 'permissions' })
+  @assign(hasValidationError = flashMessages.has('errorsBag.E_VALIDATION_ERROR'))
+  @assign(isAdmin = hasValidationError ? !!old('isAdmin') : account?.isAdmin)
+  @assign(existingPermissions = isAdmin ? [] : (hasValidationError ? old(`permissions`) : account?.permissions) ?? [])
 
+  {{-- Display validation error for the root form object, which has no field name: --}}
+  @if(hasValidationError && flashMessages.has('inputErrorsBag.'))
+    @!component('components/input-feedback', { field: '' })
+  @else
+    @!component('components/input-feedback', { field: 'isAdmin' })
+    @!component('components/input-feedback', { field: 'permissions' })
+  @end
+  
   <label for="is-user-admin">
     <input
       type="checkbox"
@@ -64,7 +78,7 @@ route('admin.accounts.store'))
       name="isAdmin"
       class="form-control"
       {{ html.attrs({
-        checked: flashMessages.has('errorsBag.permissions') ? false : account?.isAdmin,
+        checked: isAdmin,
         disabled: !auth.user.isAdmin
       }) }}
     />&nbsp;{{ t('admin.accounts.form.administrator')}}
@@ -73,18 +87,17 @@ route('admin.accounts.store'))
   <div id="user-permissions" class="ml-3 mt-1">
     <label for="permissions">Custom permissions</label>
     <fieldset name="permissions" class="ml-3 columns three-columns">
-      @assign(existingPermissions = (old(`permissions`) ?? account?.isAdmin ? [] : account?.permissions ?? []))
-      @each(permission in permissions)
-        <label for="permissions-{{ namify(permission) }}">
+      @each(permission in availablePermissions)
+        <label for="permissions-{{ permission.name }}">
           <input
             type="checkbox"
-            id="permissions-{{ namify(permission) }}"
+            id="permissions-{{ permission.name }}"
             name="permissions[]"
-            value="{{ permission }}"
+            value="{{ permission.value }}"
             {{ html.attrs({
-              checked: existingPermissions.includes(permission)
+              checked: existingPermissions.includes(permission.value)
             }) }}
-          />&nbsp;{{ t(`admin.accounts.permissions.${permission}`) }}
+          />&nbsp;{{ t(`admin.accounts.permissions.${permission.name}`) }}
         </label>
       @end
     </fieldset>
@@ -92,7 +105,7 @@ route('admin.accounts.store'))
 
   <div class="button-group mt-2">
     <button type="submit">
-      @if(user)
+      @if(account)
         {{ t('admin.accounts.update') }}
       @else
         {{ t('admin.accounts.create') }}

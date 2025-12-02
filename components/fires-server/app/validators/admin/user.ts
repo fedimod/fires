@@ -16,7 +16,7 @@ const adminOrPermissionsRequired = vine.createRule(
       field.report(
         'The account needs to be either an admin or have specific permissions assigned',
         'required',
-        { ...field, name: 'adminOrPermissions', variableName: 'adminOrPermissions' }
+        field
       )
       return
     }

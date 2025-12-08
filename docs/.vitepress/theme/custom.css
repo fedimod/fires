@@ -661,8 +661,11 @@ p + .custom-block.warning {
   margin-top: 24px;
 }
 
-:is(.vp-external-link-icon, .vp-doc a[href*="://"], .vp-doc a[target="_blank"]):not(.no-icon)::after
-{
+:is(
+    .vp-external-link-icon,
+    .vp-doc a[href*="://"],
+    .vp-doc a[target="_blank"]
+  ):not(.no-icon)::after {
   content: "";
   color: inherit;
   transition:
@@ -670,7 +673,10 @@ p + .custom-block.warning {
     opacity 0.25s;
 }
 
-:is(.vp-external-link-icon, .vp-doc a[href*="://"], .vp-doc a[target="_blank"]):not(.no-icon):hover::after
-{
+:is(
+    .vp-external-link-icon,
+    .vp-doc a[href*="://"],
+    .vp-doc a[target="_blank"]
+  ):not(.no-icon):hover::after {
   color: inherit;
 }

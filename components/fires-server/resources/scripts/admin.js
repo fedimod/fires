@@ -163,18 +163,34 @@ if (importReviewForm && missingCount) {
   })
 }
 
-const userIsAdmin = document.getElementById('is-user-admin')
-const userPermissions = document.getElementById('user-permissions')
-if (userIsAdmin instanceof HTMLInputElement && userPermissions instanceof HTMLDivElement) {
-  if (userIsAdmin.checked) {
-    userPermissions.classList.add('d-hidden')
-  }
+const accountsForm = document.getElementById('accounts-form')
+if (accountsForm instanceof HTMLFormElement) {
+  const passwordInput = document.getElementById('account-password')
+  const passwordConfirmation = document.getElementById('password-confirmation')
 
-  userIsAdmin.addEventListener('change', (ev) => {
-    if (userIsAdmin.checked) {
-      userPermissions.classList.add('d-hidden')
+  passwordConfirmation.classList.add('d-hidden')
+  passwordInput.addEventListener('input', (e) => {
+    if (e.target.value.length > 0) {
+      passwordConfirmation.classList.remove('d-hidden')
     } else {
-      userPermissions.classList.remove('d-hidden')
+      passwordConfirmation.classList.add('d-hidden')
     }
   })
+
+  // Permissions logic:
+  const userIsAdmin = document.getElementById('is-user-admin')
+  const userPermissions = document.getElementById('user-permissions')
+  if (userIsAdmin instanceof HTMLInputElement && userPermissions instanceof HTMLDivElement) {
+    if (userIsAdmin.checked) {
+      userPermissions.classList.add('d-hidden')
+    }
+
+    userIsAdmin.addEventListener('change', (ev) => {
+      if (userIsAdmin.checked) {
+        userPermissions.classList.add('d-hidden')
+      } else {
+        userPermissions.classList.remove('d-hidden')
+      }
+    })
+  }
 }

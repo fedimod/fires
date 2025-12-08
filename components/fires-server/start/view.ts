@@ -5,21 +5,12 @@ import markdown from '#utils/markdown'
 import UrlService from '#services/url_service'
 import { DateTime } from 'luxon'
 import DatasetChange, { EntityKind } from '#models/dataset_change'
-import stringHelpers from '@adonisjs/core/helpers/string'
 import { Permissions } from '#models/user'
 import i18nManager from '@adonisjs/i18n/services/main'
 import { isPunycoded, punycodeToUnicode } from '#utils/punycode'
 
 edge.global('route_url', (...args: Parameters<typeof UrlService.make>) => {
   return UrlService.make(...args)
-})
-
-edge.global('namify', (value: string) => {
-  return stringHelpers.slug(value, {
-    replacement: '-',
-    strict: true,
-    lower: true,
-  })
 })
 
 edge.global('markdown', (value: string) => {
@@ -66,10 +57,11 @@ edge.global('formatPermissions', (permissions: Permissions[], locale: string) =>
   const i18n = i18nManager.locale(locale)
   return i18n.formatList(
     permissions.map((permission, idx) => {
+      const name = permission.replaceAll(':', '-')
       if (idx > 0) {
-        return i18n.t(`admin.accounts.permissions.${permission}`).toLowerCase()
+        return i18n.t(`admin.accounts.permissions.${name}`).toLowerCase()
       } else {
-        return i18n.t(`admin.accounts.permissions.${permission}`)
+        return i18n.t(`admin.accounts.permissions.${name}`)
       }
     })
   )

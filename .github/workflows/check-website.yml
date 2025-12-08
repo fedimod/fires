@@ -2,6 +2,11 @@ name: Check Website
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/check-website.yml"
+      - "docs/**"
+      - "pnpm-lock.json"
+
   push:
     paths:
       - ".github/workflows/check-website.yml"
@@ -36,3 +41,6 @@ jobs:
 
       - name: Check formatting
         run: pnpm --filter @fedimod/fires-docs -r format:check
+
+      - name: Check build with VitePress
+        run: pnpm run --filter @fedimod/fires-docs build

@@ -1,0 +1,35 @@
+name: Check Website
+
+on:
+  pull_request:
+  push:
+    paths:
+      - ".github/workflows/check-website.yml"
+      - "docs/**"
+      - "pnpm-lock.json"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --filter @fedimod/fires-docs
+
+      - name: Check formatting
+        run: pnpm --filter @fedimod/fires-docs -r format:check

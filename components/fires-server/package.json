@@ -55,7 +55,7 @@
     "@swc/core": "1.15.3",
     "@types/luxon": "^3.4.2",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "^22.13.2",
+    "@types/node": "^22.19.1",
     "@types/proxy-addr": "^2.0.3",
     "@types/punycode": "^2.1.4",
     "@types/sinon": "^17.0.4",

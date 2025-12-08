@@ -68,8 +68,7 @@
   margin-top: 6rem;
 }
 
-main :is(a[href*="://"], a[target="_blank"]):not(:is(.no-icon, svg a, :has(img, svg)))
-{
+main :is(a[href*='://'], a[target='_blank']):not(:is(.no-icon, svg a, :has(img, svg))) {
   white-space: collapse nowrap;
   text-wrap-mode: nowrap;
 

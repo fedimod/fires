@@ -34,7 +34,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --filter @fedimod/fires-server
 
       - name: Check formatting
         run: pnpm --filter @fedimod/fires-server -r format:check
@@ -87,7 +87,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --filter @fedimod/fires-server
 
       - name: Run migrations
         run: pnpm --filter @fedimod/fires-server -r migrate:fresh

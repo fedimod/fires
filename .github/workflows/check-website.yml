@@ -8,6 +8,8 @@ on:
       - "pnpm-lock.json"
 
   push:
+    branches:
+      - main
     paths:
       - ".github/workflows/check-website.yml"
       - "docs/**"

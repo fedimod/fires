@@ -8,6 +8,8 @@ on:
       - "pnpm-lock.json"
       - "Dockerfile"
   push:
+    branches:
+      - main
     paths:
       - ".github/workflows/test-server.yml"
       - "components/fires-server/**"

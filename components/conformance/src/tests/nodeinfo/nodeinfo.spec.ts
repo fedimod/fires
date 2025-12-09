@@ -1,48 +1,53 @@
-import { test, expect, describe } from 'vitest';
-import { getServerUrl, getNodeInfo, getLabelsEndpoint, getDatasetsEndpoint } from '../../utils';
+import { test, expect, describe } from "vitest";
+import {
+  getServerUrl,
+  getNodeInfo,
+  getLabelsEndpoint,
+  getDatasetsEndpoint,
+} from "../../utils";
 
-describe('NodeInfo', () => {
-  test('GET /.well-known/nodeinfo returns JSON', async () => {
+describe("NodeInfo", () => {
+  test("GET /.well-known/nodeinfo returns JSON", async () => {
     const response = await fetch(`${getServerUrl()}/.well-known/nodeinfo`);
 
     expect(response.status).toBe(200);
-    expect(response.headers.get('content-type')).toContain('application/json');
+    expect(response.headers.get("content-type")).toContain("application/json");
   });
 
-  test('nodeinfo 2.1 endpoint has version 2.1', async () => {
+  test("nodeinfo 2.1 endpoint has version 2.1", async () => {
     const nodeinfo = await getNodeInfo();
 
-    expect(nodeinfo.version).toBe('2.1');
+    expect(nodeinfo.version).toBe("2.1");
   });
 
   test('protocols array contains "fires"', async () => {
     const nodeinfo = await getNodeInfo();
 
     expect(Array.isArray(nodeinfo.protocols)).toBe(true);
-    expect(nodeinfo.protocols).toContain('fires');
+    expect(nodeinfo.protocols).toContain("fires");
   });
 
-  test('metadata.fires is an object', async () => {
+  test("metadata.fires is an object", async () => {
     const nodeinfo = await getNodeInfo();
 
-    expect(typeof nodeinfo.metadata.fires).toBe('object');
+    expect(typeof nodeinfo.metadata.fires).toBe("object");
   });
 
-  test('metadata.fires.labels is a well-formed IRI (optional)', async () => {
+  test("metadata.fires.labels is a well-formed IRI (optional)", async () => {
     const labels = await getLabelsEndpoint();
 
     if (labels !== undefined) {
-      expect(typeof labels).toBe('string');
-      expect(() => new URL(labels)).not.toThrow();
+      expect(typeof labels).toBe("string");
+      expect(URL.canParse(labels)).toBe(true);
     }
   });
 
-  test('metadata.fires.datasets is a well-formed IRI (optional)', async () => {
+  test("metadata.fires.datasets is a well-formed IRI (optional)", async () => {
     const datasets = await getDatasetsEndpoint();
 
     if (datasets !== undefined) {
-      expect(typeof datasets).toBe('string');
-      expect(() => new URL(datasets)).not.toThrow();
+      expect(typeof datasets).toBe("string");
+      expect(URL.canParse(datasets)).toBe(true);
     }
   });
 });

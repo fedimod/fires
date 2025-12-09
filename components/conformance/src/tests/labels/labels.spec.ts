@@ -1,10 +1,10 @@
-import { test, expect, describe } from 'vitest';
-import { parse as parseBCP47 } from 'bcp-47';
-import { getLabelsEndpoint } from '../../utils';
+import { test, expect, describe } from "vitest";
+import { parse as parseBCP47 } from "bcp-47";
+import { getLabelsEndpoint } from "../../utils";
 
 const EXPECTED_CONTEXT = [
-  'https://www.w3.org/ns/activitystreams',
-  'https://fires.fedimod.org/context/fires.jsonld',
+  "https://www.w3.org/ns/activitystreams",
+  "https://fires.fedimod.org/context/fires.jsonld",
 ];
 
 /**
@@ -24,12 +24,12 @@ function validateLocalizedField(field: any): void {
     return;
   }
 
-  expect(typeof field).toBe('object');
+  expect(typeof field).toBe("object");
   expect(Array.isArray(field)).toBe(false);
 
   for (const [languageTag, value] of Object.entries(field)) {
     expect(isValidBCP47(languageTag)).toBe(true);
-    expect(typeof value).toBe('string');
+    expect(typeof value).toBe("string");
   }
 }
 
@@ -39,13 +39,13 @@ function validateLocalizedField(field: any): void {
  */
 function validateLabelFields(label: any): void {
   // name or nameMap must exist
-  const hasName = 'name' in label;
-  const hasNameMap = 'nameMap' in label;
+  const hasName = "name" in label;
+  const hasNameMap = "nameMap" in label;
 
   expect(hasName || hasNameMap).toBe(true);
 
   if (hasName) {
-    expect(typeof label.name).toBe('string');
+    expect(typeof label.name).toBe("string");
   }
 
   if (hasNameMap) {
@@ -53,13 +53,13 @@ function validateLabelFields(label: any): void {
   }
 
   // summary or summaryMap must exist
-  const hasSummary = 'summary' in label;
-  const hasSummaryMap = 'summaryMap' in label;
+  const hasSummary = "summary" in label;
+  const hasSummaryMap = "summaryMap" in label;
 
   expect(hasSummary || hasSummaryMap).toBe(true);
 
   if (hasSummary) {
-    expect(typeof label.summary).toBe('string');
+    expect(typeof label.summary).toBe("string");
   }
 
   if (hasSummaryMap) {
@@ -67,72 +67,74 @@ function validateLabelFields(label: any): void {
   }
 
   // content or contentMap is optional
-  if ('content' in label) {
-    expect(typeof label.content).toBe('string');
+  if ("content" in label) {
+    expect(typeof label.content).toBe("string");
   }
 
-  if ('contentMap' in label) {
+  if ("contentMap" in label) {
     validateLocalizedField(label.contentMap);
   }
 }
 
-describe('Labels Collection', () => {
-  test('labels endpoint returns valid JSON-LD', async () => {
+describe("Labels Collection", () => {
+  test("labels endpoint returns valid JSON-LD", async () => {
     const labelsUrl = await getLabelsEndpoint();
 
     if (!labelsUrl) {
-      throw new Error('Labels endpoint not found in NodeInfo metadata');
+      throw new Error("Labels endpoint not found in NodeInfo metadata");
     }
 
     const response = await fetch(labelsUrl, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
     expect(response.status).toBe(200);
-    expect(response.headers.get('content-type')).toContain('application/ld+json');
+    expect(response.headers.get("content-type")).toContain(
+      "application/ld+json",
+    );
 
     const data: any = await response.json();
 
     // Validate JSON-LD structure
-    expect(data).toHaveProperty('@context');
-    expect(data['@context']).toEqual(EXPECTED_CONTEXT);
+    expect(data).toHaveProperty("@context");
+    expect(data["@context"]).toEqual(EXPECTED_CONTEXT);
   });
 
-  test('labels collection has required fields', async () => {
+  test("labels collection has required fields", async () => {
     const labelsUrl = await getLabelsEndpoint();
 
     if (!labelsUrl) {
-      throw new Error('Labels endpoint not found in NodeInfo metadata');
+      throw new Error("Labels endpoint not found in NodeInfo metadata");
     }
 
     const response = await fetch(labelsUrl, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
     const data: any = await response.json();
 
     // Collection should have these required fields
-    expect(data.type).toBe('Collection');
-    expect(data).toHaveProperty('id');
-    expect(data).toHaveProperty('totalItems');
-    expect(data).toHaveProperty('items');
+    expect(data.type).toBe("Collection");
+    expect(data).toHaveProperty("id");
+    expect(data).toHaveProperty("totalItems");
+    expect(data).toHaveProperty("items");
     expect(Array.isArray(data.items)).toBe(true);
   });
 
-  test('labels collection items have required structure and valid localization', async () => {
+  test("labels collection items have required structure and valid localization", async () => {
     const labelsUrl = await getLabelsEndpoint();
 
     if (!labelsUrl) {
-      throw new Error('Labels endpoint not found in NodeInfo metadata');
+      throw new Error("Labels endpoint not found in NodeInfo metadata");
     }
 
     const response = await fetch(labelsUrl, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
@@ -140,29 +142,36 @@ describe('Labels Collection', () => {
 
     // If there are items, validate their structure
     if (data.items && data.items.length > 0) {
-      for (const label of data.items) {
-        expect(label.type).toBe('fires:Label');
-        expect(label).toHaveProperty('id');
+      for (const item of data.items) {
+        // Items can be either string URIs or objects with at minimum type + id
+        if (typeof item === "string") {
+          // String URI - validate it's parseable as a URL
+          expect(URL.canParse(item)).toBe(true);
+        } else {
+          // Object - must have at minimum type and id
+          expect(item.type).toBe("fires:Label");
+          expect(item).toHaveProperty("id");
 
-        // Validate fields can be either simple or localized with BCP-47 tags
-        validateLabelFields(label);
+          // Validate fields can be either simple or localized with BCP-47 tags
+          validateLabelFields(item);
+        }
       }
     }
   });
 });
 
-describe('Individual Labels', () => {
-  test('individual label endpoint returns valid JSON-LD', async () => {
+describe("Individual Labels", () => {
+  test("individual label endpoint returns valid JSON-LD", async () => {
     const labelsUrl = await getLabelsEndpoint();
 
     if (!labelsUrl) {
-      throw new Error('Labels endpoint not found in NodeInfo metadata');
+      throw new Error("Labels endpoint not found in NodeInfo metadata");
     }
 
     // First get the collection to find a label
     const collectionResponse = await fetch(labelsUrl, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
@@ -170,7 +179,7 @@ describe('Individual Labels', () => {
 
     // Skip test if no labels exist
     if (!collection.items || collection.items.length === 0) {
-      console.log('No labels found, skipping individual label test');
+      console.log("No labels found, skipping individual label test");
       return;
     }
 
@@ -179,31 +188,33 @@ describe('Individual Labels', () => {
     // Fetch the individual label
     const response = await fetch(labelId, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
     expect(response.status).toBe(200);
-    expect(response.headers.get('content-type')).toContain('application/ld+json');
+    expect(response.headers.get("content-type")).toContain(
+      "application/ld+json",
+    );
 
     const data: any = await response.json();
 
     // Validate JSON-LD structure
-    expect(data).toHaveProperty('@context');
-    expect(data['@context']).toEqual(EXPECTED_CONTEXT);
+    expect(data).toHaveProperty("@context");
+    expect(data["@context"]).toEqual(EXPECTED_CONTEXT);
   });
 
-  test('individual label has required fields and valid localization', async () => {
+  test("individual label has required fields and valid localization", async () => {
     const labelsUrl = await getLabelsEndpoint();
 
     if (!labelsUrl) {
-      throw new Error('Labels endpoint not found in NodeInfo metadata');
+      throw new Error("Labels endpoint not found in NodeInfo metadata");
     }
 
     // First get the collection to find a label
     const collectionResponse = await fetch(labelsUrl, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
@@ -211,7 +222,7 @@ describe('Individual Labels', () => {
 
     // Skip test if no labels exist
     if (!collection.items || collection.items.length === 0) {
-      console.log('No labels found, skipping individual label test');
+      console.log("No labels found, skipping individual label test");
       return;
     }
 
@@ -220,31 +231,32 @@ describe('Individual Labels', () => {
     // Fetch the individual label
     const response = await fetch(labelId, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
     const data: any = await response.json();
 
     // Required fields per FIRES spec
-    expect(data.type).toBe('fires:Label');
-    expect(data).toHaveProperty('id');
+    // TODO: adjust to FEP standard labels when published
+    expect(data.type).toBe("fires:Label");
+    expect(data).toHaveProperty("id");
 
     // Validate fields can be either simple or localized with BCP-47 tags
     validateLabelFields(data);
   });
 
-  test('localized fields use valid BCP-47 language tags', async () => {
+  test("localized fields use valid BCP-47 language tags", async () => {
     const labelsUrl = await getLabelsEndpoint();
 
     if (!labelsUrl) {
-      throw new Error('Labels endpoint not found in NodeInfo metadata');
+      throw new Error("Labels endpoint not found in NodeInfo metadata");
     }
 
     // First get the collection to find labels
     const collectionResponse = await fetch(labelsUrl, {
       headers: {
-        Accept: 'application/ld+json',
+        Accept: "application/ld+json",
       },
     });
 
@@ -252,7 +264,7 @@ describe('Individual Labels', () => {
 
     // Skip test if no labels exist
     if (!collection.items || collection.items.length === 0) {
-      console.log('No labels found, skipping localization test');
+      console.log("No labels found, skipping localization test");
       return;
     }
 
@@ -260,26 +272,26 @@ describe('Individual Labels', () => {
     for (const labelRef of collection.items) {
       const response = await fetch(labelRef.id, {
         headers: {
-          Accept: 'application/ld+json',
+          Accept: "application/ld+json",
         },
       });
 
       const label: any = await response.json();
 
       // Check each localized field if it exists
-      if ('nameMap' in label) {
+      if ("nameMap" in label) {
         for (const tag of Object.keys(label.nameMap)) {
           expect(isValidBCP47(tag)).toBe(true);
         }
       }
 
-      if ('summaryMap' in label) {
+      if ("summaryMap" in label) {
         for (const tag of Object.keys(label.summaryMap)) {
           expect(isValidBCP47(tag)).toBe(true);
         }
       }
 
-      if ('contentMap' in label) {
+      if ("contentMap" in label) {
         for (const tag of Object.keys(label.contentMap)) {
           expect(isValidBCP47(tag)).toBe(true);
         }

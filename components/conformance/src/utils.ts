@@ -1,4 +1,8 @@
-const SERVER_URL = process.env.FIRES_SERVER_URL || 'http://localhost:3333';
+const SERVER_URL = process.env.FIRES_SERVER_URL || "http://localhost:3333";
+
+// XSD date format regex: yyyy-MM-dd'T'HH:mm:ss'Z'
+// Matches the server's XSDDateFormat from app/utils/jsonld.ts
+export const XSD_DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
 interface NodeInfoDiscovery {
   links: Array<{
@@ -33,11 +37,11 @@ export async function getNodeInfo(): Promise<NodeInfo> {
   const discovery = await getNodeInfoDiscovery();
 
   const nodeinfo21Link = discovery.links.find(
-    (link) => link.rel === 'http://nodeinfo.diaspora.software/ns/schema/2.1'
+    (link) => link.rel === "http://nodeinfo.diaspora.software/ns/schema/2.1",
   );
 
   if (!nodeinfo21Link) {
-    throw new Error('NodeInfo 2.1 link not found in discovery document');
+    throw new Error("NodeInfo 2.1 link not found in discovery document");
   }
 
   const response = await fetch(nodeinfo21Link.href);

@@ -1,4 +1,4 @@
-const SERVER_URL = process.env.FIRES_SERVER_URL || "http://localhost:3333";
+const SERVER_URL = process.env.FIRES_SERVER_URL || "http://localhost:4444";
 
 // XSD date format regex: yyyy-MM-dd'T'HH:mm:ss'Z'
 // Matches the server's XSDDateFormat from app/utils/jsonld.ts
@@ -26,8 +26,8 @@ interface NodeInfo {
  * Fetches the NodeInfo discovery document from /.well-known/nodeinfo
  */
 export async function getNodeInfoDiscovery(): Promise<NodeInfoDiscovery> {
-  const response = await fetch(`${SERVER_URL}/.well-known/nodeinfo`);
-  return await response.json();
+  const response = await fetch(`${getServerUrl()}.well-known/nodeinfo`);
+  return (await response.json()) as NodeInfoDiscovery;
 }
 
 /**
@@ -45,7 +45,7 @@ export async function getNodeInfo(): Promise<NodeInfo> {
   }
 
   const response = await fetch(nodeinfo21Link.href);
-  return await response.json();
+  return (await response.json()) as NodeInfo;
 }
 
 /**

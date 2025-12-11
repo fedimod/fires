@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { merge, object, or } from "@optique/core/constructs";
+import { merge, object, conditional } from "@optique/core/constructs";
 import { optional, withDefault } from "@optique/core/modifiers";
 import { option } from "@optique/core/primitives";
 import { choice, string, url } from "@optique/core/valueparser";
@@ -16,8 +16,11 @@ function commaSeparatedSuites(): ValueParser<string[]> {
   return {
     metavar: "SUITE[,SUITE...]",
     parse(input: string): ValueParserResult<string[]> {
-      const suites = input.split(",").map(s => s.trim()).filter(s => s.length > 0);
-      const invalidSuites = suites.filter(s => !AVAILABLE_SUITES.includes(s));
+      const suites = input
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+      const invalidSuites = suites.filter((s) => !AVAILABLE_SUITES.includes(s));
 
       if (invalidSuites.length > 0) {
         return {
@@ -34,36 +37,32 @@ function commaSeparatedSuites(): ValueParser<string[]> {
   };
 }
 
+const consoleParser = object({
+  noColor: withDefault(option("--no-color"), false),
+});
+
 // Base options shared by all configurations
-const baseOptions = object({
+const parser = object({
   url: option("--url", url()),
   suites: optional(option("--suites", commaSeparatedSuites())),
   verbose: withDefault(option("--verbose"), false),
+  reporter: conditional(
+    option("--reporter", choice(["console", "junit", "html", "json"])),
+    {
+      console: consoleParser,
+      junit: object({
+        outputFile: option("--output-file", string()),
+      }),
+      html: object({
+        outputFile: option("--output-file", string()),
+      }),
+      json: object({
+        outputFile: option("--output-file", string()),
+      }),
+    },
+    consoleParser,
+  ),
 });
-
-// File reporter configuration: requires both --reporter and --output-file
-const fileReporterOptions = merge(
-  baseOptions,
-  object({
-    reporter: option("--reporter", choice(["junit", "html", "json"])),
-    outputFile: option("--output-file", string()),
-  }),
-);
-
-// Console reporter configuration: --reporter optional, --output-file not present
-const consoleReporterOptions = merge(
-  baseOptions,
-  object({
-    reporter: withDefault(
-      optional(option("--reporter", choice(["console"]))),
-      "console" as const,
-    ),
-    noColor: withDefault(option("--no-color"), false),
-  }),
-);
-
-// Try file reporter first (more specific), then console (more lenient)
-const parser = or(fileReporterOptions, consoleReporterOptions);
 
 async function main() {
   const pkg = require("../package.json");
@@ -83,20 +82,20 @@ async function main() {
     run: true,
     mode: "test",
     env: {
-      FIRES_SERVER_URL: options.url,
+      FIRES_SERVER_URL: options.url.href,
     },
   };
 
-  // Configure reporter based on which parser matched
-  if ("outputFile" in options) {
+  const [reporter, reporterConfig] = options.reporter;
+
+  if (reporter === "console" || typeof reporter === "undefined") {
+    vitestConfig.color = !reporterConfig.noColor;
+  }
+
+  if (reporter === "html" || reporter === "json" || reporter === "junit") {
     // File-based reporter (junit/html/json)
-    vitestConfig.reporters = [options.reporter];
-    vitestConfig.outputFile = options.outputFile;
-  } else {
-    // Console reporter - check for color option
-    if ("noColor" in options && options.noColor) {
-      vitestConfig.color = false;
-    }
+    vitestConfig.reporters = [reporter];
+    vitestConfig.outputFile = reporterConfig.outputFile;
   }
 
   // Configure logging level

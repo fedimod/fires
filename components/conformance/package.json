@@ -11,8 +11,8 @@
   "license": "AGPL-3.0",
   "packageManager": "pnpm@10.9.0",
   "dependencies": {
-    "@optique/core": "^0.7.0",
-    "@optique/run": "^0.7.0",
+    "@optique/core": "^0.8.0",
+    "@optique/run": "^0.8.0",
     "bcp-47": "^2.1.0",
     "jsonld": "^9.0.0",
     "ts-node-maintained": "^10.9.6",

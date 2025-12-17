@@ -163,6 +163,10 @@ p.lead {
   margin-bottom: calc(var(--pico-typography-spacing-vertical) * 2);
 }
 
+blockquote > p:last-child {
+  margin-bottom: 0;
+}
+
 .d-hidden {
   display: none;
 }
@@ -198,6 +202,10 @@ button.inline {
 
 .ml-3 {
   margin-left: calc(var(--pico-spacing) * 2);
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
 }
 
 dl.labels dt {
@@ -313,7 +321,8 @@ input:is([type='file']) {
   }
 }
 
-[role='group']:has(+ .form-hint) {
+[role='group']:has(+ .form-hint),
+:is(h1, h2, h3, h4, h5, h6):has(+ .form-hint) {
   margin-bottom: 0;
 
   & + .form-hint {
@@ -542,4 +551,33 @@ select[disabled] {
   opacity: 1;
   pointer-events: none;
   cursor: pointer;
+}
+
+dialog article {
+  padding: 0;
+
+  header,
+  footer {
+    margin: 0;
+    padding: var(--pico-block-spacing-vertical) var(--pico-block-spacing-horizontal);
+    background: var(--pico-color-slate-850);
+    border: none;
+  }
+
+  header {
+    position: sticky;
+    top: 0px;
+  }
+
+  form {
+    padding: var(--pico-block-spacing-vertical) var(--pico-block-spacing-horizontal);
+  }
+
+  footer {
+    position: sticky;
+    bottom: 0px;
+    // Negative to account for form > footer
+    margin: var(--pico-block-spacing-vertical) calc(var(--pico-block-spacing-horizontal) * -1);
+    margin-bottom: calc(var(--pico-block-spacing-vertical) * -1);
+  }
 }

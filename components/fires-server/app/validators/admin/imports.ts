@@ -4,6 +4,26 @@ import Label from '#models/label'
 import vine from '@vinejs/vine'
 import { entityKeyActor, entityKeyDomain } from '#validators/admin/dataset_change'
 
+const labelsValidator = vine.createRule(
+  async (value, _options, field) => {
+    if (!field.isValid) {
+      return
+    }
+
+    if (!Array.isArray(value)) {
+      field.report('Invalid labels value', 'invalid_type', field)
+      return
+    }
+
+    const labels = await Label.findMany(value)
+    if (value.length !== labels.length) {
+      field.report('Invalid labels', 'invalid', field)
+      return
+    }
+  },
+  { isAsync: true }
+)
+
 export const importValidator = vine.compile(
   vine.object({
     dataset: vine
@@ -59,13 +79,15 @@ export const performImportValidator = vine.compile(
             type: vine.enum(['recommendation', 'advisory', 'retraction']),
             recommended_policy: vine.enum(DatasetChange.policies),
             labels: vine
-              .array(
-                vine.string().exists({
-                  table: Label.table,
-                  column: 'id',
-                })
-              )
+              .array(vine.string())
+              .parse((value) => {
+                if (typeof value === 'string') {
+                  return value.split(/,\s*/)
+                }
+                return value
+              })
               .distinct()
+              .use(labelsValidator())
               .optional(),
             comment: vine.string().optional(),
             entity_kind: vine.enum(DatasetChange.entities),

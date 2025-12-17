@@ -1,4 +1,5 @@
 import Dataset from '#models/dataset'
+import Label from '#models/label'
 import { ImportFileService } from '#services/import_file_service'
 import {
   importFileValidator,
@@ -35,6 +36,7 @@ export default class ImportsController {
 
     const data = await request.validateUsing(importFileValidator)
     const dataset = await Dataset.findOrFail(data.dataset)
+    const labels = await Label.query().orderBy('deprecatedAt', 'desc').orderBy('id', 'desc')
 
     if (!data.file.isValid || !data.file.tmpPath) {
       session.flash('notification', {
@@ -63,6 +65,10 @@ export default class ImportsController {
       unchanged: results.unchanged,
       missing: results.missing,
       defaultType: data.defaultType,
+      labels: labels.filter((l) => l.deprecatedAt === null).map((label) => label.serialize()),
+      deprecatedLabels: labels
+        .filter((l) => l.deprecatedAt !== null)
+        .map((label) => label.serialize()),
     })
   }
 

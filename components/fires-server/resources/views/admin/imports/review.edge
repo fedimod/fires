@@ -82,9 +82,7 @@
             from the dataset, mark them as retractions, otherwise ignore them:
           </p>
 
-          @if(missing.length)
-            @!component('admin/imports/_review_header_row', { retraction: true })
-          @endif
+          @!component('admin/imports/_review_header_row', { retraction: true })
           <div class="rows">
             {{-- This gets shown dynamically with javascript --}}
             <div id="no-missing-record" class="d-hidden text-center">
@@ -130,5 +128,69 @@
       
       <button type="submit">Import</button>
     </form>
+  @endslot
+  
+  @slot('modals')
+    <dialog id="import-manage-labels">
+      <article>
+        <header>
+          <button aria-label="Close" rel="prev"></button>
+          <p>
+            <strong>Manage labels & comment</strong>
+          </p>
+        </header>
+        <form method="dialog">
+          <div id="manage-row-comment">
+            <h5>
+              Row Comment
+            </h5>
+            <blockquote>
+              <p id="manage-row-comment-text">
+              </p>
+            </blockquote>
+          </div>
+
+          <h5>
+            <label for="manage-comment">Labels</label>
+          </h5>
+          <fieldset name="labels" class="columns">
+            @each(label in labels)
+              <label for="labels-{{ label.id }}">
+                <input type="checkbox" id="labels-{{ label.id }}" name="labels[]" value="{{ label.id }}" />&nbsp;{{ label.name }}
+              </label>
+            @else
+              <p>
+                You need to create labels first before you can assign them.
+              </p>
+            @end
+          </fieldset>
+          @if(deprecatedLabels.length)
+            <h6 class="mt-0">
+              Deprecated Labels
+            </h6>
+            <fieldset name="labels" class="columns">
+              @each(label in deprecatedLabels)
+                <label for="labels-{{ label.id }}">
+                  <input type="checkbox" id="labels-{{ label.id }}" name="labels[]" value="{{ label.id }}" />&nbsp;{{ label.name }}
+                </label>
+              @end
+            </fieldset>
+          @end
+          
+          <h5>
+            <label for="manage-comment">Internal Comment</label>
+          </h5>
+          <small class="form-hint">This comment is not publicly visible, and purely for your own information.</small>
+          <input type="text" name="comment" value="" class="form-control mb-2" />
+
+          <footer>
+            <div class="button-group">
+              <button id="cancel" type="reset">Cancel</button>
+              <button id="submit" type="submit">Update</button>
+            </div>
+          </footer>
+        </form>
+      </article>
+    </dialog>
   @endslot
 @end

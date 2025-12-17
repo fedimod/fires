@@ -58,5 +58,8 @@
       </main>
       @!component('components/footer')
     </div>
+    @if ($slots.modals)
+      {{{ await $slots.modals() }}}
+    @endif
   </body>
 </html>

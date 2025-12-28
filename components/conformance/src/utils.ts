@@ -26,7 +26,8 @@ interface NodeInfo {
  * Fetches the NodeInfo discovery document from /.well-known/nodeinfo
  */
 export async function getNodeInfoDiscovery(): Promise<NodeInfoDiscovery> {
-  const response = await fetch(`${getServerUrl()}.well-known/nodeinfo`);
+  const url = new URL(".well-known/nodeinfo", getServerUrl()).href;
+  const response = await fetch(url);
   return (await response.json()) as NodeInfoDiscovery;
 }
 

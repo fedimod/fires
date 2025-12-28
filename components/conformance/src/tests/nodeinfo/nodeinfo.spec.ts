@@ -8,7 +8,9 @@ import {
 
 describe("NodeInfo", () => {
   test("GET /.well-known/nodeinfo returns JSON", async () => {
-    const response = await fetch(`${getServerUrl()}.well-known/nodeinfo`);
+    const response = await fetch(
+      new URL(".well-known/nodeinfo", getServerUrl()).href,
+    );
 
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("application/json");

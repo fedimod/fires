@@ -49,7 +49,7 @@
     "@adonisjs/prettier-config": "^1.4.5",
     "@adonisjs/tsconfig": "^1.4.0",
     "@faker-js/faker": "^9.6.0",
-    "@japa/assert": "^4.0.1",
+    "@japa/assert": "^4.2.0",
     "@japa/plugin-adonisjs": "^4.0.0",
     "@japa/runner": "^4.2.0",
     "@swc/core": "1.15.3",

@@ -1,5 +1,11 @@
 # @fedimod/fires-docs
 
+## 1.5.1
+
+### Patch Changes
+
+- [#267](https://github.com/fedimod/fires/pull/267) [`4ad1080`](https://github.com/fedimod/fires/commit/4ad1080ca0f8b601ab4e06df46caaa939707da93) Thanks [@ThisIsMissEm](https://github.com/ThisIsMissEm)! - Improve website workflows
+
 ## 1.5.0
 
 ### Minor Changes

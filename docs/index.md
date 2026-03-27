@@ -32,7 +32,7 @@ features:
       This also allows for extensibility to support new data types in the future.
   - title: Allows resumable retrieval of data
     details: |
-      Instead of being push-based which requires requires the server to maintain a list of consumers interested in updates, or real-time requiring consumers to always be online.
+      Instead of being push-based which requires the server to maintain a list of consumers interested in updates, or real-time requiring consumers to always be online.
       <br/><br/>
       FIRES is designed to allow consumers to periodically refresh their copy of the data using just the last  known change ID.
 ---

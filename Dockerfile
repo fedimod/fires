@@ -73,7 +73,7 @@ RUN \
   # Install curl and tini
   apk add \
   tini=0.19.0-r3 \
-  tzdata=2025b-r0 \
+  tzdata=2026a-r0 \
   curl=8.14.1-r2 \
   jq=1.7.1-r0;
 

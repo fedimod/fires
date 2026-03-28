@@ -1,5 +1,6 @@
 // @ts-nocheck
 import './lib/copyable'
+import './admin/import'
 
 function addTranslation() {
   const template = document.getElementById('new-translation')

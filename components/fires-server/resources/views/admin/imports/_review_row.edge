@@ -1,4 +1,4 @@
-<div class="grid row">
+<div class="grid row" id="changes-{{ index }}">
   <input
     type="hidden"
     name="changes[{{ index }}][entity_kind]"
@@ -20,8 +20,17 @@
 
   <input
     type="hidden"
+    id="changes-{{ index }}-comment"
     name="changes[{{ index }}][comment]"
     value="{{ record.comment }}"
+    {{ html.attrs({ disabled: noUpdate }) }}
+  />
+
+  <input
+    type="hidden"
+    id="changes-{{ index }}-labels"
+    name="changes[{{ index }}][labels]"
+    value=""
     {{ html.attrs({ disabled: noUpdate }) }}
   />
 
@@ -73,6 +82,9 @@
       {{ record.recommendedPolicy }}
     @endif
   </span>
+  @unless(noUpdate)
+    <button class="manage-labels" data-row="changes-{{ index }}" data-row-comment="{{ record.comment }}">Edit</button>
+  @end
   @if(retraction)
     <button class="remove-row" type="button">Ignore</button>
   @endif

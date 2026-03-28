@@ -52,7 +52,7 @@
     "@japa/assert": "^4.0.1",
     "@japa/plugin-adonisjs": "^4.0.0",
     "@japa/runner": "^4.2.0",
-    "@swc/core": "1.15.3",
+    "@swc/core": "1.15.8",
     "@types/luxon": "^3.4.2",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.19.1",

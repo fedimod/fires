@@ -96,7 +96,7 @@
     "bcp47-language-tags": "^1.1.0",
     "csv-parse": "^6.1.0",
     "csv-stringify": "^6.6.0",
-    "edge.js": "^6.2.1",
+    "edge.js": "^6.4.0",
     "luxon": "^3.5.0",
     "markdown-it": "^14.1.0",
     "pg": "^8.13.3",

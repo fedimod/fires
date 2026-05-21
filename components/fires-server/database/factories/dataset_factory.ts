@@ -1,6 +1,6 @@
 import factory from '@adonisjs/lucid/factories'
 import stringHelpers from '@adonisjs/core/helpers/string'
-import { v7 as uuidv7 } from 'uuid'
+import { uuidv7 } from '#utils/uuid'
 
 import Dataset from '#models/dataset'
 

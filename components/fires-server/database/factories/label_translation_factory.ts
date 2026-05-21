@@ -1,6 +1,6 @@
 import factory from '@adonisjs/lucid/factories'
 import LabelTranslation from '#models/label_translation'
-import { v7 as uuidv7 } from 'uuid'
+import { uuidv7 } from '#utils/uuid'
 import { LabelFactory } from '#database/factories/label_factory'
 
 export const LabelTranslationFactory = factory

@@ -1,6 +1,6 @@
 import factory from '@adonisjs/lucid/factories'
 import Label from '#models/label'
-import { v7 as uuidv7 } from 'uuid'
+import { uuidv7 } from '#utils/uuid'
 import { DateTime } from 'luxon'
 import { LabelTranslationFactory } from '#database/factories/label_translation_factory'
 

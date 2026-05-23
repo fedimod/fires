@@ -1,8 +1,7 @@
 import { column, BaseModel, beforeCreate } from '@adonisjs/lucid/orm'
 import { TypedDecorator } from '@adonisjs/lucid/types/model'
 import { Secret } from '@adonisjs/core/helpers'
-import { v7 as uuidv7 } from 'uuid'
-import type { UUIDv7 } from '#utils/uuid'
+import { uuidv7, type UUIDv7 } from '#utils/uuid'
 
 export const secretColumn = (): TypedDecorator<Secret<string>> => {
   return function (target: any, propertyKey: string) {
